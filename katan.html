@@ -357,6 +357,7 @@
             font-size: 28px; color: var(--accent-gold); cursor: pointer;
         }
         .admin-content h2 { color: var(--accent-gold); text-align: center; margin-bottom: 20px; }
+        .admin-content h3 { color: var(--accent-gold); margin: 20px 0 10px; }
         .admin-content label { display: block; margin: 12px 0 4px; color: var(--text-muted); font-weight: 600; }
         .admin-content input, .admin-content select {
             width: 100%; padding: 10px; border-radius: 10px;
@@ -369,18 +370,31 @@
             border: none; border-radius: 10px; cursor: pointer;
             font-family: 'Cairo', sans-serif;
         }
-        .admin-product-item {
+        .admin-content .btn-admin-danger {
+            background: #dc2626; color: #fff;
+        }
+        .admin-product-item, .admin-slider-item {
             display: flex; align-items: center; gap: 12px;
             background: rgba(255,255,255,0.03); padding: 10px;
             border-radius: 10px; margin: 6px 0;
         }
-        .admin-product-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; }
-        .admin-product-item .info { flex: 1; font-size: 13px; }
-        .admin-product-item .actions button {
+        .admin-product-item img, .admin-slider-item img {
+            width: 50px; height: 50px; object-fit: cover; border-radius: 6px;
+        }
+        .admin-product-item .info, .admin-slider-item .info { flex: 1; font-size: 13px; }
+        .admin-product-item .actions button, .admin-slider-item .actions button {
             background: transparent; border: 1px solid var(--border-glow);
             color: #fff; padding: 2px 10px; border-radius: 6px; cursor: pointer;
         }
-        .admin-product-item .actions .delete:hover { background: #b91c1c; }
+        .admin-product-item .actions .delete:hover, .admin-slider-item .actions .delete:hover {
+            background: #b91c1c;
+        }
+        .admin-slider-item .actions .set-active {
+            border-color: var(--accent-gold); color: var(--accent-gold);
+        }
+        .admin-slider-item .actions .set-active:hover {
+            background: var(--accent-gold); color: #000;
+        }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 32px; }
@@ -575,6 +589,23 @@
         <div class="admin-content">
             <span class="close" onclick="closeAdmin()">&times;</span>
             <h2>🔐 لوحة التحكم</h2>
+            
+            <!-- قسم إدارة صور الخلفية -->
+            <h3>🖼️ صور الخلفية (Hero Slider)</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+                أضف صورة واحدة للثبات، أو أكثر للتحرك التلقائي.
+            </p>
+            <form id="sliderForm" onsubmit="event.preventDefault(); addSliderImage();">
+                <label>رابط الصورة الجديدة</label>
+                <input type="text" id="newSliderImg" placeholder="https://example.com/image.jpg" required>
+                <button type="submit" class="btn-admin">➕ إضافة صورة</button>
+            </form>
+            <div id="adminSliderList" style="margin-top:15px;"></div>
+
+            <hr style="border-color:var(--border-glow); margin:25px 0;" />
+
+            <!-- قسم إدارة المنتجات -->
+            <h3>📦 إدارة المنتجات</h3>
             <form id="adminForm" onsubmit="event.preventDefault(); addProduct();">
                 <label>رابط الصورة</label>
                 <input type="text" id="newImg" placeholder="https://example.com/image.jpg" required>
@@ -607,37 +638,125 @@
     </div>
 
     <script>
-        // ===== الصور المتحركة للخلفية =====
-        const heroImages = [
-            'https://i.ibb.co/pBvTDg7F/2.png',
-            'https://i.ibb.co/qY3JNYR9/everest.png',
-            'https://i.ibb.co/cc0w69Dy/aqua.png',
-            'https://i.ibb.co/8t2JsMD/global.png',
-            'https://i.ibb.co/ksyMknZ9/laith.png',
-            'https://i.ibb.co/b56fvfG8/sulid-mix.png'
-        ];
+        // ===== إدارة صور الخلفية =====
+        let sliderImages = [];
+        let sliderInterval = null;
+        let currentSlideIndex = 0;
 
-        let currentImageIndex = 0;
+        function loadSliderImages() {
+            const stored = localStorage.getItem('katanbuild_slider_images');
+            if (stored) {
+                sliderImages = JSON.parse(stored);
+            } else {
+                // الصورة الافتراضية
+                sliderImages = ['https://i.ibb.co/dxbJqTT/1786627087080.png'];
+                saveSliderImages();
+            }
+        }
 
-        function initHeroSlider() {
+        function saveSliderImages() {
+            localStorage.setItem('katanbuild_slider_images', JSON.stringify(sliderImages));
+        }
+
+        function renderSlider() {
             const slider = document.getElementById('heroSlider');
-            heroImages.forEach((src, index) => {
+            slider.innerHTML = '';
+            
+            if (sliderImages.length === 0) {
+                // صورة افتراضية إذا كانت القائمة فارغة
+                const img = document.createElement('img');
+                img.src = 'https://i.ibb.co/dxbJqTT/1786627087080.png';
+                img.alt = 'خلفية KatanBuild';
+                img.classList.add('active');
+                slider.appendChild(img);
+                return;
+            }
+
+            sliderImages.forEach((src, index) => {
                 const img = document.createElement('img');
                 img.src = src;
                 img.alt = 'خلفية KatanBuild';
                 if (index === 0) img.classList.add('active');
                 slider.appendChild(img);
             });
-            
-            setInterval(() => {
-                const images = slider.querySelectorAll('img');
-                images[currentImageIndex].classList.remove('active');
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-                images[currentImageIndex].classList.add('active');
-            }, 4000);
+
+            // تشغيل السلايدر إذا كان هناك أكثر من صورة
+            if (sliderImages.length > 1) {
+                startSlider();
+            } else {
+                stopSlider();
+            }
         }
 
-        // ===== البيانات =====
+        function startSlider() {
+            stopSlider();
+            sliderInterval = setInterval(() => {
+                const images = document.querySelectorAll('#heroSlider img');
+                if (images.length === 0) return;
+                images.forEach(img => img.classList.remove('active'));
+                currentSlideIndex = (currentSlideIndex + 1) % images.length;
+                images[currentSlideIndex].classList.add('active');
+            }, 5000);
+        }
+
+        function stopSlider() {
+            if (sliderInterval) {
+                clearInterval(sliderInterval);
+                sliderInterval = null;
+            }
+        }
+
+        // ===== إدارة صور الخلفية في لوحة التحكم =====
+        function renderAdminSliderList() {
+            const list = document.getElementById('adminSliderList');
+            if (sliderImages.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">لا توجد صور. أضف صورة الآن.</p>';
+                return;
+            }
+            list.innerHTML = sliderImages.map((src, index) => `
+                <div class="admin-slider-item">
+                    <img src="${src}" onerror="this.src='https://via.placeholder.com/50/0f1a3a/d4af37?text=?'">
+                    <div class="info">صورة ${index + 1} ${index === 0 ? '⭐ (نشطة)' : ''}</div>
+                    <div class="actions">
+                        <button class="set-active" onclick="setActiveSlider(${index})">⭐ تفعيل</button>
+                        <button class="delete" onclick="deleteSliderImage(${index})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSliderImage() {
+            const url = document.getElementById('newSliderImg').value.trim();
+            if (!url) { alert('أدخل رابط الصورة'); return; }
+            sliderImages.push(url);
+            saveSliderImages();
+            renderSlider();
+            renderAdminSliderList();
+            document.getElementById('newSliderImg').value = '';
+            alert('✅ تم إضافة الصورة');
+        }
+
+        function deleteSliderImage(index) {
+            if (!confirm('حذف هذه الصورة؟')) return;
+            sliderImages.splice(index, 1);
+            saveSliderImages();
+            renderSlider();
+            renderAdminSliderList();
+            alert('✅ تم حذف الصورة');
+        }
+
+        function setActiveSlider(index) {
+            if (index === 0) return;
+            // نقل الصورة المحددة إلى البداية
+            const [item] = sliderImages.splice(index, 1);
+            sliderImages.unshift(item);
+            saveSliderImages();
+            renderSlider();
+            renderAdminSliderList();
+            alert('✅ تم تعيين الصورة كنشطة');
+        }
+
+        // ===== المنتجات =====
         const DEFAULT_PRODUCTS = [
             // لاصق ديكور
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/pBvTDg7F/2.png', ad: 95, wat: 75, flex: 85 },
@@ -647,7 +766,6 @@
             { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/7xwK7LLr/image.png', ad: 91, wat: 70, flex: 80 },
             { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/B59xYdbM/claytor.png', ad: 90, wat: 74, flex: 83 },
             { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/d0vGgyjw/lazurd.png', ad: 95, wat: 80, flex: 86 },
-
             // لاصق مسابح
             { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/cc0w69Dy/aqua.png', ad: 99, wat: 100, flex: 95 },
             { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/99621j5f/basil.png', ad: 97, wat: 98, flex: 92 },
@@ -657,7 +775,6 @@
             { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/CqcfHGZ/image.png', ad: 96, wat: 98, flex: 93 },
             { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Qv3d7XRT/image.png', ad: 97, wat: 99, flex: 91 },
             { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/9kpp0ThV/image.png', ad: 94, wat: 95, flex: 89 },
-
             // لاصق غرانيت
             { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/4RNtff4m/image.png', ad: 98, wat: 88, flex: 92 },
             { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Swxbp98f/mockup.png', ad: 97, wat: 86, flex: 90 },
@@ -669,23 +786,19 @@
             { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/8t2JsMD/global.png', ad: 96, wat: 87, flex: 89 },
             { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ksyMknZ9/laith.png', ad: 94, wat: 83, flex: 87 },
             { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/qLNhnMr8/onerlo.png', ad: 95, wat: 84, flex: 88 },
-
             // لاصق خارجي
             { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/WNHBMYQP/r2b.png', ad: 99, wat: 94, flex: 98 },
             { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/rRWyVDvs/raed.png', ad: 98, wat: 92, flex: 99 },
             { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/60RpRPPh/raed-o.png', ad: 96, wat: 90, flex: 95 },
-
             // طينة
             { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/hxn0F1Nj/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93 },
             { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/4R97wPj6/Untitled-1.png', ad: 90, wat: 85, flex: 91 },
             { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/b56fvfG8/sulid-mix.png', ad: 91, wat: 82, flex: 88 },
             { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/NnL35s6j/Whats-App-Image-2026-06-18-at-1-10.png', ad: 94, wat: 89, flex: 87 },
             { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/gMwFp3VZ/image.png', ad: 95, wat: 90, flex: 92 },
-
             // روبة
             { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/tPskSqWy/graft.png', ad: 93, wat: 95, flex: 89 },
             { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/mFvsx0SF/qods.png', ad: 98, wat: 96, flex: 94 },
-
             // عوازل
             { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/2RGTx2H/najar.png', ad: 95, wat: 100, flex: 97 },
             { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/Jjbzg53k/rocky.png', ad: 96, wat: 99, flex: 96 },
@@ -701,7 +814,7 @@
         }
         function saveProducts() { localStorage.setItem('katanbuild_products', JSON.stringify(products)); }
 
-        // ===== العرض =====
+        // ===== عرض المنتجات =====
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('productGrid');
             const items = filter === 'all' ? products : products.filter(p => p.tag === filter);
@@ -793,6 +906,7 @@
                 if (pwd === 'katan2026') {
                     document.getElementById('adminPanel').style.display = 'flex';
                     renderAdminList();
+                    renderAdminSliderList();
                 } else { alert('كلمة مرور خاطئة.'); }
                 clickCount = 0;
             }
@@ -800,6 +914,7 @@
 
         function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
 
+        // ===== إدارة المنتجات في لوحة التحكم =====
         function renderAdminList() {
             const list = document.getElementById('adminProductList');
             list.innerHTML = products.map(p => `
@@ -852,11 +967,17 @@
 
         // ===== التهيئة =====
         window.addEventListener('load', () => {
+            loadSliderImages();
             loadProducts();
+            renderSlider();
             renderProducts('all');
             calculateMaterials();
-            initHeroSlider();
             setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 1500);
+        });
+
+        // تنظيف السلايدر عند مغادرة الصفحة
+        window.addEventListener('beforeunload', () => {
+            stopSlider();
         });
     </script>
 </body>
