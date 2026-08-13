@@ -649,7 +649,11 @@
             if (stored) {
                 sliderImages = JSON.parse(stored);
             } else {
-                sliderImages = ['https://i.ibb.co/dxbJqTT/1786627087080.png'];
+                // الصور الافتراضية (الصورة القديمة + الصورة الجديدة)
+                sliderImages = [
+                    'https://i.ibb.co/dxbJqTT/1786627087080.png',
+                    'https://i.ibb.co/9kn63v1c/1786629632716.png'
+                ];
                 saveSliderImages();
             }
         }
@@ -752,7 +756,7 @@
             alert('✅ تم تعيين الصورة كنشطة');
         }
 
-        // ===== المنتجات (تم تصحيح الروابط والمسميات) =====
+        // ===== المنتجات =====
         const DEFAULT_PRODUCTS = [
             // ===== لاصق ديكور (7 منتجات) =====
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/pBvTDg7F/2.png', ad: 95, wat: 75, flex: 85 },
