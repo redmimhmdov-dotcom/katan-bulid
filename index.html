@@ -752,9 +752,9 @@
             alert('✅ تم تعيين الصورة كنشطة');
         }
 
-        // ===== المنتجات (تم تصحيح الروابط) =====
+        // ===== المنتجات (تم تصحيح الروابط والمسميات) =====
         const DEFAULT_PRODUCTS = [
-            // ===== لاصق ديكور =====
+            // ===== لاصق ديكور (7 منتجات) =====
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/pBvTDg7F/2.png', ad: 95, wat: 75, flex: 85 },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/qY3JNYR9/everest.png', ad: 92, wat: 70, flex: 80 },
             { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/bj074vJT/mockup.png', ad: 94, wat: 78, flex: 82 },
@@ -763,7 +763,7 @@
             { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/B59xYdbM/claytor.png', ad: 90, wat: 74, flex: 83 },
             { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/d0vGgyjw/lazurd.png', ad: 95, wat: 80, flex: 86 },
 
-            // ===== لاصق مسابح =====
+            // ===== لاصق مسابح (8 منتجات) =====
             { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/cc0w69Dy/aqua.png', ad: 99, wat: 100, flex: 95 },
             { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/99621j5f/basil.png', ad: 97, wat: 98, flex: 92 },
             { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/HD5ChQ8k/mockup.png', ad: 98, wat: 99, flex: 94 },
@@ -773,7 +773,7 @@
             { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Qv3d7XRT/image.png', ad: 97, wat: 99, flex: 91 },
             { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/9kpp0ThV/image.png', ad: 94, wat: 95, flex: 89 },
 
-            // ===== لاصق غرانيت =====
+            // ===== لاصق غرانيت (10 منتجات) =====
             { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/4RNtff4m/image.png', ad: 98, wat: 88, flex: 92 },
             { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Swxbp98f/mockup.png', ad: 97, wat: 86, flex: 90 },
             { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/d4SFXRCn/image.png', ad: 96, wat: 85, flex: 88 },
@@ -785,23 +785,23 @@
             { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ksyMknZ9/laith.png', ad: 94, wat: 83, flex: 87 },
             { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/qLNhnMr8/onerlo.png', ad: 95, wat: 84, flex: 88 },
 
-            // ===== لاصق خارجي =====
+            // ===== لاصق خارجي (3 منتجات) =====
             { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/WNHBMYQP/r2b.png', ad: 99, wat: 94, flex: 98 },
             { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/rRWyVDvs/raed.png', ad: 98, wat: 92, flex: 99 },
             { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/60RpRPPh/raed-o.png', ad: 96, wat: 90, flex: 95 },
 
-            // ===== طينة =====
+            // ===== طينة (5 منتجات) =====
             { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/hxn0F1Nj/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93 },
             { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/4R97wPj6/Untitled-1.png', ad: 90, wat: 85, flex: 91 },
             { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/b56fvfG8/sulid-mix.png', ad: 91, wat: 82, flex: 88 },
             { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/NnL35s6j/Whats-App-Image-2026-06-18-at-1-10.png', ad: 94, wat: 89, flex: 87 },
             { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/gMwFp3VZ/image.png', ad: 95, wat: 90, flex: 92 },
 
-            // ===== روبة =====
+            // ===== روبة (2 منتجات) =====
             { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/tPskSqWy/graft.png', ad: 93, wat: 95, flex: 89 },
             { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/mFvsx0SF/qods.png', ad: 98, wat: 96, flex: 94 },
 
-            // ===== عوازل =====
+            // ===== عوازل (3 منتجات) =====
             { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/2RGTx2H/najar.png', ad: 95, wat: 100, flex: 97 },
             { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/Jjbzg53k/rocky.png', ad: 96, wat: 99, flex: 96 },
             { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/mFq1m9MQ/graft.png', ad: 97, wat: 98, flex: 95 }
