@@ -235,7 +235,7 @@
 
         .container { max-width: 95%; margin: auto; padding: 25px 10px; position: relative; z-index: 1; }
 
-        /* ===== 🖼️ 4. واجهة البانر (مستطيل مدمج مع تمدد) ===== */
+        /* ===== 🖼️ 4. واجهة البانر ===== */
         .hero-banner-section {
             max-width: 100%;
             margin: 0 auto 30px auto;
@@ -741,12 +741,10 @@
                 🤖 المساعد الهندسي: حدد التحدي التقني في مشروعك لاختيار المادة المناسبة
             </div>
             <div class="assistant-chips">
-                <!-- تم تحديث العدد الإجمالي -->
                 <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (49)</div>
                 <div class="chip" onclick="filterByTag('decor', this)">🎨 التكسيات والديكورات الداخلية</div>
                 <div class="chip" onclick="filterByTag('pool', this)">🏊‍♂️ المسابح والضغط المائي الفائق</div>
                 <div class="chip" onclick="filterByTag('heavy', this)">🏛️ البورسلين والغرانيت الضخم</div>
-                <!-- تم إضافة قسم السيراميك -->
                 <div class="chip" onclick="filterByTag('ceramic', this)">🟤 لاصق السيراميك والبلاط</div>
                 <div class="chip" onclick="filterByTag('outdoor', this)">☀️ الواجهات الخارجية ومقاومة الحرارة</div>
                 <div class="chip" onclick="filterByTag('plaster', this)">🧱 الطينة الجاهزة والأكريليك</div>
@@ -832,7 +830,7 @@
         });
 
         // ============================================================
-        // 2. إدارة البانر (كما هو)
+        // 2. إدارة البانر
         // ============================================================
         let bannerImages = [];
         let currentSlideIdx = 0;
@@ -922,7 +920,7 @@
         }
 
         // ============================================================
-        // 4. خلفية النجوم (كما هو)
+        // 4. خلفية النجوم
         // ============================================================
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
@@ -970,7 +968,7 @@
         animateStars();
 
         // ============================================================
-        // 5. المنتجات الجديدة (تم تحديثها بالكامل)
+        // 5. المنتجات الافتراضية (تستخدم فقط إذا لم يوجد تخزين)
         // ============================================================
         let PRODUCTS = [
             // ===== لاصق ديكور (7) =====
@@ -1040,7 +1038,7 @@
         ];
 
         // ============================================================
-        // 6. عرض المنتجات (كما هو)
+        // 6. عرض المنتجات
         // ============================================================
         let showTestBtn = false;
         let showEditBtn = false;
@@ -1067,7 +1065,7 @@
         }
 
         // ============================================================
-        // 7. إدارة المنتجات وباقي الدوال (كما هي، باستثناء الفلاتر)
+        // 7. إدارة المنتجات
         // ============================================================
         function editProduct(id) {
             const p = PRODUCTS.find(item => item.id === id);
@@ -1144,13 +1142,18 @@
             const stored = localStorage.getItem('katanbuild_products');
             if (stored) {
                 try {
-                    PRODUCTS = JSON.parse(stored);
-                } catch(e) {}
+                    const parsed = JSON.parse(stored);
+                    if (parsed.length > 0) {
+                        PRODUCTS = parsed; // استخدم المنتجات المحفوظة
+                    }
+                } catch(e) {
+                    console.warn('خطأ في تحميل المنتجات المحفوظة، استخدام القائمة الافتراضية');
+                }
             }
         }
 
         // ============================================================
-        // 8. الفلترة (تم تحديث الأقسام)
+        // 8. الفلترة
         // ============================================================
         const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسبح', 'لاصق غرانيت', 'لاصق سيراميك', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
 
@@ -1184,7 +1187,7 @@
         }
 
         // ============================================================
-        // 9. الحاسبة وباقي الدوال (كما هي)
+        // 9. الحاسبة وباقي الدوال
         // ============================================================
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
@@ -1208,7 +1211,7 @@
         function openWhatsApp() { window.open(`https://wa.me/0952725590`, '_blank'); }
 
         // ============================================================
-        // 10. لوحة التحكم المخفية (ضغط 5 مرات + كلمة مرور)
+        // 10. لوحة التحكم المخفية
         // ============================================================
         let logoClickCount = 0;
         let logoClickTimer = null;
@@ -1231,7 +1234,7 @@
         });
 
         // ============================================================
-        // 11. لوحة التحكم المتقدمة (دوال إدارة البانر والمنتجات كما هي)
+        // 11. لوحة التحكم المتقدمة
         // ============================================================
         function openAdminPanel() {
             document.getElementById('modalIcon').innerText = '⚙️';
@@ -1453,14 +1456,22 @@
             alert('💾 تم حفظ جميع الإعدادات بنجاح!');
         }
 
+        // ============================================================
+        // 12. تحميل الإعدادات المحفوظة (الأهمية القصوى)
+        // ============================================================
         function loadSettings() {
             loadBannerSettings();
+            
             const testVal = localStorage.getItem('katanbuild_showTest');
             if (testVal !== null) showTestBtn = JSON.parse(testVal);
+            
             const editVal = localStorage.getItem('katanbuild_showEdit');
             if (editVal !== null) showEditBtn = JSON.parse(editVal);
+            
             const deleteVal = localStorage.getItem('katanbuild_showDelete');
             if (deleteVal !== null) showDeleteBtn = JSON.parse(deleteVal);
+
+            // ✅ تحميل المنتجات من التخزين قبل العرض
             loadProductsFromStorage();
         }
 
@@ -1468,12 +1479,15 @@
             document.getElementById('cyberModal').style.display = 'none';
         }
 
+        // ============================================================
+        // 13. تهيئة الصفحة (الترتيب الصحيح للحفظ)
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            loadSettings();
-            renderCategories();
-            renderProducts(PRODUCTS);
-            calculateMaterials();
-            initSlider();
+            loadSettings();          // أولاً: تحميل المنتجات والإعدادات
+            renderCategories();      // ثانياً: الفئات
+            renderProducts(PRODUCTS); // ثالثاً: عرض المنتجات المحفوظة
+            calculateMaterials();    // رابعاً: الحاسبة
+            initSlider();            // خامساً: البانر
         });
 
         window.triggerExplosionAndEnter = triggerExplosionAndEnter;
