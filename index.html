@@ -31,14 +31,13 @@
             min-height: 100vh;
         }
 
-        /* دمج الصور وتطبيص الخلفية البيضاء للشعار */
         .blend-logo {
             mix-blend-mode: screen;
             filter: brightness(1.1) contrast(1.1);
             object-fit: contain;
         }
 
-        /* ===== 🎆 1. صفحة الترحيب والشعار (Splash Screen) ===== */
+        /* ===== 🎆 1. صفحة الترحيب والشعار المتحرك ===== */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -49,6 +48,29 @@
             align-items: center;
             justify-content: center;
             transition: opacity 0.8s ease, visibility 0.8s;
+            overflow: hidden;
+        }
+
+        .splash-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* الشعار المتحرك من اليسار لليمين */
+        .splash-logo-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .splash-logo {
@@ -59,14 +81,48 @@
             border-radius: 20px;
             border: 2px solid var(--accent-gold);
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.4);
-            animation: pulseSplash 2.5s infinite alternate ease-in-out;
-            margin-bottom: 25px;
             background: rgba(255, 255, 255, 0.05);
+            animation: slideLogo 2.5s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes pulseSplash {
-            0% { transform: scale(0.95); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
-            100% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255, 215, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.6); }
+        @keyframes slideLogo {
+            0% { transform: translateX(-120px) scale(0.95); opacity: 0.7; }
+            100% { transform: translateX(120px) scale(1.05); opacity: 1; }
+        }
+
+        /* الآلة الكاتبة خلف الشعار */
+        .splash-typewriter-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: rgba(255, 215, 0, 0.15);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            direction: ltr;
+        }
+
+        .splash-typewriter-bg span {
+            display: inline-block;
+            animation: typewriterBg 3s steps(30) 1s forwards;
+            width: 0;
+            overflow: hidden;
+            border-left: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        @keyframes typewriterBg {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
         .splash-title {
@@ -75,16 +131,21 @@
             font-weight: 900;
             color: #fff;
             letter-spacing: 2px;
+            margin-top: 15px;
             margin-bottom: 8px;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            z-index: 2;
+            position: relative;
         }
 
         .splash-sub {
             color: var(--accent-cyan);
             font-size: 14px;
             letter-spacing: 4px;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             font-weight: 600;
+            z-index: 2;
+            position: relative;
         }
 
         .btn-enter {
@@ -99,6 +160,8 @@
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
             transition: 0.3s;
             font-family: 'Cairo';
+            z-index: 2;
+            position: relative;
         }
 
         .btn-enter:hover {
@@ -106,7 +169,29 @@
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
         }
 
-        /* ===== 🌟 2. شعار الخلفية المضيء بالنيون ===== */
+        /* تأثير الانفجار */
+        .splash-explosion {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .splash-explosion.active {
+            opacity: 1;
+            animation: explosion 0.8s ease forwards;
+        }
+
+        @keyframes explosion {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* ===== 🌟 2. شعار الخلفية المضيء ===== */
         .watermark-logo {
             position: fixed;
             top: 50%;
@@ -130,7 +215,7 @@
             pointer-events: none; z-index: 0; opacity: 0.6;
         }
 
-        /* ===== 🏛️ 3. الهيدر الفاخر ===== */
+        /* ===== 🏛️ 3. الهيدر ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 5%; 
@@ -142,7 +227,16 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
         .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
-        .logo img { border-radius: 8px; background: rgba(255,255,255,0.05); padding: 2px; border: 1px solid var(--accent-gold); box-shadow: 0 0 12px rgba(255, 215, 0, 0.4); }
+        .logo img { 
+            border-radius: 8px; 
+            background: rgba(255,255,255,0.05); 
+            padding: 2px; 
+            border: 1px solid var(--accent-gold); 
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+        }
         .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
         .logo-sub { font-size:10px; color:var(--accent-cyan); letter-spacing:3px; display:block; }
         
@@ -164,9 +258,9 @@
 
         .container { max-width: 95%; margin: auto; padding: 25px 10px; position: relative; z-index: 1; }
 
-        /* ===== 🖼️ 4. واجهة البانر المتناوبة بالصور التفاعلية ===== */
+        /* ===== 🖼️ 4. واجهة البانر المتناوبة ===== */
         .hero-banner-section {
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto 30px auto;
             border-radius: 20px;
             overflow: hidden;
@@ -179,7 +273,7 @@
 
         .slider-wrapper {
             width: 100%;
-            height: 380px;
+            height: 420px;
             position: relative;
             overflow: hidden;
         }
@@ -190,6 +284,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
             opacity: 0;
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
             transform: scale(1.03);
@@ -200,7 +295,7 @@
             transform: scale(1);
         }
 
-        /* ===== ⌨️ شريط الرسالة المتغيرة المدمج بالواجهة ===== */
+        /* ===== ⌨️ شريط الرسالة المتغيرة ===== */
         .typewriter-banner {
             background: rgba(3, 7, 18, 0.85);
             border-top: 1px solid var(--border-indigo);
@@ -215,7 +310,9 @@
             font-size: 20px;
             background: rgba(255, 215, 0, 0.15);
             width: 42px; height: 42px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
@@ -318,7 +415,10 @@
             border-radius: 18px;
             border: 1px solid rgba(255, 215, 0, 0.2); 
             overflow: hidden;
-            transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
+            transition: 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: relative; 
             backdrop-filter: blur(16px);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -356,18 +456,38 @@
         }
 
         .product-info { padding: 18px; text-align: center; }
-        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-        
-        .btn-card-single {
-            width: 100%; padding: 10px; border-radius: 10px; 
-            border: 1px solid var(--accent-gold);
-            background: rgba(255, 215, 0, 0.12); color: #fff; 
-            font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: 0.3s; font-family: 'Cairo';
-        }
-        .btn-card-single:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; }
 
-        /* ===== 💬 8. النوافذ المنبثقة التفاعلية ===== */
+        .product-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .product-actions button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo';
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .product-actions .btn-test:hover { background: var(--accent-gold); color: #000; }
+        .product-actions .btn-edit:hover { background: #38bdf8; color: #000; }
+        .product-actions .btn-delete:hover { background: #ef4444; color: #fff; }
+
+        .product-actions .hidden-action { display: none; }
+
+        /* ===== 💬 8. النوافذ المنبثقة ===== */
         .cyber-modal-overlay {
             position: fixed; inset: 0; z-index: 9999;
             background: rgba(2, 5, 12, 0.85); backdrop-filter: blur(15px);
@@ -380,12 +500,18 @@
         .cyber-modal-card {
             background: rgba(11, 19, 43, 0.95);
             border: 1px solid var(--accent-gold);
-            border-radius: 20px; padding: 30px; width: 90%; max-width: 500px;
-            position: relative; color: #fff; text-align: center;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            color: #fff;
+            text-align: center;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
             transform: scale(0.9);
             animation: modalPop 0.3s forwards ease;
-            max-height: 90vh; overflow-y: auto;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalPop { to { transform: scale(1); } }
@@ -394,7 +520,8 @@
             width: 60px; height: 60px; margin: 0 auto 15px;
             background: rgba(255, 215, 0, 0.1); border-radius: 50%;
             border: 1px solid var(--accent-gold);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center; justify-content: center;
             font-size: 26px; color: var(--accent-gold);
         }
 
@@ -402,20 +529,122 @@
         .bar-outer { height: 8px; background: rgba(3, 7, 18, 0.8); border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold)); transition: width 0.8s ease; }
 
-        /* عناصر التحكم بإدارة الصور */
-        .admin-img-list { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
-        .admin-img-item { display: flex; justify-content: space-between; align-items: center; background: rgba(3,7,18,0.7); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-indigo); }
-        .admin-img-item img { width: 50px; height: 35px; object-fit: cover; border-radius: 4px; }
+        /* إدارة صور البانر في لوحة التحكم */
+        .admin-img-list { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; max-height: 250px; overflow-y: auto; }
+        .admin-img-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(3,7,18,0.7); padding: 8px 12px; border-radius: 8px; 
+            border: 1px solid var(--border-indigo);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-img-item img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .admin-img-item .img-url { font-size: 11px; color: var(--text-muted); flex: 1; text-align: right; word-break: break-all; }
+        .admin-img-item .btn-del { 
+            background: rgba(239, 68, 68, 0.2); 
+            border: 1px solid #ef4444; 
+            color: #ef4444; 
+            padding: 2px 10px; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .admin-img-item .btn-del:hover { background: #ef4444; color: #fff; }
+
+        .toggle-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+            background: rgba(3,7,18,0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .toggle-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .admin-input-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .admin-input-group input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+            background: rgba(3,7,18,0.7);
+            color: #fff;
+            font-family: 'Cairo';
+            min-width: 150px;
+        }
+
+        .admin-input-group button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo';
+        }
+
+        .admin-input-group button:hover { opacity: 0.8; }
+
+        .btn-save-admin {
+            background: #22c55e;
+            color: #000;
+            font-weight: 800;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo';
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn-save-admin:hover { opacity: 0.8; }
+
+        @media (max-width: 600px) {
+            .admin-img-item { flex-direction: column; align-items: stretch; }
+            .admin-img-item .img-url { text-align: center; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 🎆 1. شاشة الترحيب بالشعار المضيء بدون خلفية بيضاء -->
+    <!-- 🎆 1. شاشة الترحيب بالشعار المتحرك والآلة الكاتبة -->
     <div id="splashScreen">
-        <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="splash-logo blend-logo" alt="KATANBUILD Logo" />
-        <div class="splash-title">KATANBUILD</div>
-        <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
-        <button class="btn-enter" onclick="enterSite()">دخول المنصة الهندسة 🚀</button>
+        <div class="splash-wrapper">
+            <div class="splash-logo-container">
+                <div class="splash-typewriter-bg">
+                    <span>مرحباً بكم في KATANBUILD</span>
+                </div>
+                <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="splash-logo blend-logo" alt="KATANBUILD Logo" />
+            </div>
+            <div class="splash-title">KATANBUILD</div>
+            <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
+            <button class="btn-enter" onclick="enterSite()">دخول المنصة الهندسية 🚀</button>
+        </div>
+        <div class="splash-explosion" id="splashExplosion"></div>
     </div>
 
     <!-- 🌟 2. الشعار الخلفي المدمج بأسلوب النيون -->
@@ -426,8 +655,8 @@
 
     <!-- ===== الهيدر ===== -->
     <header>
-        <div class="logo">
-            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="blend-logo" height="40" width="auto" />
+        <div class="logo" id="mainLogo">
+            <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="blend-logo" alt="KATANBUILD" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
                 <span class="logo-sub">DEEP INDIGO & CYBER EDITION</span>
@@ -442,7 +671,7 @@
 
     <div class="container">
 
-        <!-- ===== 🖼️ 3. واجهة البانر المتناوبة (900x700 / تمدد متناسق) المدمجة بالرسالة المتحركة ===== -->
+        <!-- ===== 🖼️ 3. واجهة البانر المتناوبة ===== -->
         <div class="hero-banner-section">
             <div class="slider-wrapper" id="sliderContainer">
                 <!-- الصور تضاف ديناميكياً بواسطة JavaScript -->
@@ -527,15 +756,28 @@
     </div>
 
     <script>
-        // إخفاء صفحة الترحيب والدخول للموقع
+        // ============================================================
+        // 1. شاشة الترحيب - تأثير الانفجار والدخول
+        // ============================================================
         function enterSite() {
             const splash = document.getElementById('splashScreen');
-            splash.style.opacity = '0';
-            splash.style.visibility = 'hidden';
-            runSiteTypewriter();
+            const explosion = document.getElementById('splashExplosion');
+            
+            // تفعيل تأثير الانفجار
+            explosion.classList.add('active');
+            
+            setTimeout(() => {
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                runSiteTypewriter();
+                // بدء تشغيل البانر بعد الدخول
+                if (typeof initSlider === 'function') initSlider();
+            }, 800);
         }
 
-        // ===== 1. إدارة الواجهة وصور البانر التناوبية (تبديل كل 3 ثوانٍ) =====
+        // ============================================================
+        // 2. إدارة الواجهة وصور البانر التناوبية
+        // ============================================================
         let bannerImages = [
             'https://i.ibb.co/dxbJqTT/1786627087080.png',
             'https://i.ibb.co/9kn63v1c/1786629632716.png'
@@ -545,12 +787,13 @@
 
         function initSlider() {
             const container = document.getElementById('sliderContainer');
+            if (!container) return;
             container.innerHTML = bannerImages.map((src, i) => `
                 <img src="${src}" class="slider-img ${i === 0 ? 'active' : ''}" alt="KATANBUILD Banner ${i+1}" />
             `).join('');
 
             if (sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(nextSlide, 3000); // تبديل كل 3 ثوانٍ
+            sliderInterval = setInterval(nextSlide, 3000);
         }
 
         function nextSlide() {
@@ -561,7 +804,9 @@
             imgs[currentSlideIdx].classList.add('active');
         }
 
-        // ===== 2. نظام الآلة الكاتبة الديناميكي =====
+        // ============================================================
+        // 3. نظام الآلة الكاتبة الديناميكي
+        // ============================================================
         const messages = [
             "أهلاً بكم في KATANBUILD | المرجع الأول لابتكار وتطوير مواد البناء المتقدمة.",
             "الموقع مصمم بأسلوب الكحلي الملكي والتأثير الزجاجي المضيء لتوفير تجربة تصفح هادئة وفاخرة.",
@@ -600,7 +845,9 @@
             setTimeout(runSiteTypewriter, isDeleting ? deleteSpeed : speed);
         }
 
-        // ===== 3. خلفية النجوم الديناميكية =====
+        // ============================================================
+        // 4. خلفية النجوم
+        // ============================================================
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -647,8 +894,10 @@
         }
         animateStars();
 
-        // ===== 4. قائمة المنتجات الـ 38 المحدثة بروابط الصور الجديدة =====
-        const PRODUCTS = [
+        // ============================================================
+        // 5. قائمة المنتجات الـ 38 المحدثة
+        // ============================================================
+        let PRODUCTS = [
             // لاصق ديكور (7)
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/mVXhBN3c/2.png', ad: 95, wat: 75, flex: 85 },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfkgJs03/everest.png', ad: 92, wat: 70, flex: 80 },
@@ -702,134 +951,57 @@
             { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/m553JtKC/image.png', ad: 97, wat: 100, flex: 98 }
         ];
 
-        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
-        let waNumber = '0952725590';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initSlider();
-            renderCategories();
-            renderProducts(PRODUCTS);
-            calculateMaterials();
-        });
-
-        function renderCategories() {
-            const container = document.getElementById('filterBar');
-            container.innerHTML = CATEGORIES.map(c => `
-                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
-            `).join('');
-        }
-
-        function filterCategory(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filtered = cat === 'الكل' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
-            renderProducts(filtered);
-        }
-
-        function filterByTag(tag, chip) {
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            
-            if(tag === 'all') {
-                renderProducts(PRODUCTS);
-            } else {
-                const filtered = PRODUCTS.filter(p => p.tag === tag);
-                renderProducts(filtered);
-            }
-        }
+        // ============================================================
+        // 6. عرض المنتجات مع أزرار التحكم (تعديل، حذف، اختبار)
+        // ============================================================
+        let showTestBtn = true;
+        let showEditBtn = true;
+        let showDeleteBtn = true;
 
         function renderProducts(list) {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = list.map(p => `
-                <div class="product-card">
+                <div class="product-card" data-id="${p.id}">
                     <div class="img-container">
                         <span class="badge-cat">${p.cat}</span>
-                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" />
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://via.placeholder.com/260x230/0b132b/d4af37?text=KATANBUILD'" />
                     </div>
                     <div class="product-info">
-                        <div class="product-title">${p.name}</div>
-                        <button class="btn-card-single" onclick="openTestModal(${p.id})">🧪 الاختبار الفني الكفاءة</button>
+                        <div class="product-title" id="title-${p.id}">${p.name}</div>
+                        <div class="product-actions">
+                            <button class="btn-test ${showTestBtn ? '' : 'hidden-action'}" onclick="openTestModal(${p.id})">🧪 اختبار</button>
+                            <button class="btn-edit ${showEditBtn ? '' : 'hidden-action'}" onclick="editProduct(${p.id})">✏️ تعديل</button>
+                            <button class="btn-delete ${showDeleteBtn ? '' : 'hidden-action'}" onclick="deleteProduct(${p.id})">🗑️ حذف</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function calculateMaterials() {
-            const area = parseFloat(document.getElementById('calcArea').value) || 0;
-            const rate = parseFloat(document.getElementById('calcType').value) || 0;
-
-            const totalKg = area * rate;
-            const bags = Math.ceil(totalKg / 25);
-            const safetyBags = (bags * 1.1).toFixed(1);
-
-            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
-            document.getElementById('resBags').innerText = `${bags} أكياس`;
-            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
-        }
-
-        function sendCalcToWA() {
-            const area = document.getElementById('calcArea').value;
-            const bags = document.getElementById('resSafety').innerText;
-            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
-            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // ===== 5. لوحة التحكم لإدارة صور البانر والتحديث الديناميكي =====
-        function openAdminPanel() {
-            document.getElementById('modalIcon').innerText = '⚙️';
-            document.getElementById('modalTitle').innerText = 'لوحة التحكم - إدارة صور الواجهة (Banner Slider)';
-            document.getElementById('modalBody').innerText = 'يمكنك إضافة رابط صورة جديد لشرائح الواجهة أو حذف الصور الحالية. تتغير الصور تلقائياً كل 3 ثوانٍ:';
-            
-            renderAdminContent();
-            document.getElementById('cyberModal').style.display = 'flex';
-        }
-
-        function renderAdminContent() {
-            const content = document.getElementById('modalCustomContent');
-            content.innerHTML = `
-                <div style="margin-bottom:15px; text-align:right;">
-                    <label style="font-size:12px; color:var(--accent-gold);">رابط صورة جديد (URL):</label>
-                    <div style="display:flex; gap:8px; margin-top:5px;">
-                        <input type="text" id="newImgUrl" placeholder="https://..." style="flex:1; padding:8px; border-radius:8px; border:1px solid var(--accent-gold); background:rgba(3,7,18,0.8); color:#fff;" />
-                        <button class="btn-cyber" onclick="addBannerImage()">إضافة</button>
-                    </div>
-                </div>
-                <div class="admin-img-list">
-                    ${bannerImages.map((img, idx) => `
-                        <div class="admin-img-item">
-                            <img src="${img}" alt="Thumb" />
-                            <span style="font-size:11px; text-overflow:ellipsis; overflow:hidden; width:200px; white-space:nowrap;">${img}</span>
-                            <button class="btn-cyber" style="padding:4px 10px; font-size:11px; background:rgba(239, 68, 68, 0.2); border-color:#ef4444; color:#ef4444;" onclick="removeBannerImage(${idx})">حذف</button>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function addBannerImage() {
-            const urlInput = document.getElementById('newImgUrl');
-            const url = urlInput.value.trim();
-            if(url) {
-                bannerImages.push(url);
-                currentSlideIdx = 0;
-                initSlider();
-                renderAdminContent();
-                urlInput.value = '';
+        // ============================================================
+        // 7. إدارة المنتجات (تعديل، حذف، اختبار)
+        // ============================================================
+        function editProduct(id) {
+            const p = PRODUCTS.find(item => item.id === id);
+            if (!p) return;
+            const newName = prompt('✏️ تعديل اسم المنتج:', p.name);
+            if (newName !== null && newName.trim() !== '') {
+                p.name = newName.trim();
+                // تحديث العرض
+                renderCurrentView();
+                saveProductsToStorage();
+                alert('✅ تم تحديث الاسم بنجاح');
             }
         }
 
-        function removeBannerImage(index) {
-            if(bannerImages.length <= 1) {
-                alert('يجب الإبقاء على صورة واحدة على الأقل في البانر.');
-                return;
-            }
-            bannerImages.splice(index, 1);
-            currentSlideIdx = 0;
-            initSlider();
-            renderAdminContent();
+        function deleteProduct(id) {
+            if (!confirm('🗑️ هل أنت متأكد من حذف هذا المنتج نهائياً؟')) return;
+            PRODUCTS = PRODUCTS.filter(item => item.id !== id);
+            renderCurrentView();
+            saveProductsToStorage();
+            alert('✅ تم حذف المنتج');
         }
 
-        // ===== 6. Nodal الاختبارات =====
         function openTestModal(id) {
             const p = PRODUCTS.find(item => item.id === id);
             if(!p) return;
@@ -865,12 +1037,275 @@
             document.getElementById('cyberModal').style.display = 'flex';
         }
 
+        function renderCurrentView() {
+            const activeFilter = document.querySelector('.filter-btn.active');
+            if (activeFilter) {
+                const cat = activeFilter.innerText;
+                if (cat === 'الكل') {
+                    renderProducts(PRODUCTS);
+                } else {
+                    const filtered = PRODUCTS.filter(p => p.cat === cat);
+                    renderProducts(filtered);
+                }
+            } else {
+                renderProducts(PRODUCTS);
+            }
+        }
+
+        // حفظ المنتجات في localStorage
+        function saveProductsToStorage() {
+            localStorage.setItem('katanbuild_products', JSON.stringify(PRODUCTS));
+        }
+
+        function loadProductsFromStorage() {
+            const stored = localStorage.getItem('katanbuild_products');
+            if (stored) {
+                try {
+                    PRODUCTS = JSON.parse(stored);
+                } catch(e) {
+                    console.warn('خطأ في قراءة المنتجات المخزنة، استخدم الافتراضية');
+                }
+            }
+        }
+
+        // ============================================================
+        // 8. الفلترة
+        // ============================================================
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
+
+        function renderCategories() {
+            const container = document.getElementById('filterBar');
+            container.innerHTML = CATEGORIES.map(c => `
+                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
+            `).join('');
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (cat === 'الكل') {
+                renderProducts(PRODUCTS);
+            } else {
+                const filtered = PRODUCTS.filter(p => p.cat === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        function filterByTag(tag, chip) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            if(tag === 'all') {
+                renderProducts(PRODUCTS);
+            } else {
+                const filtered = PRODUCTS.filter(p => p.tag === tag);
+                renderProducts(filtered);
+            }
+        }
+
+        // ============================================================
+        // 9. الحاسبة
+        // ============================================================
+        function calculateMaterials() {
+            const area = parseFloat(document.getElementById('calcArea').value) || 0;
+            const rate = parseFloat(document.getElementById('calcType').value) || 0;
+
+            const totalKg = area * rate;
+            const bags = Math.ceil(totalKg / 25);
+            const safetyBags = (bags * 1.1).toFixed(1);
+
+            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
+            document.getElementById('resBags').innerText = `${bags} أكياس`;
+            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
+        }
+
+        function sendCalcToWA() {
+            const area = document.getElementById('calcArea').value;
+            const bags = document.getElementById('resSafety').innerText;
+            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
+            window.open(`https://wa.me/0952725590?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
+        function openWhatsApp() { window.open(`https://wa.me/0952725590`, '_blank'); }
+
+        // ============================================================
+        // 10. لوحة التحكم المخفية (الضغط 5 مرات على الشعار)
+        // ============================================================
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+
+        document.getElementById('mainLogo').addEventListener('click', function(e) {
+            // منع النقر على الشعار أثناء كتابة الرسالة لتجنب التداخل
+            if (document.getElementById('splashScreen').style.visibility !== 'hidden') return;
+            
+            logoClickCount++;
+            if (logoClickCount === 5) {
+                logoClickCount = 0;
+                openAdminPanel();
+            }
+            // إعادة تعيين العداد بعد 3 ثوانٍ من عدم النقر
+            clearTimeout(logoClickTimer);
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 3000);
+        });
+
+        // ============================================================
+        // 11. لوحة التحكم المتقدمة (إدارة البانر + إظهار/إخفاء الأزرار)
+        // ============================================================
+        function openAdminPanel() {
+            document.getElementById('modalIcon').innerText = '⚙️';
+            document.getElementById('modalTitle').innerText = '🛠️ لوحة التحكم المتقدمة';
+            document.getElementById('modalBody').innerText = 'إدارة صور الواجهة الرئيسية والتحكم في أزرار المنتجات:';
+
+            renderAdminContent();
+            document.getElementById('cyberModal').style.display = 'flex';
+        }
+
+        function renderAdminContent() {
+            const content = document.getElementById('modalCustomContent');
+            content.innerHTML = `
+                <div style="text-align:right; margin-bottom:15px;">
+                    <h4 style="color:var(--accent-gold); margin-bottom:10px;">🖼️ صور البانر (Banner Slider)</h4>
+                    <div class="admin-input-group">
+                        <input type="text" id="newBannerUrl" placeholder="https://... صورة جديدة" />
+                        <button onclick="addBannerImage()">➕ إضافة</button>
+                    </div>
+                    <div class="admin-img-list">
+                        ${bannerImages.map((img, idx) => `
+                            <div class="admin-img-item">
+                                <img src="${img}" alt="Banner ${idx+1}" />
+                                <span class="img-url">${img}</span>
+                                <button class="btn-del" onclick="removeBannerImage(${idx})">🗑️ حذف</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="font-size:11px; color:var(--text-muted);">⚠️ الصورة الأولى هي النشطة حالياً. تتغير الصور كل 3 ثوانٍ.</p>
+                </div>
+
+                <hr style="border-color:var(--border-glow); margin:15px 0;" />
+
+                <h4 style="color:var(--accent-gold); margin-bottom:10px;">🔘 إظهار/إخفاء أزرار المنتجات</h4>
+                <div class="toggle-group">
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleTest" ${showTestBtn ? 'checked' : ''} onchange="toggleAction('test')" />
+                        <label for="toggleTest">🧪 اختبار القوة</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleEdit" ${showEditBtn ? 'checked' : ''} onchange="toggleAction('edit')" />
+                        <label for="toggleEdit">✏️ تعديل الاسم</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleDelete" ${showDeleteBtn ? 'checked' : ''} onchange="toggleAction('delete')" />
+                        <label for="toggleDelete">🗑️ حذف المنتج</label>
+                    </div>
+                </div>
+
+                <button class="btn-save-admin" onclick="saveAdminSettings()">💾 حفظ جميع الإعدادات</button>
+            `;
+        }
+
+        // ============================================================
+        // 12. دوال التحكم في الأزرار وإدارة البانر
+        // ============================================================
+        function toggleAction(action) {
+            const checked = document.getElementById(`toggle${action.charAt(0).toUpperCase() + action.slice(1)}`).checked;
+            if (action === 'test') showTestBtn = checked;
+            else if (action === 'edit') showEditBtn = checked;
+            else if (action === 'delete') showDeleteBtn = checked;
+            // التحديث فوري بعد تغيير التبديل
+            renderCurrentView();
+        }
+
+        function addBannerImage() {
+            const input = document.getElementById('newBannerUrl');
+            const url = input.value.trim();
+            if (url) {
+                bannerImages.push(url);
+                currentSlideIdx = 0;
+                initSlider();
+                renderAdminContent();
+                input.value = '';
+                // حفظ في localStorage
+                localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+                alert('✅ تم إضافة الصورة بنجاح');
+            } else {
+                alert('⚠️ الرجاء إدخال رابط صورة صحيح');
+            }
+        }
+
+        function removeBannerImage(index) {
+            if (bannerImages.length <= 1) {
+                alert('⚠️ يجب الإبقاء على صورة واحدة على الأقل في البانر.');
+                return;
+            }
+            bannerImages.splice(index, 1);
+            currentSlideIdx = 0;
+            initSlider();
+            renderAdminContent();
+            localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+            alert('✅ تم حذف الصورة');
+        }
+
+        function saveAdminSettings() {
+            // حفظ حالة الأزرار في localStorage
+            localStorage.setItem('katanbuild_showTest', JSON.stringify(showTestBtn));
+            localStorage.setItem('katanbuild_showEdit', JSON.stringify(showEditBtn));
+            localStorage.setItem('katanbuild_showDelete', JSON.stringify(showDeleteBtn));
+            alert('💾 تم حفظ جميع الإعدادات بنجاح!');
+        }
+
+        // ============================================================
+        // 13. تحميل الإعدادات المحفوظة
+        // ============================================================
+        function loadSettings() {
+            // تحميل صور البانر
+            const storedBanner = localStorage.getItem('katanbuild_banner_images');
+            if (storedBanner) {
+                try {
+                    const parsed = JSON.parse(storedBanner);
+                    if (parsed.length > 0) bannerImages = parsed;
+                } catch(e) {}
+            }
+
+            // تحميل حالة الأزرار
+            const testVal = localStorage.getItem('katanbuild_showTest');
+            if (testVal !== null) showTestBtn = JSON.parse(testVal);
+            const editVal = localStorage.getItem('katanbuild_showEdit');
+            if (editVal !== null) showEditBtn = JSON.parse(editVal);
+            const deleteVal = localStorage.getItem('katanbuild_showDelete');
+            if (deleteVal !== null) showDeleteBtn = JSON.parse(deleteVal);
+
+            // تحميل المنتجات
+            loadProductsFromStorage();
+        }
+
+        // ============================================================
+        // 14. إغلاق النافذة المنبثقة
+        // ============================================================
         function closeCyberModal() {
             document.getElementById('cyberModal').style.display = 'none';
         }
 
-        function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
-        function openWhatsApp() { window.open(`https://wa.me/${waNumber}`, '_blank'); }
+        // ============================================================
+        // 15. تهيئة الصفحة
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            renderCategories();
+            renderProducts(PRODUCTS);
+            calculateMaterials();
+            // تهيئة البانر بعد تحميل الصفحة
+            initSlider();
+            // بدء تشغيل الآلة الكاتبة بعد تحميل الصفحة
+            setTimeout(() => {
+                if (document.getElementById('splashScreen').style.visibility === 'hidden') {
+                    runSiteTypewriter();
+                }
+            }, 1000);
+        });
+
+        // بدء تشغيل الآلة الكاتبة إذا تم إغلاق شاشة الترحيب يدوياً
+        window.enterSite = enterSite;
     </script>
 </body>
 </html>
