@@ -250,7 +250,7 @@
 
         .slider-wrapper {
             width: 100%;
-            height: 380px; /* ارتفاع مناسب مع تمدد */
+            height: 380px;
             position: relative;
             overflow: hidden;
         }
@@ -260,7 +260,7 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* تمدد مع إخفاء الأطراف */
+            object-fit: cover;
             object-position: center;
             opacity: 0;
             transition: opacity 1.2s ease-in-out;
@@ -695,7 +695,7 @@
                 <div class="splash-typewriter-bg">
                     <span>مرحباً بكم في KATANBUILD</span>
                 </div>
-                <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="splash-logo blend-logo" alt="KATANBUILD Logo" />
+                <img src="https://i.ibb.co/TZ3RCnf/Gemini-Generated-Image-mtvum8mtvum8mtvu.jpg" class="splash-logo blend-logo" alt="KATANBUILD Logo" />
             </div>
             <div class="splash-title">KATANBUILD</div>
             <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
@@ -728,9 +728,7 @@
 
         <!-- ===== 🖼️ 3. واجهة البانر ===== -->
         <div class="hero-banner-section">
-            <div class="slider-wrapper" id="sliderContainer">
-                <!-- الصور تضاف ديناميكياً بواسطة JavaScript -->
-            </div>
+            <div class="slider-wrapper" id="sliderContainer"></div>
             <div class="typewriter-banner">
                 <div class="typewriter-icon">💡</div>
                 <div class="typewriter-text-box" id="siteTypewriterText"></div>
@@ -743,10 +741,13 @@
                 🤖 المساعد الهندسي: حدد التحدي التقني في مشروعك لاختيار المادة المناسبة
             </div>
             <div class="assistant-chips">
-                <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (38)</div>
+                <!-- تم تحديث العدد الإجمالي -->
+                <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (49)</div>
                 <div class="chip" onclick="filterByTag('decor', this)">🎨 التكسيات والديكورات الداخلية</div>
                 <div class="chip" onclick="filterByTag('pool', this)">🏊‍♂️ المسابح والضغط المائي الفائق</div>
                 <div class="chip" onclick="filterByTag('heavy', this)">🏛️ البورسلين والغرانيت الضخم</div>
+                <!-- تم إضافة قسم السيراميك -->
+                <div class="chip" onclick="filterByTag('ceramic', this)">🟤 لاصق السيراميك والبلاط</div>
                 <div class="chip" onclick="filterByTag('outdoor', this)">☀️ الواجهات الخارجية ومقاومة الحرارة</div>
                 <div class="chip" onclick="filterByTag('plaster', this)">🧱 الطينة الجاهزة والأكريليك</div>
                 <div class="chip" onclick="filterByTag('grout', this)">🛠️ الروبة وجراوت الترميم</div>
@@ -803,25 +804,21 @@
             <div class="modal-icon-badge" id="modalIcon">🧪</div>
             <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="modalTitle">عنوان التنبيه</h3>
             <p id="modalBody" style="font-size:14px; color:#d1d5db; line-height:1.6; margin-bottom:20px;"></p>
-            
             <div id="modalCustomContent"></div>
-
             <button class="btn-cyber" style="width:100%; justify-content:center; margin-top:15px;" onclick="closeCyberModal()">موافق / إغلاق</button>
         </div>
     </div>
 
     <script>
         // ============================================================
-        // 1. شاشة الترحيب - الانتقال التلقائي
+        // 1. شاشة الترحيب
         // ============================================================
         let splashTimer;
 
         function triggerExplosionAndEnter() {
             const splash = document.getElementById('splashScreen');
             const explosion = document.getElementById('splashExplosion');
-            
             explosion.classList.add('active');
-            
             setTimeout(() => {
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
@@ -835,7 +832,7 @@
         });
 
         // ============================================================
-        // 2. إدارة البانر
+        // 2. إدارة البانر (كما هو)
         // ============================================================
         let bannerImages = [];
         let currentSlideIdx = 0;
@@ -873,9 +870,7 @@
             container.innerHTML = bannerImages.map((src, i) => `
                 <img src="${src}" class="slider-img ${i === 0 ? 'active' : ''}" alt="KATANBUILD Banner ${i+1}" />
             `).join('');
-
             if (sliderInterval) clearInterval(sliderInterval);
-            
             if (bannerImages.length > 1) {
                 sliderInterval = setInterval(nextSlide, slideIntervalTime);
             } else {
@@ -907,7 +902,6 @@
             const currentMsg = messages[msgIdx];
             const displayTarget = document.getElementById("siteTypewriterText");
             if (!displayTarget) return;
-
             if (!isDeleting) {
                 displayTarget.innerText = currentMsg.substring(0, charIdx + 1);
                 charIdx++;
@@ -928,7 +922,7 @@
         }
 
         // ============================================================
-        // 4. خلفية النجوم
+        // 4. خلفية النجوم (كما هو)
         // ============================================================
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
@@ -968,7 +962,6 @@
         }
 
         for (let i = 0; i < 80; i++) stars.push(new Star());
-
         function animateStars() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             stars.forEach(s => { s.update(); s.draw(); });
@@ -977,68 +970,81 @@
         animateStars();
 
         // ============================================================
-        // 5. المنتجات
+        // 5. المنتجات الجديدة (تم تحديثها بالكامل)
         // ============================================================
         let PRODUCTS = [
-            // لاصق ديكور (7)
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/mVXhBN3c/2.png', ad: 95, wat: 75, flex: 85 },
-            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfkgJs03/everest.png', ad: 92, wat: 70, flex: 80 },
+            // ===== لاصق ديكور (7) =====
+            { id: 1, name: 'كارو فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=كارو+فيكس', ad: 92, wat: 78, flex: 84 },
+            { id: 2, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', ad: 90, wat: 74, flex: 83 },
             { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', ad: 94, wat: 78, flex: 82 },
-            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/1GZK0JGn/forever.png', ad: 93, wat: 72, flex: 84 },
-            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/d4YVhwZh/image.png', ad: 91, wat: 70, flex: 80 },
-            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', ad: 90, wat: 74, flex: 83 },
-            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', ad: 95, wat: 80, flex: 86 },
+            { id: 4, name: 'القرع ديكور فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/mVXhBN3c/2.png', ad: 95, wat: 75, flex: 85 },
+            { id: 5, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', ad: 95, wat: 80, flex: 86 },
+            { id: 6, name: 'فورريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/1GZK0JGn/forever.png', ad: 93, wat: 72, flex: 84 },
+            { id: 7, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfkgJs03/everest.png', ad: 92, wat: 70, flex: 80 },
 
-            // لاصق مسابح (8)
-            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', ad: 99, wat: 100, flex: 95 },
-            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/TDwZVW7R/basil.png', ad: 97, wat: 98, flex: 92 },
-            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/6cr616P5/mockup.png', ad: 98, wat: 99, flex: 94 },
-            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', ad: 99, wat: 97, flex: 96 },
-            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Z6kqm8wt/image.png', ad: 95, wat: 96, flex: 90 },
-            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/HDYtzRm5/image.png', ad: 96, wat: 98, flex: 93 },
-            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/DHdDTwtX/image.png', ad: 97, wat: 99, flex: 91 },
-            { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VW0QXqyG/image.png', ad: 94, wat: 95, flex: 89 },
+            // ===== لاصق مسبح (8) =====
+            { id: 8, name: 'آن ازرق', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/Z6kqm8wt/image.png', ad: 95, wat: 96, flex: 90 },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/TDwZVW7R/basil.png', ad: 97, wat: 98, flex: 92 },
+            { id: 10, name: 'عباس', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/VW0QXqyG/image.png', ad: 94, wat: 95, flex: 89 },
+            { id: 11, name: 'اونكس', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/HDYtzRm5/image.png', ad: 96, wat: 98, flex: 93 },
+            { id: 12, name: 'الترا غريب اكسترا', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', ad: 99, wat: 97, flex: 96 },
+            { id: 13, name: 'اكوا فيكس بلس', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', ad: 99, wat: 100, flex: 95 },
+            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/DHdDTwtX/image.png', ad: 97, wat: 99, flex: 91 },
+            { id: 15, name: 'الترا بوند ازرق', cat: 'لاصق مسبح', tag: 'pool', img: 'https://i.ibb.co/6cr616P5/mockup.png', ad: 98, wat: 99, flex: 94 },
 
-            // لاصق غرانيت (10)
-            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/gLDmLyHM/image.png', ad: 98, wat: 88, flex: 92 },
+            // ===== لاصق غرانيت (11) =====
+            { id: 16, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/8n73h5xG/laith.png', ad: 94, wat: 83, flex: 87 },
             { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/fYYX8W1m/mockup.png', ad: 97, wat: 86, flex: 90 },
-            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rGrh2zq9/image.png', ad: 96, wat: 85, flex: 88 },
+            { id: 18, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', ad: 96, wat: 87, flex: 89 },
             { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tw8DFGcT/image.png', ad: 95, wat: 84, flex: 87 },
-            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Q3DBpnNX/span.png', ad: 94, wat: 82, flex: 86 },
-            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tpYb9KHR/image.png', ad: 93, wat: 80, flex: 85 },
-            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', ad: 95, wat: 85, flex: 88 },
-            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', ad: 96, wat: 87, flex: 89 },
-            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/8n73h5xG/laith.png', ad: 94, wat: 83, flex: 87 },
-            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/21g55pWv/onerlo.png', ad: 95, wat: 84, flex: 88 },
+            { id: 20, name: 'ناولو', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/21g55pWv/onerlo.png', ad: 95, wat: 84, flex: 88 },
+            { id: 21, name: 'سلامات فكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tpYb9KHR/image.png', ad: 93, wat: 80, flex: 85 },
+            { id: 22, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Q3DBpnNX/span.png', ad: 94, wat: 82, flex: 86 },
+            { id: 23, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', ad: 95, wat: 85, flex: 88 },
+            { id: 24, name: 'نجار فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=نجار+فيكس', ad: 93, wat: 82, flex: 86 },
+            { id: 25, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/gLDmLyHM/image.png', ad: 98, wat: 88, flex: 92 },
+            { id: 26, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rGrh2zq9/image.png', ad: 96, wat: 85, flex: 88 },
 
-            // لاصق خارجي (3)
-            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/DPCK57x1/r2b.png', ad: 99, wat: 94, flex: 98 },
-            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', ad: 98, wat: 92, flex: 99 },
-            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', ad: 96, wat: 90, flex: 95 },
+            // ===== لاصق سيراميك (10) =====
+            { id: 27, name: 'سيتي فيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=سيتي+فيكس', ad: 94, wat: 78, flex: 82 },
+            { id: 28, name: 'كرافت الترافيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=كرافت+الترافيكس', ad: 92, wat: 80, flex: 84 },
+            { id: 29, name: 'لايت فيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=لايت+فيكس', ad: 93, wat: 76, flex: 85 },
+            { id: 30, name: 'بريمير فيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=بريمير+فيكس', ad: 95, wat: 79, flex: 86 },
+            { id: 31, name: 'موسيك فيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=موسيك+فيكس', ad: 91, wat: 72, flex: 80 },
+            { id: 32, name: 'سيرا فيكس', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=سيرا+فيكس', ad: 92, wat: 74, flex: 83 },
+            { id: 33, name: 'منستر فيكس 100', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=منستر+100', ad: 96, wat: 82, flex: 88 },
+            { id: 34, name: 'فيكسو', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=فيكسو', ad: 90, wat: 70, flex: 78 },
+            { id: 35, name: 'الترا بوند احمر', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=الترا+بوند+احمر', ad: 98, wat: 85, flex: 92 },
+            { id: 36, name: 'بروسيل رمادي', cat: 'لاصق سيراميك', tag: 'ceramic', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=بروسيل+رمادي', ad: 94, wat: 78, flex: 84 },
 
-            // طينة (5)
-            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93 },
-            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', ad: 90, wat: 85, flex: 91 },
-            { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/sv947RvN/sulid-mix.png', ad: 91, wat: 82, flex: 88 },
-            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/nNgC3hzH/Whats-App-Image-2026-06-18-at-1-10.png', ad: 94, wat: 89, flex: 87 },
-            { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/DDFN8TJF/image.png', ad: 95, wat: 90, flex: 92 },
+            // ===== لاصق خارجي (3) =====
+            { id: 37, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', ad: 96, wat: 90, flex: 95 },
+            { id: 38, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', ad: 98, wat: 92, flex: 99 },
+            { id: 39, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/DPCK57x1/r2b.png', ad: 99, wat: 94, flex: 98 },
 
-            // روبة (2)
-            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/39XZ6n5k/graft.png', ad: 93, wat: 95, flex: 89 },
-            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GQTn6NG1/qods.png', ad: 98, wat: 96, flex: 94 },
+            // ===== طينة (5) =====
+            { id: 40, name: 'طينة سولايد ميكس اسمنتية 50كغ', cat: 'طينة', tag: 'plaster', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=سولايد+50كغ', ad: 94, wat: 89, flex: 87 },
+            { id: 41, name: 'طينة اسمنتية سولايد ميكس 18كغ', cat: 'طينة', tag: 'plaster', img: 'https://via.placeholder.com/260x230/0b132b/d4af37?text=سولايد+18كغ', ad: 92, wat: 85, flex: 86 },
+            { id: 42, name: 'الترا بوند طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', ad: 90, wat: 85, flex: 91 },
+            { id: 43, name: 'الترا بوند طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93 },
+            { id: 44, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/DDFN8TJF/image.png', ad: 95, wat: 90, flex: 92 },
 
-            // عوازل (3)
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/fGKcxGHx/najar.png', ad: 95, wat: 100, flex: 97 },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', ad: 89, wat: 98, flex: 86 },
-            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/m553JtKC/image.png', ad: 97, wat: 100, flex: 98 }
+            // ===== روبة (2) =====
+            { id: 45, name: 'الترا جريب', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/39XZ6n5k/graft.png', ad: 93, wat: 95, flex: 89 },
+            { id: 46, name: 'جراوت اصلاح الترا بوند', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GQTn6NG1/qods.png', ad: 98, wat: 96, flex: 94 },
+
+            // ===== عوازل (3) =====
+            { id: 47, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/m553JtKC/image.png', ad: 97, wat: 100, flex: 98 },
+            { id: 48, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/fGKcxGHx/najar.png', ad: 95, wat: 100, flex: 97 },
+            { id: 49, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', ad: 89, wat: 98, flex: 86 }
         ];
 
         // ============================================================
-        // 6. عرض المنتجات (الأزرار مخفية افتراضياً)
+        // 6. عرض المنتجات (كما هو)
         // ============================================================
-        let showTestBtn = false;  // ← افتراضياً مخفية
-        let showEditBtn = false;  // ← افتراضياً مخفية
-        let showDeleteBtn = false; // ← افتراضياً مخفية
+        let showTestBtn = false;
+        let showEditBtn = false;
+        let showDeleteBtn = false;
 
         function renderProducts(list) {
             const grid = document.getElementById('productGrid');
@@ -1061,7 +1067,7 @@
         }
 
         // ============================================================
-        // 7. إدارة المنتجات
+        // 7. إدارة المنتجات وباقي الدوال (كما هي، باستثناء الفلاتر)
         // ============================================================
         function editProduct(id) {
             const p = PRODUCTS.find(item => item.id === id);
@@ -1086,11 +1092,9 @@
         function openTestModal(id) {
             const p = PRODUCTS.find(item => item.id === id);
             if(!p) return;
-
             document.getElementById('modalIcon').innerText = '🧪';
             document.getElementById('modalTitle').innerText = `اختبار الكفاءة: ${p.name}`;
             document.getElementById('modalBody').innerText = `المواصفات الفنية ومؤشرات القوة الخاصة بمادة (${p.name}) تحت الاختبار الميداني:`;
-            
             document.getElementById('modalCustomContent').innerHTML = `
                 <div class="metric-bar">
                     <div style="display:flex; justify-content:space-between; font-size:12px;">
@@ -1114,7 +1118,6 @@
                     <div class="bar-outer"><div class="bar-inner" style="width:${p.flex}%;"></div></div>
                 </div>
             `;
-
             document.getElementById('cyberModal').style.display = 'flex';
         }
 
@@ -1147,9 +1150,9 @@
         }
 
         // ============================================================
-        // 8. الفلترة
+        // 8. الفلترة (تم تحديث الأقسام)
         // ============================================================
-        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسبح', 'لاصق غرانيت', 'لاصق سيراميك', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
 
         function renderCategories() {
             const container = document.getElementById('filterBar');
@@ -1172,7 +1175,6 @@
         function filterByTag(tag, chip) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            
             if(tag === 'all') {
                 renderProducts(PRODUCTS);
             } else {
@@ -1182,16 +1184,14 @@
         }
 
         // ============================================================
-        // 9. الحاسبة
+        // 9. الحاسبة وباقي الدوال (كما هي)
         // ============================================================
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
-
             const totalKg = area * rate;
             const bags = Math.ceil(totalKg / 25);
             const safetyBags = (bags * 1.1).toFixed(1);
-
             document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
             document.getElementById('resBags').innerText = `${bags} أكياس`;
             document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
@@ -1216,7 +1216,6 @@
 
         document.getElementById('mainLogo').addEventListener('click', function(e) {
             if (document.getElementById('splashScreen').style.visibility !== 'hidden') return;
-            
             logoClickCount++;
             if (logoClickCount === 5) {
                 logoClickCount = 0;
@@ -1232,13 +1231,12 @@
         });
 
         // ============================================================
-        // 11. لوحة التحكم المتقدمة (مع إدارة الأقسام والمنتجات)
+        // 11. لوحة التحكم المتقدمة (دوال إدارة البانر والمنتجات كما هي)
         // ============================================================
         function openAdminPanel() {
             document.getElementById('modalIcon').innerText = '⚙️';
             document.getElementById('modalTitle').innerText = '🛠️ لوحة التحكم المتقدمة';
             document.getElementById('modalBody').innerText = 'إدارة صور الواجهة، أزرار المنتجات، وإدارة الأقسام والمنتجات:';
-
             renderAdminContent();
             document.getElementById('cyberModal').style.display = 'flex';
         }
@@ -1246,7 +1244,6 @@
         function renderAdminContent() {
             const content = document.getElementById('modalCustomContent');
             content.innerHTML = `
-                <!-- قسم إدارة صور البانر -->
                 <div style="text-align:right; margin-bottom:15px;">
                     <h4 style="color:var(--accent-gold); margin-bottom:10px;">🖼️ صور البانر (Banner Slider)</h4>
                     <div class="admin-input-group">
@@ -1272,7 +1269,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- قسم إظهار/إخفاء أزرار المنتجات -->
                 <h4 style="color:var(--accent-gold); margin-bottom:10px;">🔘 إظهار/إخفاء أزرار المنتجات</h4>
                 <div class="toggle-group">
                     <div class="toggle-item">
@@ -1291,10 +1287,7 @@
 
                 <hr class="section-divider" />
 
-                <!-- قسم إدارة الأقسام والمنتجات -->
                 <h4 style="color:var(--accent-gold); margin-bottom:10px;">📂 إدارة الأقسام والمنتجات</h4>
-                
-                <!-- إضافة منتج جديد -->
                 <div style="background:rgba(3,7,18,0.3); padding:12px; border-radius:10px; margin-bottom:15px;">
                     <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">➕ إضافة منتج جديد إلى القسم المختار:</p>
                     <div class="admin-input-group" style="flex-direction:column; gap:8px;">
@@ -1312,7 +1305,6 @@
                     </div>
                 </div>
 
-                <!-- عرض المنتجات حسب الأقسام -->
                 ${CATEGORIES.filter(c => c !== 'الكل').map(cat => {
                     const items = PRODUCTS.filter(p => p.cat === cat);
                     return `
@@ -1337,14 +1329,10 @@
                 }).join('')}
 
                 <hr class="section-divider" />
-
                 <button class="btn-save-admin" onclick="saveAdminSettings()">💾 حفظ جميع الإعدادات</button>
             `;
         }
 
-        // ============================================================
-        // 12. دوال التحكم في الأزرار وإدارة البانر والمنتجات
-        // ============================================================
         function toggleAction(action) {
             const checked = document.getElementById(`toggle${action.charAt(0).toUpperCase() + action.slice(1)}`).checked;
             if (action === 'test') showTestBtn = checked;
@@ -1410,8 +1398,9 @@
 
             const tagMap = {
                 'لاصق ديكور': 'decor',
-                'لاصق مسابح': 'pool',
+                'لاصق مسبح': 'pool',
                 'لاصق غرانيت': 'heavy',
+                'لاصق سيراميك': 'ceramic',
                 'لاصق خارجي': 'outdoor',
                 'طينة': 'plaster',
                 'روبة': 'grout',
@@ -1425,7 +1414,6 @@
             saveProductsToStorage();
             renderCurrentView();
             renderAdminContent();
-            // تنظيف الحقول
             document.getElementById('newProductName').value = '';
             document.getElementById('newProductImg').value = '';
             document.getElementById('newProductAd').value = '';
@@ -1434,7 +1422,6 @@
             alert('✅ تم إضافة المنتج بنجاح');
         }
 
-        // دوال إدارة المنتجات من داخل لوحة التحكم
         function adminEditProduct(id) {
             const p = PRODUCTS.find(item => item.id === id);
             if (!p) return;
@@ -1466,32 +1453,21 @@
             alert('💾 تم حفظ جميع الإعدادات بنجاح!');
         }
 
-        // ============================================================
-        // 13. تحميل الإعدادات المحفوظة
-        // ============================================================
         function loadSettings() {
             loadBannerSettings();
-            
             const testVal = localStorage.getItem('katanbuild_showTest');
             if (testVal !== null) showTestBtn = JSON.parse(testVal);
             const editVal = localStorage.getItem('katanbuild_showEdit');
             if (editVal !== null) showEditBtn = JSON.parse(editVal);
             const deleteVal = localStorage.getItem('katanbuild_showDelete');
             if (deleteVal !== null) showDeleteBtn = JSON.parse(deleteVal);
-
             loadProductsFromStorage();
         }
 
-        // ============================================================
-        // 14. إغلاق النافذة المنبثقة
-        // ============================================================
         function closeCyberModal() {
             document.getElementById('cyberModal').style.display = 'none';
         }
 
-        // ============================================================
-        // 15. تهيئة الصفحة
-        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
             renderCategories();
