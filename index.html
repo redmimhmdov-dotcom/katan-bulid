@@ -31,14 +31,13 @@
             min-height: 100vh;
         }
 
-        /* دمج الصور وتطبيص الخلفية البيضاء للشعار */
         .blend-logo {
-            mix-blend-mode: multiply; /* أفضل لدمج الخلفية البيضاء على الخلفيات الداكنة */
-            filter: contrast(1.1);
+            mix-blend-mode: screen;
+            filter: brightness(1.1) contrast(1.1);
             object-fit: contain;
         }
 
-        /* ===== 🎆 1. صفحة الترحيب والشعار (Splash Screen) المعدلة ===== */
+        /* ===== 🎆 1. صفحة الترحيب ===== */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -52,52 +51,124 @@
             overflow: hidden;
         }
 
-        /* تأثير الانفجار للشعار عند النهاية */
-        #splashScreen.explode {
-            animation: splashExplode 1s forwards ease-out;
+        .splash-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        @keyframes splashExplode {
-            0% { transform: scale(1); opacity: 1; filter: blur(0px); }
-            100% { transform: scale(5); opacity: 0; filter: blur(20px); visibility: hidden; }
+        .splash-logo-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .splash-logo {
-            width: 350px; /* حجم أكبر بناء على طلبك */
+            width: 220px;
             height: auto;
+            max-height: 180px;
+            padding: 10px;
             border-radius: 20px;
-            /* تم إزالة الحدود والظلال لجعل الشعار مدمج */
-            animation: pulseSplash 2s alternate ease-in-out;
-            margin-bottom: 25px;
-            mix-blend-mode: multiply; /* دمج الخلفية البيضاء */
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            animation: slideLogo 2.5s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes pulseSplash {
-            0% { transform: scale(0.9); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1;}
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes slideLogo {
+            0% { transform: translateX(-120px) scale(0.95); opacity: 0.7; }
+            100% { transform: translateX(120px) scale(1.05); opacity: 1; }
+        }
+
+        .splash-typewriter-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: rgba(255, 215, 0, 0.2);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 3px;
+            direction: ltr;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .splash-typewriter-bg span {
+            display: inline-block;
+            animation: typewriterBg 3s steps(30) 1s forwards;
+            width: 0;
+            overflow: hidden;
+            border-left: 3px solid rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes typewriterBg {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
         .splash-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 900;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            margin-top: 15px;
             margin-bottom: 8px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            z-index: 2;
+            position: relative;
         }
 
         .splash-sub {
             color: var(--accent-cyan);
-            font-size: 14px;
-            letter-spacing: 4px;
+            font-size: 16px;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
             font-weight: 600;
+            z-index: 2;
+            position: relative;
         }
 
-        /* تم إزالة زر الدخول لتصبح العملية تلقائية */
+        .splash-explosion {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
 
-        /* ===== 🌟 2. شعار الخلفية المضيء بالنيون ===== */
+        .splash-explosion.active {
+            opacity: 1;
+            animation: explosion 0.8s ease forwards;
+        }
+
+        @keyframes explosion {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.8); opacity: 0.9; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* ===== 🌟 2. شعار الخلفية المضيء ===== */
         .watermark-logo {
             position: fixed;
             top: 50%;
@@ -107,14 +178,13 @@
             max-width: 800px;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.1; /* أقل شفافية للدمج */
+            opacity: 0.15;
             animation: watermarkNeonPulse 4s infinite alternate ease-in-out;
-            mix-blend-mode: multiply; /* دمج الخلفية البيضاء */
         }
 
         @keyframes watermarkNeonPulse {
-            0% { opacity: 0.05; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2)) saturate(100%); }
-            100% { opacity: 0.15; filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.8)) saturate(160%); }
+            0% { opacity: 0.10; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2)) saturate(100%); }
+            100% { opacity: 0.22; filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 25px rgba(56, 189, 248, 0.4)) saturate(160%); }
         }
 
         #bgCanvas {
@@ -122,7 +192,7 @@
             pointer-events: none; z-index: 0; opacity: 0.6;
         }
 
-        /* ===== 🏛️ 3. الهيدر الفاخر ===== */
+        /* ===== 🏛️ 3. الهيدر ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 5%; 
@@ -133,17 +203,21 @@
             position: sticky; top:0; z-index:100;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
-        .logo { display:flex; align-items:center; gap:14px; cursor:pointer; } /* المؤشر يد يوحي بإمكانية الضغط */
+        .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
         .logo img { 
             border-radius: 8px; 
+            background: rgba(255,255,255,0.05); 
             padding: 2px; 
-            mix-blend-mode: multiply; /* دمج */
+            border: 1px solid var(--accent-gold); 
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
         }
         .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
         .logo-sub { font-size:10px; color:var(--accent-cyan); letter-spacing:3px; display:block; }
         
         .header-actions { display:flex; align-items:center; gap:12px; }
-        /* تم إزالة زر لوحة التحكم الظاهر */
         .btn-cyber {
             background: rgba(255, 215, 0, 0.1);
             backdrop-filter: blur(12px);
@@ -161,14 +235,14 @@
 
         .container { max-width: 95%; margin: auto; padding: 25px 10px; position: relative; z-index: 1; }
 
-        /* ===== 🖼️ 4. واجهة البانر المتناوبة المدمجة بالرسالة المتحركة ===== */
+        /* ===== 🖼️ 4. واجهة البانر (مستطيل مدمج مع تمدد) ===== */
         .hero-banner-section {
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto 30px auto;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border-glow);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 25px rgba(255, 215, 0, 0.2);
             position: relative;
             background: rgba(11, 19, 43, 0.6);
             backdrop-filter: blur(15px);
@@ -176,7 +250,7 @@
 
         .slider-wrapper {
             width: 100%;
-            height: 400px; /* الارتفاع بناء على طلبك */
+            height: 380px; /* ارتفاع مناسب مع تمدد */
             position: relative;
             overflow: hidden;
         }
@@ -186,20 +260,23 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* تمدد متناسق */
+            object-fit: cover; /* تمدد مع إخفاء الأطراف */
+            object-position: center;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.2s ease-in-out;
+            transform: scale(1.02);
         }
 
         .slider-img.active {
             opacity: 1;
+            transform: scale(1);
         }
 
-        /* دمج الرسالة المتحركة أسفل البانر */
+        /* ===== ⌨️ شريط الرسالة المتغيرة ===== */
         .typewriter-banner {
             background: rgba(3, 7, 18, 0.85);
             border-top: 1px solid var(--border-indigo);
-            padding: 16px 25px;
+            padding: 14px 25px;
             backdrop-filter: blur(15px);
             display: flex;
             align-items: center;
@@ -209,8 +286,10 @@
         .typewriter-icon {
             font-size: 20px;
             background: rgba(255, 215, 0, 0.15);
-            width: 42px; height: 42px;
-            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
@@ -269,7 +348,10 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             backdrop-filter: blur(20px);
         }
-        @media (max-width: 900px) { .calculator-section { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { 
+            .calculator-section { grid-template-columns: 1fr; } 
+            .slider-wrapper { height: 260px; }
+        }
         
         .calc-inputs input, .calc-inputs select {
             width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 18px;
@@ -310,7 +392,10 @@
             border-radius: 18px;
             border: 1px solid rgba(255, 215, 0, 0.2); 
             overflow: hidden;
-            transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
+            transition: 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: relative; 
             backdrop-filter: blur(16px);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -348,44 +433,38 @@
         }
 
         .product-info { padding: 18px; text-align: center; }
-        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-        
-        /* أزرار التحكم بالمنتج (تظهر للمسؤول فقط) */
-        .admin-actions {
-            display: none; /* مخفية افتراضيا */
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(3, 7, 18, 0.9);
-            padding: 10px;
-            gap: 5px;
+        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+
+        .product-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
             justify-content: center;
-            border-top: 1px solid var(--accent-gold);
+            margin-top: 10px;
         }
-        .admin-btn {
-            flex: 1;
-            padding: 5px;
+
+        .product-actions button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
             font-size: 11px;
-            border-radius: 5px;
-            border: 1px solid;
-            background: none;
+            font-weight: 600;
             cursor: pointer;
+            transition: 0.3s;
             font-family: 'Cairo';
-            font-weight: bold;
+            flex: 1;
+            min-width: 60px;
         }
-        .btn-edit { color: var(--accent-cyan); border-color: var(--accent-cyan); }
-        .btn-del { color: #ef4444; border-color: #ef4444; }
-        .btn-test { color: var(--accent-gold); border-color: var(--accent-gold); }
 
-        .btn-card-single {
-            width: 100%; padding: 10px; border-radius: 10px; 
-            border: 1px solid var(--accent-gold);
-            background: rgba(255, 215, 0, 0.12); color: #fff; 
-            font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: 0.3s; font-family: 'Cairo';
-        }
-        .btn-card-single:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+        .product-actions .btn-test:hover { background: var(--accent-gold); color: #000; }
+        .product-actions .btn-edit:hover { background: #38bdf8; color: #000; }
+        .product-actions .btn-delete:hover { background: #ef4444; color: #fff; }
 
-        /* ===== 💬 8. النوافذ المنبثقة التفاعلية ===== */
+        .product-actions .hidden-action { display: none; }
+
+        /* ===== 💬 8. النوافذ المنبثقة ===== */
         .cyber-modal-overlay {
             position: fixed; inset: 0; z-index: 9999;
             background: rgba(2, 5, 12, 0.85); backdrop-filter: blur(15px);
@@ -398,12 +477,18 @@
         .cyber-modal-card {
             background: rgba(11, 19, 43, 0.95);
             border: 1px solid var(--accent-gold);
-            border-radius: 20px; padding: 30px; width: 90%; max-width: 500px;
-            position: relative; color: #fff; text-align: center;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 650px;
+            position: relative;
+            color: #fff;
+            text-align: center;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
             transform: scale(0.9);
             animation: modalPop 0.3s forwards ease;
-            max-height: 90vh; overflow-y: auto;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalPop { to { transform: scale(1); } }
@@ -412,7 +497,8 @@
             width: 60px; height: 60px; margin: 0 auto 15px;
             background: rgba(255, 215, 0, 0.1); border-radius: 50%;
             border: 1px solid var(--accent-gold);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center; justify-content: center;
             font-size: 26px; color: var(--accent-gold);
         }
 
@@ -420,60 +506,219 @@
         .bar-outer { height: 8px; background: rgba(3, 7, 18, 0.8); border-radius: 4px; overflow: hidden; margin-top: 5px; }
         .bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold)); transition: width 0.8s ease; }
 
-        /* تنسيقات لوحة التحكم */
-        .admin-form-group { text-align: right; margin-bottom: 15px; }
-        .admin-form-group label { display: block; color: var(--accent-gold); font-size: 13px; margin-bottom: 5px; }
-        .admin-form-group input { 
-            width: 100%; padding: 10px; border-radius: 8px; 
-            border: 1px solid var(--border-indigo); background: rgba(3,7,18,0.7); color: #fff; font-family: 'Cairo'; 
+        /* إدارة الأقسام والمنتجات في لوحة التحكم */
+        .admin-section-block {
+            background: rgba(3,7,18,0.4);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid var(--border-indigo);
         }
-        .btn-admin-save {
-            width: 100%; padding: 12px; border-radius: 10px; background: linear-gradient(135deg, var(--accent-gold), #997a15);
-            border: none; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px;
-        }
-        .management-section { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 15px;}
-        .section-tab-title {color: var(--accent-cyan); font-weight: bold; margin-bottom: 10px;}
 
-        /* تنسيق قائمة المنتجات داخل لوحة التحكم */
-        .admin-p-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; text-align: right;}
-        .admin-p-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px;
+        .admin-section-title {
+            color: var(--accent-gold);
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .admin-p-controls { display: flex; gap: 5px; align-items: center;}
-        .admin-p-controls input[type="checkbox"] { accent-color: var(--accent-gold); }
 
+        .admin-product-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 5px 0;
+            flex-wrap: wrap;
+        }
+
+        .admin-product-row img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border-glow);
+        }
+
+        .admin-product-row .prod-info {
+            flex: 1;
+            text-align: right;
+            font-size: 13px;
+            min-width: 120px;
+        }
+
+        .admin-product-row .prod-info .pname {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .admin-product-row .prod-info .plink {
+            font-size: 10px;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .admin-product-row .btn-sm {
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-glow);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: 'Cairo';
+            transition: 0.3s;
+        }
+
+        .admin-product-row .btn-sm:hover { opacity: 0.8; }
+        .admin-product-row .btn-edit-sm:hover { background: #38bdf8; color: #000; }
+        .admin-product-row .btn-del-sm:hover { background: #ef4444; color: #fff; }
+
+        .admin-img-list { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; max-height: 250px; overflow-y: auto; }
+        .admin-img-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(3,7,18,0.7); padding: 8px 12px; border-radius: 8px; 
+            border: 1px solid var(--border-indigo);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-img-item img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .admin-img-item .img-url { font-size: 11px; color: var(--text-muted); flex: 1; text-align: right; word-break: break-all; }
+        .admin-img-item .btn-del { 
+            background: rgba(239, 68, 68, 0.2); 
+            border: 1px solid #ef4444; 
+            color: #ef4444; 
+            padding: 2px 10px; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .admin-img-item .btn-del:hover { background: #ef4444; color: #fff; }
+
+        .toggle-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+            background: rgba(3,7,18,0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .toggle-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .admin-input-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .admin-input-group input, .admin-input-group select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+            background: rgba(3,7,18,0.7);
+            color: #fff;
+            font-family: 'Cairo';
+            min-width: 150px;
+        }
+
+        .admin-input-group button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo';
+        }
+
+        .admin-input-group button:hover { opacity: 0.8; }
+
+        .btn-save-admin {
+            background: #22c55e;
+            color: #000;
+            font-weight: 800;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo';
+            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn-save-admin:hover { opacity: 0.8; }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-glow);
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .admin-img-item { flex-direction: column; align-items: stretch; }
+            .admin-img-item .img-url { text-align: center; }
+            .admin-product-row { flex-direction: column; align-items: stretch; text-align: center; }
+            .admin-product-row .prod-info { text-align: center; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 🎆 1. شاشة الترحيب بالشعار المضيء المدمج -->
+    <!-- 🎆 1. شاشة الترحيب -->
     <div id="splashScreen">
-        <!-- تحديث صورة الشعار وتطبيق الدمج -->
-        <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="splash-logo" alt="KATANBUILD Logo" />
-        <div class="splash-title">KATANBUILD</div>
-        <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
-        <!-- تم إزالة زر الدخول -->
+        <div class="splash-wrapper">
+            <div class="splash-logo-container">
+                <div class="splash-typewriter-bg">
+                    <span>مرحباً بكم في KATANBUILD</span>
+                </div>
+                <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="splash-logo blend-logo" alt="KATANBUILD Logo" />
+            </div>
+            <div class="splash-title">KATANBUILD</div>
+            <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
+        </div>
+        <div class="splash-explosion" id="splashExplosion"></div>
     </div>
 
     <!-- 🌟 2. الشعار الخلفي المدمج بأسلوب النيون -->
-    <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="watermark-logo" alt="Neon Watermark" />
+    <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo blend-logo" alt="Neon Watermark" />
 
     <!-- خلفية النجوم -->
     <canvas id="bgCanvas"></canvas>
 
     <!-- ===== الهيدر ===== -->
     <header>
-        <!-- جعل الشعار قابل للضغط 5 مرات لفتح لوحة التحكم -->
-        <div class="logo" id="adminTriggerLogo">
-            <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="blend-logo" height="40" width="auto" />
+        <div class="logo" id="mainLogo">
+            <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="blend-logo" alt="KATANBUILD" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
                 <span class="logo-sub">DEEP INDIGO & CYBER EDITION</span>
             </div>
         </div>
         <div class="header-actions">
-            <!-- تم إزالة زر لوحة التحكم من هنا -->
             <button class="btn-cyber" onclick="scrollToCalc()">🧮 الحاسبة</button>
             <button class="btn-cyber" onclick="openWhatsApp()">📞 التواصل</button>
         </div>
@@ -481,7 +726,7 @@
 
     <div class="container">
 
-        <!-- ===== 🖼️ 3. واجهة البانر المتناوبة (900x700) ===== -->
+        <!-- ===== 🖼️ 3. واجهة البانر ===== -->
         <div class="hero-banner-section">
             <div class="slider-wrapper" id="sliderContainer">
                 <!-- الصور تضاف ديناميكياً بواسطة JavaScript -->
@@ -492,13 +737,13 @@
             </div>
         </div>
 
-        <!-- ===== المساعد الهندسي الذكي ===== -->
+        <!-- ===== المساعد الهندسي ===== -->
         <div class="smart-assistant-card">
             <div class="assistant-title">
                 🤖 المساعد الهندسي: حدد التحدي التقني في مشروعك لاختيار المادة المناسبة
             </div>
             <div class="assistant-chips">
-                <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (<span id="totalProductCount">38</span>)</div>
+                <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (38)</div>
                 <div class="chip" onclick="filterByTag('decor', this)">🎨 التكسيات والديكورات الداخلية</div>
                 <div class="chip" onclick="filterByTag('pool', this)">🏊‍♂️ المسابح والضغط المائي الفائق</div>
                 <div class="chip" onclick="filterByTag('heavy', this)">🏛️ البورسلين والغرانيت الضخم</div>
@@ -509,7 +754,7 @@
             </div>
         </div>
 
-        <!-- ===== حاسبة الكميات للمشاريع ===== -->
+        <!-- ===== حاسبة الكميات ===== -->
         <div class="calculator-section" id="calcSection">
             <div class="calc-inputs">
                 <h3 style="color:var(--accent-gold); margin-bottom:15px;">🧮 حاسبة الاحتياجات والميزانية</h3>
@@ -543,510 +788,719 @@
             </div>
         </div>
 
-        <!-- ===== شبكة المنتجات ===== -->
-        <h2 style="margin-bottom:16px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات</h2>
-        
-        <div class="product-grid" id="productGrid">
-             <!-- المنتجات تضاف ديناميكياً -->
-        </div>
+        <!-- ===== الفلترة ===== -->
+        <h2 style="margin-bottom:16px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات المعروضة</h2>
+        <div class="filter-bar" id="filterBar"></div>
+
+        <!-- شبكة المنتجات -->
+        <div class="product-grid" id="productGrid"></div>
 
     </div>
 
-    <!-- ===== 💬 النافذة المنبثقة التفاعلية العمة ===== -->
+    <!-- ===== 💬 النافذة المنبثقة ===== -->
     <div id="cyberModal" class="cyber-modal-overlay">
         <div class="cyber-modal-card">
-            <span style="position: absolute; top:10px; right:15px; cursor:pointer; color:var(--text-muted); font-size:20px;" onclick="closeCyberModal()">&times;</span>
             <div class="modal-icon-badge" id="modalIcon">🧪</div>
             <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="modalTitle">عنوان التنبيه</h3>
+            <p id="modalBody" style="font-size:14px; color:#d1d5db; line-height:1.6; margin-bottom:20px;"></p>
             
             <div id="modalCustomContent"></div>
 
-            <button id="modalMainBtn" class="btn-cyber" style="width:100%; justify-content:center; margin-top:15px;" onclick="closeCyberModal()">موافق / إغلاق</button>
+            <button class="btn-cyber" style="width:100%; justify-content:center; margin-top:15px;" onclick="closeCyberModal()">موافق / إغلاق</button>
         </div>
     </div>
 
     <script>
-        // المتغيرات العالمية للتهيئة
-        let waNumber = '0952725590';
-        let isAdmin = false; // هل المستخدم مسؤول
+        // ============================================================
+        // 1. شاشة الترحيب - الانتقال التلقائي
+        // ============================================================
+        let splashTimer;
 
-        // ===== تهيئة صفحة الترحيب التلقائية =====
-        document.addEventListener('DOMContentLoaded', () => {
-            // التحقق من وجود بيانات محفوظة
-            loadAdminSettings();
-            
+        function triggerExplosionAndEnter() {
             const splash = document.getElementById('splashScreen');
-            // دخول تلقائي بعد 3 ثواني (مدة الانيميشن)
+            const explosion = document.getElementById('splashExplosion');
+            
+            explosion.classList.add('active');
+            
             setTimeout(() => {
-                splash.classList.add('explode');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
                 runSiteTypewriter();
-                // إزالة الديف تماما بعد الانتهاء لضمان وضوح الخطوط خلفه
-                setTimeout(() => splash.style.display = 'none', 1000);
-            }, 3000);
+                if (typeof initSlider === 'function') initSlider();
+            }, 900);
+        }
 
-            // تهيئة المكونات الأخرى
-            initBackgroundStars();
-            initTypewriterBanner();
-            initCalculator();
-            renderProducts();
-            initSlider();
-            initAdminTrigger();
+        window.addEventListener('load', function() {
+            splashTimer = setTimeout(triggerExplosionAndEnter, 5000);
         });
 
-        // ===== 1. التعامل مع الشعار المدمج (إزالة الخلفية البيضاء من CSS) =====
-        // تم تنفيذ ذلك في الـ CSS عبر: mix-blend-mode: multiply;
-
-        // ===== 2. نظام الدخول التلقائي والخطوط الواضحة =====
-        // تم تنفيذه في DOMContentLoaded + إزالة الـ z-index العالي بعد الدخول
-
-        // ===== 3. تحويل البانر لـ 900x700 ودمج الرسالة وحفظ الصور تلقائياً =====
-        // تم ضبط الـ CSS للأبعاد. JavaScript لإدارة السلايدر:
-
-        // الإعدادات الافتراضية للبانر
-        let bannerSettings = {
-            images: [
-                'https://i.ibb.co/dxbJqTT/1786627087080.png',
-                'https://i.ibb.co/9kn63v1c/1786629632716.png'
-            ],
-            interval: 3000 // 3 ثواني
-        };
-
+        // ============================================================
+        // 2. إدارة البانر
+        // ============================================================
+        let bannerImages = [];
         let currentSlideIdx = 0;
-        let sliderInterval;
+        let sliderInterval = null;
+        let slideIntervalTime = 3000;
+
+        function loadBannerSettings() {
+            const stored = localStorage.getItem('katanbuild_banner_images');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed.length > 0) bannerImages = parsed;
+                } catch(e) {}
+            }
+            if (bannerImages.length === 0) {
+                bannerImages = [
+                    'https://i.ibb.co/dxbJqTT/1786627087080.png',
+                    'https://i.ibb.co/9kn63v1c/1786629632716.png'
+                ];
+            }
+            const storedTime = localStorage.getItem('katanbuild_slide_interval');
+            if (storedTime) {
+                slideIntervalTime = parseInt(storedTime) || 3000;
+            }
+        }
+
+        function saveBannerSettings() {
+            localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+            localStorage.setItem('katanbuild_slide_interval', slideIntervalTime.toString());
+        }
 
         function initSlider() {
             const container = document.getElementById('sliderContainer');
-            if(bannerSettings.images.length === 0) {
-                container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#555;">لا توجد صور بانر</div>';
-                return;
-            }
-
-            container.innerHTML = bannerSettings.images.map((src, i) => `
-                <img src="${src}" class="slider-img ${i === 0 ? 'active' : ''}" alt="KATANBUILD Banner" />
+            if (!container) return;
+            container.innerHTML = bannerImages.map((src, i) => `
+                <img src="${src}" class="slider-img ${i === 0 ? 'active' : ''}" alt="KATANBUILD Banner ${i+1}" />
             `).join('');
 
-            currentSlideIdx = 0;
             if (sliderInterval) clearInterval(sliderInterval);
-
-            // إذا كانت صورة واحدة لا تبدأ التايمر
-            if (bannerSettings.images.length > 1) {
-                sliderInterval = setInterval(nextSlide, bannerSettings.interval);
+            
+            if (bannerImages.length > 1) {
+                sliderInterval = setInterval(nextSlide, slideIntervalTime);
+            } else {
+                sliderInterval = null;
             }
         }
 
         function nextSlide() {
             const imgs = document.querySelectorAll('.slider-img');
-            if(imgs.length < 2) return;
-            
+            if(imgs.length === 0 || imgs.length <= 1) return;
             imgs[currentSlideIdx].classList.remove('active');
             currentSlideIdx = (currentSlideIdx + 1) % imgs.length;
             imgs[currentSlideIdx].classList.add('active');
         }
 
-        // ===== 4. نظام لوحة التحكم (مخفية، كلمة مرور، صلاحيات) =====
+        // ============================================================
+        // 3. الآلة الكاتبة
+        // ============================================================
+        const messages = [
+            "أهلاً بكم في KATANBUILD | المرجع الأول لابتكار وتطوير مواد البناء المتقدمة.",
+            "الموقع مصمم بأسلوب الكحلي الملكي والتأثير الزجاجي المضيء لتوفير تجربة تصفح هادئة وفاخرة.",
+            "استخدم المساعد الهندسي والحاسبة التفاعلية لتقدير احتياجات مشروعك بدقة متناهية."
+        ];
 
-        // إطلاق لوحة التحكم بالضغط 5 مرات على الشعار
-        function initAdminTrigger() {
-            const logo = document.getElementById('adminTriggerLogo');
-            let clickCount = 0;
-            let lastClickTime = 0;
+        let msgIdx = 0, charIdx = 0, isDeleting = false;
+        const speed = 40, deleteSpeed = 20, delayBetween = 2200;
 
-            logo.addEventListener('click', () => {
-                const currentTime = new Date().getTime();
-                
-                // إعادة تعيين إذا طال الوقت بين الضغطات (أكثر من 1.5 ثانية)
-                if (currentTime - lastClickTime > 1500) {
-                    clickCount = 0;
+        function runSiteTypewriter() {
+            const currentMsg = messages[msgIdx];
+            const displayTarget = document.getElementById("siteTypewriterText");
+            if (!displayTarget) return;
+
+            if (!isDeleting) {
+                displayTarget.innerText = currentMsg.substring(0, charIdx + 1);
+                charIdx++;
+                if (charIdx === currentMsg.length) {
+                    isDeleting = true;
+                    setTimeout(runSiteTypewriter, delayBetween);
+                    return;
                 }
-                
-                clickCount++;
-                lastClickTime = currentTime;
-
-                if (clickCount === 5) {
-                    clickCount = 0; // إعادة تعيين
-                    askForPassword();
+            } else {
+                displayTarget.innerText = currentMsg.substring(0, charIdx - 1);
+                charIdx--;
+                if (charIdx === 0) {
+                    isDeleting = false;
+                    msgIdx = (msgIdx + 1) % messages.length;
                 }
-            });
+            }
+            setTimeout(runSiteTypewriter, isDeleting ? deleteSpeed : speed);
         }
 
-        function askForPassword() {
-            // استخدام نافذة منبثقة بسيطة لطلب كلمة المرور
-            const pass = prompt("الرجاء إدخال كلمة مرور المسؤول للوصول إلى لوحة التحكم:");
-            if (pass === "katan2026") {
-                isAdmin = true;
-                showCustomAlert('🔐 تم الدخول', 'أهلاً بك أيها المسؤول. تم تفعيل خيارات التعديل في الموقع وتجهيز لوحة التحكم.', '🔑');
-                // تغيير وظيفة زر المنبثقة لفتح لوحة التحكم
-                document.getElementById('modalMainBtn').onclick = () => { closeCyberModal(); openAdminPanel(); };
-            } else if (pass !== null) {
-                showCustomAlert('⛔ خطأ', 'كلمة المرور غير صحيحة. الوصول مرفوض.', '❌');
+        // ============================================================
+        // 4. خلفية النجوم
+        // ============================================================
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.4 + 0.5;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.015 + 0.005;
+                this.growing = Math.random() > 0.5;
+            }
+            update() {
+                if (this.growing) {
+                    this.alpha += this.speed;
+                    if (this.alpha >= 0.8) this.growing = false;
+                } else {
+                    this.alpha -= this.speed;
+                    if (this.alpha <= 0.15) this.growing = true;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(186, 230, 253, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
-        function openAdminPanel() {
-            if(!isAdmin) return;
+        for (let i = 0; i < 80; i++) stars.push(new Star());
 
-            setModalContent('⚙️ لوحة التحكم الإحترافية', '', '⚙️');
-            
-            const content = document.getElementById('modalCustomContent');
-            content.innerHTML = `
-                <!-- 1. إدارة الواجهة -->
-                <div class="management-section">
-                    <div class="section-tab-title">🖼️ إدارة واجهة المستخدم</div>
-                    <div class="admin-form-group">
-                        <label>روابط صور البانر المباشرة (رابط في كل سطر)</label>
-                        <textarea id="adminBannerUrls" rows="4" style="width:100%; padding:10px; border-radius:8px; background:rgba(3,7,18,0.7); color:#fff; border:1px solid var(--border-indigo); font-family:monospace; resize:vertical;"></textarea>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>الفترة الزمنية للتبديل (ميلي ثانية - مثال: 3000 لـ 3 ثواني)</label>
-                        <input type="number" id="adminBannerInterval" placeholder="3000">
-                    </div>
-                </div>
-
-                <!-- 2 & 3. إدارة المنتجات والأقسام -->
-                <div class="management-section">
-                    <div class="section-tab-title">📦 إدارة المنتجات والأقسام</div>
-                    <div style="text-align:right; font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-                        قم باختيار الأزرار التي تود إظهارها للمستخدم على كارت المنتج:
-                    </div>
-                    <div class="admin-p-list" id="adminProductControlList">
-                        <!-- تضاف ديناميكياً -->
-                    </div>
-                    
-                    <button class="btn-cyber" style="width:100%; margin-top:15px; justify-content:center; background:rgba(56, 189, 248, 0.1); border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="addNewProductForm()">➕ إضافة منتج جديد</button>
-                </div>
-
-                <button class="btn-admin-save" onclick="saveAdminSettings()">💾 حفظ كافة التعديلات</button>
-            `;
-
-            // ملء البيانات الحالية في الفورم
-            document.getElementById('adminBannerUrls').value = bannerSettings.images.join('\n');
-            document.getElementById('adminBannerInterval').value = bannerSettings.interval;
-            renderAdminProductList();
-
-            document.getElementById('modalMainBtn').style.display = 'none'; // إخفاء زر الإغلاق العادي
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => { s.update(); s.draw(); });
+            requestAnimationFrame(animateStars);
         }
+        animateStars();
 
-        // رندر قائمة المنتجات في لوحة التحكم لإدارة خيارات الظهور
-        function renderAdminProductList() {
-            const list = document.getElementById('adminProductControlList');
-            list.innerHTML = PRODUCTS.map(p => `
-                <div class="admin-p-item">
-                    <div style="font-size:13px; color:#fff;">${p.name} <span style="color:var(--text-muted); font-size:11px;">(${p.cat})</span></div>
-                    <div class="admin-p-controls">
-                        <label title="تعديل الاسم"><input type="checkbox" id="edit_${p.id}" ${p.showEdit ? 'checked' : ''}> 📝</label>
-                        <label title="حذف"><input type="checkbox" id="del_${p.id}" ${p.showDel ? 'checked' : ''}> 🗑️</label>
-                        <label title="اختبار القوة"><input type="checkbox" id="test_${p.id}" ${p.showTest ? 'checked' : ''}> 🧪</label>
+        // ============================================================
+        // 5. المنتجات
+        // ============================================================
+        let PRODUCTS = [
+            // لاصق ديكور (7)
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/mVXhBN3c/2.png', ad: 95, wat: 75, flex: 85 },
+            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfkgJs03/everest.png', ad: 92, wat: 70, flex: 80 },
+            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', ad: 94, wat: 78, flex: 82 },
+            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/1GZK0JGn/forever.png', ad: 93, wat: 72, flex: 84 },
+            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/d4YVhwZh/image.png', ad: 91, wat: 70, flex: 80 },
+            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', ad: 90, wat: 74, flex: 83 },
+            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', ad: 95, wat: 80, flex: 86 },
+
+            // لاصق مسابح (8)
+            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', ad: 99, wat: 100, flex: 95 },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/TDwZVW7R/basil.png', ad: 97, wat: 98, flex: 92 },
+            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/6cr616P5/mockup.png', ad: 98, wat: 99, flex: 94 },
+            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', ad: 99, wat: 97, flex: 96 },
+            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Z6kqm8wt/image.png', ad: 95, wat: 96, flex: 90 },
+            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/HDYtzRm5/image.png', ad: 96, wat: 98, flex: 93 },
+            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/DHdDTwtX/image.png', ad: 97, wat: 99, flex: 91 },
+            { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VW0QXqyG/image.png', ad: 94, wat: 95, flex: 89 },
+
+            // لاصق غرانيت (10)
+            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/gLDmLyHM/image.png', ad: 98, wat: 88, flex: 92 },
+            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/fYYX8W1m/mockup.png', ad: 97, wat: 86, flex: 90 },
+            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rGrh2zq9/image.png', ad: 96, wat: 85, flex: 88 },
+            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tw8DFGcT/image.png', ad: 95, wat: 84, flex: 87 },
+            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Q3DBpnNX/span.png', ad: 94, wat: 82, flex: 86 },
+            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tpYb9KHR/image.png', ad: 93, wat: 80, flex: 85 },
+            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', ad: 95, wat: 85, flex: 88 },
+            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', ad: 96, wat: 87, flex: 89 },
+            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/8n73h5xG/laith.png', ad: 94, wat: 83, flex: 87 },
+            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/21g55pWv/onerlo.png', ad: 95, wat: 84, flex: 88 },
+
+            // لاصق خارجي (3)
+            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/DPCK57x1/r2b.png', ad: 99, wat: 94, flex: 98 },
+            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', ad: 98, wat: 92, flex: 99 },
+            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', ad: 96, wat: 90, flex: 95 },
+
+            // طينة (5)
+            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93 },
+            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', ad: 90, wat: 85, flex: 91 },
+            { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/sv947RvN/sulid-mix.png', ad: 91, wat: 82, flex: 88 },
+            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/nNgC3hzH/Whats-App-Image-2026-06-18-at-1-10.png', ad: 94, wat: 89, flex: 87 },
+            { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/DDFN8TJF/image.png', ad: 95, wat: 90, flex: 92 },
+
+            // روبة (2)
+            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/39XZ6n5k/graft.png', ad: 93, wat: 95, flex: 89 },
+            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GQTn6NG1/qods.png', ad: 98, wat: 96, flex: 94 },
+
+            // عوازل (3)
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/fGKcxGHx/najar.png', ad: 95, wat: 100, flex: 97 },
+            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', ad: 89, wat: 98, flex: 86 },
+            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/m553JtKC/image.png', ad: 97, wat: 100, flex: 98 }
+        ];
+
+        // ============================================================
+        // 6. عرض المنتجات (الأزرار مخفية افتراضياً)
+        // ============================================================
+        let showTestBtn = false;  // ← افتراضياً مخفية
+        let showEditBtn = false;  // ← افتراضياً مخفية
+        let showDeleteBtn = false; // ← افتراضياً مخفية
+
+        function renderProducts(list) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = list.map(p => `
+                <div class="product-card" data-id="${p.id}">
+                    <div class="img-container">
+                        <span class="badge-cat">${p.cat}</span>
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://via.placeholder.com/260x230/0b132b/d4af37?text=KATANBUILD'" />
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title" id="title-${p.id}">${p.name}</div>
+                        <div class="product-actions">
+                            <button class="btn-test ${showTestBtn ? '' : 'hidden-action'}" onclick="openTestModal(${p.id})">🧪 اختبار</button>
+                            <button class="btn-edit ${showEditBtn ? '' : 'hidden-action'}" onclick="editProduct(${p.id})">✏️ تعديل</button>
+                            <button class="btn-delete ${showDeleteBtn ? '' : 'hidden-action'}" onclick="deleteProduct(${p.id})">🗑️ حذف</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // إضافة فورم منتج جديد داخل المنبثقة
-        function addNewProductForm() {
-            const content = document.getElementById('modalCustomContent');
-            content.innerHTML = `
-                <div class="management-section">
-                    <div class="section-tab-title">➕ إضافة منتج جديد</div>
-                    <div class="admin-form-group">
-                        <label>اسم المنتج</label>
-                        <input type="text" id="newP_name" required>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>القسم (Decor, Pool, Heavy, Outdoor, Plaster, Grout, Insulation)</label>
-                        <input type="text" id="newP_tag" placeholder="Decor" required>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>اسم القسم بالعربي للعرض (مثال: لاصق ديكور)</label>
-                        <input type="text" id="newP_cat" placeholder="لاصق ديكور" required>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>رابط الصورة المباشر</label>
-                        <input type="url" id="newP_img" required>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-cyber" style="flex:1; justify-content:center; color:#ef4444; border-color:#ef4444;" onclick="openAdminPanel()">❌ إلغاء</button>
-                        <button class="btn-cyber" style="flex:1; justify-content:center; color:var(--accent-gold);" onclick="saveNewProduct()">✅ إضافة</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function saveNewProduct() {
-            const name = document.getElementById('newP_name').value;
-            const tag = document.getElementById('newP_tag').value;
-            const cat = document.getElementById('newP_cat').value;
-            const img = document.getElementById('newP_img').value;
-
-            if(!name || !tag || !cat || !img) { alert("الرجاء ملء جميع الحقول المطلوبة"); return; }
-
-            const newId = PRODUCTS.length > 0 ? Math.max(...PRODUCTS.map(p=>p.id)) + 1 : 1;
-            const newP = {
-                id: newId,
-                name: name,
-                tag: tag,
-                cat: cat,
-                img: img,
-                ad: 90, wat: 90, flex: 90, // قيم افتراضية للاختبار
-                showEdit: true, showDel: true, showTest: true // أزرار افتراضية
-            };
-
-            PRODUCTS.push(newP);
-            showCustomAlert('✅ نجاح', 'تم إضافة المنتج الجديد. اضغط حفظ في لوحة التحكم لاعتماد التغييرات نهائياً.', '🎉');
-            document.getElementById('modalMainBtn').onclick = () => { closeCyberModal(); openAdminPanel(); };
-        }
-
-        // حفظ كافة الإعدادات إلى LocalStorage
-        function saveAdminSettings() {
-            // 1. حفظ إعدادات البانر
-            const urlsText = document.getElementById('adminBannerUrls').value;
-            bannerSettings.images = urlsText.split('\n').map(url => url.trim()).filter(url => url !== '');
-            bannerSettings.interval = parseInt(document.getElementById('adminBannerInterval').value) || 3000;
-
-            // 2. حفظ إعدادات أزرار المنتجات
-            PRODUCTS.forEach(p => {
-                p.showEdit = document.getElementById(`edit_${p.id}`).checked;
-                p.showDel = document.getElementById(`del_${p.id}`).checked;
-                p.showTest = document.getElementById(`test_${p.id}`).checked;
-            });
-
-            // حفظ في التخزين المحلي
-            localStorage.setItem('katan_banner_settings', JSON.stringify(bannerSettings));
-            localStorage.setItem('katan_products_db', JSON.stringify(PRODUCTS));
-
-            closeCyberModal();
-            // إعادة تحميل العناصر المتأثرة
-            initSlider();
-            renderProducts();
-            showCustomAlert('💾 تم الحفظ', 'تم حفظ جميع التعديلات بنجاح.', '✅');
-            // إعادة ضبط زر المنبثقة للإغلاق العادي
-            document.getElementById('modalMainBtn').onclick = closeCyberModal;
-        }
-
-        // تحميل الإعدادات المحفوظة
-        function loadAdminSettings() {
-            const savedBanner = localStorage.getItem('katan_banner_settings');
-            if(savedBanner) bannerSettings = JSON.parse(savedBanner);
-
-            const savedProducts = localStorage.getItem('katan_products_db');
-            if(savedProducts) PRODUCTS = JSON.parse(savedProducts);
-        }
-
-        // إجراءات المسؤول على المنتج مباشرة
-        function adminEditName(id) {
+        // ============================================================
+        // 7. إدارة المنتجات
+        // ============================================================
+        function editProduct(id) {
             const p = PRODUCTS.find(item => item.id === id);
-            if(!p) return;
-            const newName = prompt(`تعديل اسم المنتج لـ:`, p.name);
-            if(newName && newName !== p.name) {
-                p.name = newName;
-                localStorage.setItem('katan_products_db', JSON.stringify(PRODUCTS));
-                renderProducts();
+            if (!p) return;
+            const newName = prompt('✏️ تعديل اسم المنتج:', p.name);
+            if (newName !== null && newName.trim() !== '') {
+                p.name = newName.trim();
+                renderCurrentView();
+                saveProductsToStorage();
+                alert('✅ تم تحديث الاسم بنجاح');
             }
         }
 
-        function adminDeleteProduct(id) {
-            const p = PRODUCTS.find(item => item.id === id);
-            if(!p) return;
-            if(confirm(`هل أنت متأكد من حذف المنتج: ${p.name}؟`)) {
-                PRODUCTS = PRODUCTS.filter(item => item.id !== id);
-                localStorage.setItem('katan_products_db', JSON.stringify(PRODUCTS));
-                renderProducts();
-            }
-        }
-
-
-        // ===== باقي الكود الأصلي محسناً للتعامل مع التغييرات ديناميكياً =====
-
-        // قاعدة بيانات المنتجات الافتراضية (تستخدم أول مرة فقط إذا لم يكن هناك كاش)
-        let PRODUCTS = [
-             // تم تحديث الروابط بناء على الصورة والبيانات الأخيرة في الكود المرسل
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/mVXhBN3c/2.png', ad: 95, wat: 75, flex: 85, showEdit:true, showDel:true, showTest:true },
-            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfkgJs03/everest.png', ad: 92, wat: 70, flex: 80, showEdit:true, showDel:true, showTest:true },
-            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', ad: 94, wat: 78, flex: 82, showEdit:true, showDel:true, showTest:true },
-            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/1GZK0JGn/forever.png', ad: 93, wat: 72, flex: 84, showEdit:true, showDel:true, showTest:true },
-            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/d4YVhwZh/image.png', ad: 91, wat: 70, flex: 80, showEdit:true, showDel:true, showTest:true },
-            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', ad: 90, wat: 74, flex: 83, showEdit:true, showDel:true, showTest:true },
-            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', ad: 95, wat: 80, flex: 86, showEdit:true, showDel:true, showTest:true },
-            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', ad: 99, wat: 100, flex: 95, showEdit:true, showDel:true, showTest:true },
-            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/TDwZVW7R/basil.png', ad: 97, wat: 98, flex: 92, showEdit:true, showDel:true, showTest:true },
-            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/6cr616P5/mockup.png', ad: 98, wat: 99, flex: 94, showEdit:true, showDel:true, showTest:true },
-            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', ad: 99, wat: 97, flex: 96, showEdit:true, showDel:true, showTest:true },
-            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Z6kqm8wt/image.png', ad: 95, wat: 96, flex: 90, showEdit:true, showDel:true, showTest:true },
-            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/HDYtzRm5/image.png', ad: 96, wat: 98, flex: 93, showEdit:true, showDel:true, showTest:true },
-            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/DHdDTwtX/image.png', ad: 97, wat: 99, flex: 91, showEdit:true, showDel:true, showTest:true },
-            { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VW0QXqyG/image.png', ad: 94, wat: 95, flex: 89, showEdit:true, showDel:true, showTest:true },
-            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/gLDmLyHM/image.png', ad: 98, wat: 88, flex: 92, showEdit:true, showDel:true, showTest:true },
-            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/fYYX8W1m/mockup.png', ad: 97, wat: 86, flex: 90, showEdit:true, showDel:true, showTest:true },
-            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rGrh2zq9/image.png', ad: 96, wat: 85, flex: 88, showEdit:true, showDel:true, showTest:true },
-            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tw8DFGcT/image.png', ad: 95, wat: 84, flex: 87, showEdit:true, showDel:true, showTest:true },
-            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Q3DBpnNX/span.png', ad: 94, wat: 82, flex: 86, showEdit:true, showDel:true, showTest:true },
-            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/tpYb9KHR/image.png', ad: 93, wat: 80, flex: 85, showEdit:true, showDel:true, showTest:true },
-            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', ad: 95, wat: 85, flex: 88, showEdit:true, showDel:true, showTest:true },
-            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', ad: 96, wat: 87, flex: 89, showEdit:true, showDel:true, showTest:true },
-            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/8n73h5xG/laith.png', ad: 94, wat: 83, flex: 87, showEdit:true, showDel:true, showTest:true },
-            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/21g55pWv/onerlo.png', ad: 95, wat: 84, flex: 88, showEdit:true, showDel:true, showTest:true },
-            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/DPCK57x1/r2b.png', ad: 99, wat: 94, flex: 98, showEdit:true, showDel:true, showTest:true },
-            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', ad: 98, wat: 92, flex: 99, showEdit:true, showDel:true, showTest:true },
-            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', ad: 96, wat: 90, flex: 95, showEdit:true, showDel:true, showTest:true },
-            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', ad: 92, wat: 88, flex: 93, showEdit:true, showDel:true, showTest:true },
-            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', ad: 90, wat: 85, flex: 91, showEdit:true, showDel:true, showTest:true },
-            { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/sv947RvN/sulid-mix.png', ad: 91, wat: 82, flex: 88, showEdit:true, showDel:true, showTest:true },
-            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/nNgC3hzH/Whats-App-Image-2026-06-18-at-1-10.png', ad: 94, wat: 89, flex: 87, showEdit:true, showDel:true, showTest:true },
-            { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/DDFN8TJF/image.png', ad: 95, wat: 90, flex: 92, showEdit:true, showDel:true, showTest:true },
-            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/39XZ6n5k/graft.png', ad: 93, wat: 95, flex: 89, showEdit:true, showDel:true, showTest:true },
-            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GQTn6NG1/qods.png', ad: 98, wat: 96, flex: 94, showEdit:true, showDel:true, showTest:true },
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/fGKcxGHx/najar.png', ad: 95, wat: 100, flex: 97, showEdit:true, showDel:true, showTest:true },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', ad: 89, wat: 98, flex: 86, showEdit:true, showDel:true, showTest:true },
-            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/m553JtKC/image.png', ad: 97, wat: 100, flex: 98, showEdit:true, showDel:true, showTest:true }
-        ];
-
-        // تهيئة خلفية النجوم
-        function initBackgroundStars() {
-            const canvas = document.getElementById('bgCanvas');
-            const ctx = canvas.getContext('2d');
-            let stars = [];
-            
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            class Star {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.4 + 0.5;
-                    this.alpha = Math.random();
-                    this.speed = Math.random() * 0.015 + 0.005;
-                    this.growing = Math.random() > 0.5;
-                }
-                update() {
-                    if (this.growing) { this.alpha += this.speed; if (this.alpha >= 0.8) this.growing = false; }
-                    else { this.alpha -= this.speed; if (this.alpha <= 0.15) this.growing = true; }
-                }
-                draw() {
-                    ctx.fillStyle = `rgba(186, 230, 253, ${this.alpha})`;
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-                }
-            }
-            for (let i = 0; i < 80; i++) stars.push(new Star());
-            function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
-            animate();
-        }
-
-        // نظام الآلة الكاتبة
-        function initTypewriterBanner() {
-            const textTarget = document.getElementById("siteTypewriterText");
-            let mIdx = 0; let cIdx = 0; let isDel = false;
-            
-            function type() {
-                const currentMsg = messages[mIdx];
-                if (!isDel) {
-                    textTarget.innerText = currentMsg.substring(0, cIdx + 1);
-                    cIdx++;
-                    if (cIdx === currentMsg.length) { isDel = true; setTimeout(type, 2200); return; }
-                } else {
-                    textTarget.innerText = currentMsg.substring(0, cIdx - 1);
-                    cIdx--;
-                    if (cIdx === 0) { isDel = false; mIdx = (mIdx + 1) % messages.length; }
-                }
-                setTimeout(type, isDel ? 20 : 40);
-            }
-            // تبدأ بعد اختفاء الـ Splash
-            setTimeout(type, 4000);
-        }
-
-        // فلترة وعرض المنتجات مع أزرار المسؤول
-        function renderProducts(list = PRODUCTS) {
-            const grid = document.getElementById('productGrid');
-            const totalSpan = document.getElementById('totalProductCount');
-            
-            totalSpan.innerText = PRODUCTS.length; // تحديث العدد الكلي دائما
-
-            grid.innerHTML = list.map(p => {
-                // بناء أزرار المسؤول بناء على الإعدادات
-                let adminButtons = '';
-                if(isAdmin) {
-                    adminButtons = `<div class="admin-actions" style="display:flex;">`;
-                    if(p.showEdit) adminButtons += `<button class="admin-btn btn-edit" onclick="adminEditName(${p.id})">تعديل</button>`;
-                    if(p.showDel) adminButtons += `<button class="admin-btn btn-del" onclick="adminDeleteProduct(${p.id})">حذف</button>`;
-                    if(p.showTest) adminButtons += `<button class="admin-btn btn-test" onclick="openTestModal(${p.id})">اختبار</button>`;
-                    adminButtons += `</div>`;
-                }
-
-                return `
-                <div class="product-card">
-                    <div class="img-container">
-                        <span class="badge-cat">${p.cat}</span>
-                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" />
-                        ${adminButtons}
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${p.name}</div>
-                        ${!isAdmin ? `<button class="btn-card-single" onclick="openTestModal(${p.id})">🧪 الاختبار الفني الكفاءة</button>` : ''}
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        function filterByTag(tag, chip) {
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            const filtered = (tag === 'all') ? PRODUCTS : PRODUCTS.filter(p => p.tag === tag);
-            renderProducts(filtered);
-        }
-
-        // الحاسبة
-        function initCalculator() { calculateMaterials(); }
-        function calculateMaterials() {
-            const area = parseFloat(document.getElementById('calcArea').value) || 0;
-            const rate = parseFloat(document.getElementById('calcType').value) || 0;
-            const totalKg = area * rate;
-            const bags = Math.ceil(totalKg / 25);
-            const safetyBags = (bags * 1.1).toFixed(1);
-            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
-            document.getElementById('resBags').innerText = `${bags} أكياس`;
-            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
-        }
-
-        // خدمات النوافذ المنبثقة
-        function setModalContent(title, body, icon = '✨') {
-            document.getElementById('modalIcon').innerText = icon;
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalCustomContent').innerHTML = body;
-            document.getElementById('modalCustomContent').style.display = body ? 'block' : 'none';
-            // إعادة تعيين محتوى الـ body النصي العادي
-            const bodyP = document.getElementById('modalBody');
-            if(bodyP) bodyP.remove(); // إزالة القديم إن وجد
-
-            document.getElementById('modalMainBtn').style.display = 'flex'; // إظهار الزر الافتراضي
+        function deleteProduct(id) {
+            if (!confirm('🗑️ هل أنت متأكد من حذف هذا المنتج نهائياً؟')) return;
+            PRODUCTS = PRODUCTS.filter(item => item.id !== id);
+            renderCurrentView();
+            saveProductsToStorage();
+            alert('✅ تم حذف المنتج');
         }
 
         function openTestModal(id) {
             const p = PRODUCTS.find(item => item.id === id);
             if(!p) return;
-            const content = `
-                <p style="font-size:14px; color:#d1d5db; line-height:1.6; margin-bottom:20px;">المواصفات الفنية ومؤشرات القوة الخاصة بمادة (${p.name}) تحت الاختبار الميداني:</p>
-                <div class="metric-bar"><div style="display:flex; justify-content:space-between; font-size:12px;"><span>قوة الالتصاق والربط (Adhesion)</span><span>${p.ad}%</span></div><div class="bar-outer"><div class="bar-inner" style="width:${p.ad}%;"></div></div></div>
-                <div class="metric-bar"><div style="display:flex; justify-content:space-between; font-size:12px;"><span>مقاومة الماء والظروف الجوية</span><span>${p.wat}%</span></div><div class="bar-outer"><div class="bar-inner" style="width:${p.wat}%;"></div></div></div>
-                <div class="metric-bar"><div style="display:flex; justify-content:space-between; font-size:12px;"><span>المرونة واستيعاب إجهاد المباني</span><span>${p.flex}%</span></div><div class="bar-outer"><div class="bar-inner" style="width:${p.flex}%;"></div></div></div>
+
+            document.getElementById('modalIcon').innerText = '🧪';
+            document.getElementById('modalTitle').innerText = `اختبار الكفاءة: ${p.name}`;
+            document.getElementById('modalBody').innerText = `المواصفات الفنية ومؤشرات القوة الخاصة بمادة (${p.name}) تحت الاختبار الميداني:`;
+            
+            document.getElementById('modalCustomContent').innerHTML = `
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>قوة الالتصاق والربط (Adhesion)</span>
+                        <span>${p.ad}%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.ad}%;"></div></div>
+                </div>
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>مقاومة الماء والظروف الجوية</span>
+                        <span>${p.wat}%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.wat}%;"></div></div>
+                </div>
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>المرونة واستيعاب إجهاد المباني</span>
+                        <span>${p.flex}%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.flex}%;"></div></div>
+                </div>
             `;
-            setModalContent(`اختبار الكفاءة: ${p.name}`, content, '🧪');
+
             document.getElementById('cyberModal').style.display = 'flex';
         }
 
-        // اختصارات المنبثقة العامة (تستخدم للرسائل السريعة)
-        function showCustomAlert(title, text, icon) {
-             const content = `<p style="font-size:14px; color:#d1d5db; line-height:1.6; margin-bottom:20px;">${text}</p>`;
-             setModalContent(title, content, icon);
-             document.getElementById('modalMainBtn').onclick = closeCyberModal; // التأكد من أنه يغلق فقط
-             document.getElementById('cyberModal').style.display = 'flex';
+        function renderCurrentView() {
+            const activeFilter = document.querySelector('.filter-btn.active');
+            if (activeFilter) {
+                const cat = activeFilter.innerText;
+                if (cat === 'الكل') {
+                    renderProducts(PRODUCTS);
+                } else {
+                    const filtered = PRODUCTS.filter(p => p.cat === cat);
+                    renderProducts(filtered);
+                }
+            } else {
+                renderProducts(PRODUCTS);
+            }
         }
 
-        function closeCyberModal() { document.getElementById('cyberModal').style.display = 'none'; }
+        function saveProductsToStorage() {
+            localStorage.setItem('katanbuild_products', JSON.stringify(PRODUCTS));
+        }
+
+        function loadProductsFromStorage() {
+            const stored = localStorage.getItem('katanbuild_products');
+            if (stored) {
+                try {
+                    PRODUCTS = JSON.parse(stored);
+                } catch(e) {}
+            }
+        }
+
+        // ============================================================
+        // 8. الفلترة
+        // ============================================================
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
+
+        function renderCategories() {
+            const container = document.getElementById('filterBar');
+            container.innerHTML = CATEGORIES.map(c => `
+                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
+            `).join('');
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (cat === 'الكل') {
+                renderProducts(PRODUCTS);
+            } else {
+                const filtered = PRODUCTS.filter(p => p.cat === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        function filterByTag(tag, chip) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            if(tag === 'all') {
+                renderProducts(PRODUCTS);
+            } else {
+                const filtered = PRODUCTS.filter(p => p.tag === tag);
+                renderProducts(filtered);
+            }
+        }
+
+        // ============================================================
+        // 9. الحاسبة
+        // ============================================================
+        function calculateMaterials() {
+            const area = parseFloat(document.getElementById('calcArea').value) || 0;
+            const rate = parseFloat(document.getElementById('calcType').value) || 0;
+
+            const totalKg = area * rate;
+            const bags = Math.ceil(totalKg / 25);
+            const safetyBags = (bags * 1.1).toFixed(1);
+
+            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
+            document.getElementById('resBags').innerText = `${bags} أكياس`;
+            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
+        }
+
+        function sendCalcToWA() {
+            const area = document.getElementById('calcArea').value;
+            const bags = document.getElementById('resSafety').innerText;
+            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
+            window.open(`https://wa.me/0952725590?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
         function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
-        function openWhatsApp() { window.open(`https://wa.me/${waNumber}`, '_blank'); }
+        function openWhatsApp() { window.open(`https://wa.me/0952725590`, '_blank'); }
+
+        // ============================================================
+        // 10. لوحة التحكم المخفية (ضغط 5 مرات + كلمة مرور)
+        // ============================================================
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+        const adminPassword = 'katan2026';
+
+        document.getElementById('mainLogo').addEventListener('click', function(e) {
+            if (document.getElementById('splashScreen').style.visibility !== 'hidden') return;
+            
+            logoClickCount++;
+            if (logoClickCount === 5) {
+                logoClickCount = 0;
+                const pwd = prompt('🔐 أدخل كلمة المرور للدخول إلى لوحة التحكم:');
+                if (pwd === adminPassword) {
+                    openAdminPanel();
+                } else {
+                    alert('❌ كلمة مرور خاطئة.');
+                }
+            }
+            clearTimeout(logoClickTimer);
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 3000);
+        });
+
+        // ============================================================
+        // 11. لوحة التحكم المتقدمة (مع إدارة الأقسام والمنتجات)
+        // ============================================================
+        function openAdminPanel() {
+            document.getElementById('modalIcon').innerText = '⚙️';
+            document.getElementById('modalTitle').innerText = '🛠️ لوحة التحكم المتقدمة';
+            document.getElementById('modalBody').innerText = 'إدارة صور الواجهة، أزرار المنتجات، وإدارة الأقسام والمنتجات:';
+
+            renderAdminContent();
+            document.getElementById('cyberModal').style.display = 'flex';
+        }
+
+        function renderAdminContent() {
+            const content = document.getElementById('modalCustomContent');
+            content.innerHTML = `
+                <!-- قسم إدارة صور البانر -->
+                <div style="text-align:right; margin-bottom:15px;">
+                    <h4 style="color:var(--accent-gold); margin-bottom:10px;">🖼️ صور البانر (Banner Slider)</h4>
+                    <div class="admin-input-group">
+                        <input type="text" id="newBannerUrl" placeholder="https://... صورة جديدة" />
+                        <button onclick="addBannerImage()">➕ إضافة</button>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center; margin:10px 0; flex-wrap:wrap;">
+                        <label style="font-size:13px; color:var(--text-muted);">⏱️ فترة التغير (بالثواني):</label>
+                        <input type="number" id="slideIntervalInput" value="${slideIntervalTime/1000}" min="1" step="0.5" style="width:80px; padding:6px; border-radius:6px; border:1px solid var(--border-glow); background:rgba(3,7,18,0.7); color:#fff;" />
+                        <button onclick="updateSlideInterval()" style="padding:6px 15px; border-radius:6px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer;">تطبيق</button>
+                    </div>
+                    <div class="admin-img-list">
+                        ${bannerImages.map((img, idx) => `
+                            <div class="admin-img-item">
+                                <img src="${img}" alt="Banner ${idx+1}" />
+                                <span class="img-url">${img}</span>
+                                <button class="btn-del" onclick="removeBannerImage(${idx})">🗑️ حذف</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="font-size:11px; color:var(--text-muted);">⚠️ الصورة الأولى هي النشطة حالياً. ${bannerImages.length > 1 ? 'تتغير الصور تلقائياً كل ' + (slideIntervalTime/1000) + ' ثانية.' : 'صورة واحدة فقط => ثابتة.'}</p>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- قسم إظهار/إخفاء أزرار المنتجات -->
+                <h4 style="color:var(--accent-gold); margin-bottom:10px;">🔘 إظهار/إخفاء أزرار المنتجات</h4>
+                <div class="toggle-group">
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleTest" ${showTestBtn ? 'checked' : ''} onchange="toggleAction('test')" />
+                        <label for="toggleTest">🧪 اختبار القوة</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleEdit" ${showEditBtn ? 'checked' : ''} onchange="toggleAction('edit')" />
+                        <label for="toggleEdit">✏️ تعديل الاسم</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="toggleDelete" ${showDeleteBtn ? 'checked' : ''} onchange="toggleAction('delete')" />
+                        <label for="toggleDelete">🗑️ حذف المنتج</label>
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- قسم إدارة الأقسام والمنتجات -->
+                <h4 style="color:var(--accent-gold); margin-bottom:10px;">📂 إدارة الأقسام والمنتجات</h4>
+                
+                <!-- إضافة منتج جديد -->
+                <div style="background:rgba(3,7,18,0.3); padding:12px; border-radius:10px; margin-bottom:15px;">
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">➕ إضافة منتج جديد إلى القسم المختار:</p>
+                    <div class="admin-input-group" style="flex-direction:column; gap:8px;">
+                        <select id="newProductCat" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-glow); background:rgba(3,7,18,0.7); color:#fff;">
+                            ${CATEGORIES.filter(c => c !== 'الكل').map(c => `<option value="${c}">${c}</option>`).join('')}
+                        </select>
+                        <input type="text" id="newProductName" placeholder="اسم المنتج" />
+                        <input type="text" id="newProductImg" placeholder="رابط الصورة (مباشر)" />
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="number" id="newProductAd" placeholder="الالتصاق (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                            <input type="number" id="newProductWat" placeholder="الماء (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                            <input type="number" id="newProductFlex" placeholder="المرونة (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                        </div>
+                        <button onclick="addNewProduct()" style="padding:10px; border-radius:8px; border:none; background:var(--accent-gold); color:#000; font-weight:700; cursor:pointer; width:100%;">➕ إضافة المنتج</button>
+                    </div>
+                </div>
+
+                <!-- عرض المنتجات حسب الأقسام -->
+                ${CATEGORIES.filter(c => c !== 'الكل').map(cat => {
+                    const items = PRODUCTS.filter(p => p.cat === cat);
+                    return `
+                        <div class="admin-section-block">
+                            <div class="admin-section-title">
+                                <span>📁 ${cat} (${items.length})</span>
+                            </div>
+                            ${items.length === 0 ? '<p style="color:var(--text-muted); font-size:12px;">لا توجد منتجات في هذا القسم</p>' : ''}
+                            ${items.map(p => `
+                                <div class="admin-product-row">
+                                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/45/0b132b/d4af37?text=?'" />
+                                    <div class="prod-info">
+                                        <div class="pname">${p.name}</div>
+                                        <div class="plink">${p.img.substring(0, 50)}...</div>
+                                    </div>
+                                    <button class="btn-sm btn-edit-sm" onclick="adminEditProduct(${p.id})">✏️</button>
+                                    <button class="btn-sm btn-del-sm" onclick="adminDeleteProduct(${p.id})">🗑️</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }).join('')}
+
+                <hr class="section-divider" />
+
+                <button class="btn-save-admin" onclick="saveAdminSettings()">💾 حفظ جميع الإعدادات</button>
+            `;
+        }
+
+        // ============================================================
+        // 12. دوال التحكم في الأزرار وإدارة البانر والمنتجات
+        // ============================================================
+        function toggleAction(action) {
+            const checked = document.getElementById(`toggle${action.charAt(0).toUpperCase() + action.slice(1)}`).checked;
+            if (action === 'test') showTestBtn = checked;
+            else if (action === 'edit') showEditBtn = checked;
+            else if (action === 'delete') showDeleteBtn = checked;
+            renderCurrentView();
+        }
+
+        function addBannerImage() {
+            const input = document.getElementById('newBannerUrl');
+            const url = input.value.trim();
+            if (url) {
+                bannerImages.push(url);
+                currentSlideIdx = 0;
+                initSlider();
+                renderAdminContent();
+                input.value = '';
+                saveBannerSettings();
+                alert('✅ تم إضافة الصورة بنجاح');
+            } else {
+                alert('⚠️ الرجاء إدخال رابط صورة صحيح');
+            }
+        }
+
+        function removeBannerImage(index) {
+            if (bannerImages.length <= 1) {
+                alert('⚠️ يجب الإبقاء على صورة واحدة على الأقل في البانر.');
+                return;
+            }
+            bannerImages.splice(index, 1);
+            currentSlideIdx = 0;
+            initSlider();
+            renderAdminContent();
+            saveBannerSettings();
+            alert('✅ تم حذف الصورة');
+        }
+
+        function updateSlideInterval() {
+            const val = parseFloat(document.getElementById('slideIntervalInput').value);
+            if (val && val > 0) {
+                slideIntervalTime = val * 1000;
+                saveBannerSettings();
+                initSlider();
+                renderAdminContent();
+                alert('✅ تم تحديث فترة التغير');
+            } else {
+                alert('⚠️ الرجاء إدخال قيمة صحيحة (أكبر من 0)');
+            }
+        }
+
+        function addNewProduct() {
+            const cat = document.getElementById('newProductCat').value;
+            const name = document.getElementById('newProductName').value.trim();
+            const img = document.getElementById('newProductImg').value.trim();
+            const ad = parseInt(document.getElementById('newProductAd').value);
+            const wat = parseInt(document.getElementById('newProductWat').value);
+            const flex = parseInt(document.getElementById('newProductFlex').value);
+
+            if (!name || !img || isNaN(ad) || isNaN(wat) || isNaN(flex)) {
+                alert('⚠️ الرجاء ملء جميع الحقول بشكل صحيح');
+                return;
+            }
+
+            const tagMap = {
+                'لاصق ديكور': 'decor',
+                'لاصق مسابح': 'pool',
+                'لاصق غرانيت': 'heavy',
+                'لاصق خارجي': 'outdoor',
+                'طينة': 'plaster',
+                'روبة': 'grout',
+                'عوازل': 'insulation'
+            };
+            const tag = tagMap[cat] || 'decor';
+
+            const newId = PRODUCTS.length ? Math.max(...PRODUCTS.map(p => p.id)) + 1 : 1;
+            PRODUCTS.push({ id: newId, name, cat, tag, img, ad, wat, flex });
+
+            saveProductsToStorage();
+            renderCurrentView();
+            renderAdminContent();
+            // تنظيف الحقول
+            document.getElementById('newProductName').value = '';
+            document.getElementById('newProductImg').value = '';
+            document.getElementById('newProductAd').value = '';
+            document.getElementById('newProductWat').value = '';
+            document.getElementById('newProductFlex').value = '';
+            alert('✅ تم إضافة المنتج بنجاح');
+        }
+
+        // دوال إدارة المنتجات من داخل لوحة التحكم
+        function adminEditProduct(id) {
+            const p = PRODUCTS.find(item => item.id === id);
+            if (!p) return;
+            const newName = prompt('✏️ تعديل اسم المنتج:', p.name);
+            if (newName !== null && newName.trim() !== '') p.name = newName.trim();
+            const newImg = prompt('📷 تعديل رابط الصورة:', p.img);
+            if (newImg !== null && newImg.trim() !== '') p.img = newImg.trim();
+            saveProductsToStorage();
+            renderCurrentView();
+            renderAdminContent();
+            alert('✅ تم تحديث المنتج');
+        }
+
+        function adminDeleteProduct(id) {
+            if (!confirm('🗑️ هل أنت متأكد من حذف هذا المنتج نهائياً؟')) return;
+            PRODUCTS = PRODUCTS.filter(item => item.id !== id);
+            saveProductsToStorage();
+            renderCurrentView();
+            renderAdminContent();
+            alert('✅ تم حذف المنتج');
+        }
+
+        function saveAdminSettings() {
+            saveBannerSettings();
+            saveProductsToStorage();
+            localStorage.setItem('katanbuild_showTest', JSON.stringify(showTestBtn));
+            localStorage.setItem('katanbuild_showEdit', JSON.stringify(showEditBtn));
+            localStorage.setItem('katanbuild_showDelete', JSON.stringify(showDeleteBtn));
+            alert('💾 تم حفظ جميع الإعدادات بنجاح!');
+        }
+
+        // ============================================================
+        // 13. تحميل الإعدادات المحفوظة
+        // ============================================================
+        function loadSettings() {
+            loadBannerSettings();
+            
+            const testVal = localStorage.getItem('katanbuild_showTest');
+            if (testVal !== null) showTestBtn = JSON.parse(testVal);
+            const editVal = localStorage.getItem('katanbuild_showEdit');
+            if (editVal !== null) showEditBtn = JSON.parse(editVal);
+            const deleteVal = localStorage.getItem('katanbuild_showDelete');
+            if (deleteVal !== null) showDeleteBtn = JSON.parse(deleteVal);
+
+            loadProductsFromStorage();
+        }
+
+        // ============================================================
+        // 14. إغلاق النافذة المنبثقة
+        // ============================================================
+        function closeCyberModal() {
+            document.getElementById('cyberModal').style.display = 'none';
+        }
+
+        // ============================================================
+        // 15. تهيئة الصفحة
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            renderCategories();
+            renderProducts(PRODUCTS);
+            calculateMaterials();
+            initSlider();
+        });
+
+        window.triggerExplosionAndEnter = triggerExplosionAndEnter;
     </script>
 </body>
 </html>
