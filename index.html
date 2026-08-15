@@ -37,7 +37,7 @@
             object-fit: contain;
         }
 
-        /* ===== 🎆 1. صفحة الترحيب والشعار المتحرك ===== */
+        /* ===== 🎆 1. صفحة الترحيب (بدون زر) ===== */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -62,12 +62,11 @@
             padding: 20px;
         }
 
-        /* الشعار المتحرك من اليسار لليمين */
         .splash-logo-container {
             width: 100%;
             overflow: hidden;
             position: relative;
-            height: 200px;
+            height: 220px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -92,7 +91,7 @@
             100% { transform: translateX(120px) scale(1.05); opacity: 1; }
         }
 
-        /* الآلة الكاتبة خلف الشعار */
+        /* الكتابة خلف الشعار بخط واضح */
         .splash-typewriter-bg {
             position: absolute;
             top: 50%;
@@ -100,16 +99,17 @@
             transform: translate(-50%, -50%);
             width: 90%;
             text-align: center;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
-            color: rgba(255, 215, 0, 0.15);
+            color: rgba(255, 215, 0, 0.2);
             z-index: 1;
             pointer-events: none;
             white-space: nowrap;
             overflow: hidden;
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             direction: ltr;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
         .splash-typewriter-bg span {
@@ -117,7 +117,7 @@
             animation: typewriterBg 3s steps(30) 1s forwards;
             width: 0;
             overflow: hidden;
-            border-left: 2px solid rgba(255, 215, 0, 0.2);
+            border-left: 3px solid rgba(255, 215, 0, 0.3);
         }
 
         @keyframes typewriterBg {
@@ -127,46 +127,25 @@
 
         .splash-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 900;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-top: 15px;
             margin-bottom: 8px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
             z-index: 2;
             position: relative;
         }
 
         .splash-sub {
             color: var(--accent-cyan);
-            font-size: 14px;
-            letter-spacing: 4px;
-            margin-bottom: 25px;
+            font-size: 16px;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
             font-weight: 600;
             z-index: 2;
             position: relative;
-        }
-
-        .btn-enter {
-            background: linear-gradient(135deg, var(--accent-gold), #997a15);
-            color: #000;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-            transition: 0.3s;
-            font-family: 'Cairo';
-            z-index: 2;
-            position: relative;
-        }
-
-        .btn-enter:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
         }
 
         /* تأثير الانفجار */
@@ -175,7 +154,7 @@
             inset: 0;
             z-index: 5;
             pointer-events: none;
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -187,8 +166,8 @@
 
         @keyframes explosion {
             0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.5); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
+            50% { transform: scale(1.8); opacity: 0.9; }
+            100% { transform: scale(2.5); opacity: 0; }
         }
 
         /* ===== 🌟 2. شعار الخلفية المضيء ===== */
@@ -215,7 +194,7 @@
             pointer-events: none; z-index: 0; opacity: 0.6;
         }
 
-        /* ===== 🏛️ 3. الهيدر ===== */
+        /* ===== 🏛️ 3. الهيدر (بدون زر لوحة التحكم) ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 5%; 
@@ -503,7 +482,7 @@
             border-radius: 20px;
             padding: 30px;
             width: 90%;
-            max-width: 550px;
+            max-width: 600px;
             position: relative;
             color: #fff;
             text-align: center;
@@ -584,7 +563,7 @@
             flex-wrap: wrap;
         }
 
-        .admin-input-group input {
+        .admin-input-group input, .admin-input-group select {
             flex: 1;
             padding: 10px;
             border-radius: 8px;
@@ -623,6 +602,12 @@
 
         .btn-save-admin:hover { opacity: 0.8; }
 
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-glow);
+            margin: 20px 0;
+        }
+
         @media (max-width: 600px) {
             .admin-img-item { flex-direction: column; align-items: stretch; }
             .admin-img-item .img-url { text-align: center; }
@@ -631,7 +616,7 @@
 </head>
 <body>
 
-    <!-- 🎆 1. شاشة الترحيب بالشعار المتحرك والآلة الكاتبة -->
+    <!-- 🎆 1. شاشة الترحيب (بدون زر) -->
     <div id="splashScreen">
         <div class="splash-wrapper">
             <div class="splash-logo-container">
@@ -642,7 +627,6 @@
             </div>
             <div class="splash-title">KATANBUILD</div>
             <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
-            <button class="btn-enter" onclick="enterSite()">دخول المنصة الهندسية 🚀</button>
         </div>
         <div class="splash-explosion" id="splashExplosion"></div>
     </div>
@@ -653,7 +637,7 @@
     <!-- خلفية النجوم -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- ===== الهيدر ===== -->
+    <!-- ===== الهيدر (بدون زر لوحة التحكم) ===== -->
     <header>
         <div class="logo" id="mainLogo">
             <img src="https://i.ibb.co/ksjcPG2S/page-0001.jpg" class="blend-logo" alt="KATANBUILD" />
@@ -663,7 +647,6 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="btn-cyber" onclick="openAdminPanel()">⚙️ لوحة التحكم</button>
             <button class="btn-cyber" onclick="scrollToCalc()">🧮 الحاسبة</button>
             <button class="btn-cyber" onclick="openWhatsApp()">📞 التواصل</button>
         </div>
@@ -757,33 +740,65 @@
 
     <script>
         // ============================================================
-        // 1. شاشة الترحيب - تأثير الانفجار والدخول
+        // 1. شاشة الترحيب - تأثير الانفجار والانتقال التلقائي
         // ============================================================
-        function enterSite() {
+        let splashTimer;
+
+        function triggerExplosionAndEnter() {
             const splash = document.getElementById('splashScreen');
             const explosion = document.getElementById('splashExplosion');
             
             // تفعيل تأثير الانفجار
             explosion.classList.add('active');
             
+            // بعد الانفجار، إخفاء الشاشة والدخول للموقع
             setTimeout(() => {
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
                 runSiteTypewriter();
-                // بدء تشغيل البانر بعد الدخول
+                // بدء تشغيل البانر
                 if (typeof initSlider === 'function') initSlider();
-            }, 800);
+            }, 900);
         }
 
+        // بدء تشغيل المؤقت للانتقال التلقائي بعد 5 ثوانٍ
+        window.addEventListener('load', function() {
+            splashTimer = setTimeout(triggerExplosionAndEnter, 5000);
+        });
+
         // ============================================================
-        // 2. إدارة الواجهة وصور البانر التناوبية
+        // 2. إدارة الواجهة وصور البانر التناوبية مع فترة زمنية
         // ============================================================
-        let bannerImages = [
-            'https://i.ibb.co/dxbJqTT/1786627087080.png',
-            'https://i.ibb.co/9kn63v1c/1786629632716.png'
-        ];
+        let bannerImages = [];
         let currentSlideIdx = 0;
         let sliderInterval = null;
+        let slideIntervalTime = 3000; // الفترة الافتراضية 3 ثوانٍ
+
+        function loadBannerSettings() {
+            const stored = localStorage.getItem('katanbuild_banner_images');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed.length > 0) bannerImages = parsed;
+                } catch(e) {}
+            }
+            if (bannerImages.length === 0) {
+                bannerImages = [
+                    'https://i.ibb.co/dxbJqTT/1786627087080.png',
+                    'https://i.ibb.co/9kn63v1c/1786629632716.png'
+                ];
+            }
+            // تحميل فترة التغير
+            const storedTime = localStorage.getItem('katanbuild_slide_interval');
+            if (storedTime) {
+                slideIntervalTime = parseInt(storedTime) || 3000;
+            }
+        }
+
+        function saveBannerSettings() {
+            localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+            localStorage.setItem('katanbuild_slide_interval', slideIntervalTime.toString());
+        }
 
         function initSlider() {
             const container = document.getElementById('sliderContainer');
@@ -793,12 +808,19 @@
             `).join('');
 
             if (sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(nextSlide, 3000);
+            
+            // إذا كان هناك أكثر من صورة، start slider
+            if (bannerImages.length > 1) {
+                sliderInterval = setInterval(nextSlide, slideIntervalTime);
+            } else {
+                // صورة واحدة فقط => ثابتة
+                sliderInterval = null;
+            }
         }
 
         function nextSlide() {
             const imgs = document.querySelectorAll('.slider-img');
-            if(imgs.length === 0) return;
+            if(imgs.length === 0 || imgs.length <= 1) return;
             imgs[currentSlideIdx].classList.remove('active');
             currentSlideIdx = (currentSlideIdx + 1) % imgs.length;
             imgs[currentSlideIdx].classList.add('active');
@@ -895,7 +917,7 @@
         animateStars();
 
         // ============================================================
-        // 5. قائمة المنتجات الـ 38 المحدثة
+        // 5. قائمة المنتجات الـ 38 (قابلة للتعديل)
         // ============================================================
         let PRODUCTS = [
             // لاصق ديكور (7)
@@ -952,7 +974,7 @@
         ];
 
         // ============================================================
-        // 6. عرض المنتجات مع أزرار التحكم (تعديل، حذف، اختبار)
+        // 6. عرض المنتجات مع أزرار التحكم
         // ============================================================
         let showTestBtn = true;
         let showEditBtn = true;
@@ -987,7 +1009,6 @@
             const newName = prompt('✏️ تعديل اسم المنتج:', p.name);
             if (newName !== null && newName.trim() !== '') {
                 p.name = newName.trim();
-                // تحديث العرض
                 renderCurrentView();
                 saveProductsToStorage();
                 alert('✅ تم تحديث الاسم بنجاح');
@@ -1130,19 +1151,26 @@
         function openWhatsApp() { window.open(`https://wa.me/0952725590`, '_blank'); }
 
         // ============================================================
-        // 10. لوحة التحكم المخفية (الضغط 5 مرات على الشعار)
+        // 10. لوحة التحكم المخفية (الضغط 5 مرات على الشعار + كلمة مرور)
         // ============================================================
         let logoClickCount = 0;
         let logoClickTimer = null;
+        let adminPassword = 'katan2026';
 
         document.getElementById('mainLogo').addEventListener('click', function(e) {
-            // منع النقر على الشعار أثناء كتابة الرسالة لتجنب التداخل
+            // منع النقر على الشعار أثناء شاشة الترحيب
             if (document.getElementById('splashScreen').style.visibility !== 'hidden') return;
             
             logoClickCount++;
             if (logoClickCount === 5) {
                 logoClickCount = 0;
-                openAdminPanel();
+                // طلب كلمة المرور
+                const pwd = prompt('🔐 أدخل كلمة المرور للدخول إلى لوحة التحكم:');
+                if (pwd === adminPassword) {
+                    openAdminPanel();
+                } else {
+                    alert('❌ كلمة مرور خاطئة.');
+                }
             }
             // إعادة تعيين العداد بعد 3 ثوانٍ من عدم النقر
             clearTimeout(logoClickTimer);
@@ -1150,12 +1178,12 @@
         });
 
         // ============================================================
-        // 11. لوحة التحكم المتقدمة (إدارة البانر + إظهار/إخفاء الأزرار)
+        // 11. لوحة التحكم المتقدمة
         // ============================================================
         function openAdminPanel() {
             document.getElementById('modalIcon').innerText = '⚙️';
             document.getElementById('modalTitle').innerText = '🛠️ لوحة التحكم المتقدمة';
-            document.getElementById('modalBody').innerText = 'إدارة صور الواجهة الرئيسية والتحكم في أزرار المنتجات:';
+            document.getElementById('modalBody').innerText = 'إدارة صور الواجهة، أزرار المنتجات، وإضافة منتجات جديدة:';
 
             renderAdminContent();
             document.getElementById('cyberModal').style.display = 'flex';
@@ -1164,11 +1192,17 @@
         function renderAdminContent() {
             const content = document.getElementById('modalCustomContent');
             content.innerHTML = `
+                <!-- قسم إدارة صور البانر -->
                 <div style="text-align:right; margin-bottom:15px;">
                     <h4 style="color:var(--accent-gold); margin-bottom:10px;">🖼️ صور البانر (Banner Slider)</h4>
                     <div class="admin-input-group">
                         <input type="text" id="newBannerUrl" placeholder="https://... صورة جديدة" />
                         <button onclick="addBannerImage()">➕ إضافة</button>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center; margin:10px 0; flex-wrap:wrap;">
+                        <label style="font-size:13px; color:var(--text-muted);">⏱️ فترة التغير (بالثواني):</label>
+                        <input type="number" id="slideIntervalInput" value="${slideIntervalTime/1000}" min="1" step="0.5" style="width:80px; padding:6px; border-radius:6px; border:1px solid var(--border-glow); background:rgba(3,7,18,0.7); color:#fff;" />
+                        <button onclick="updateSlideInterval()" style="padding:6px 15px; border-radius:6px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer;">تطبيق</button>
                     </div>
                     <div class="admin-img-list">
                         ${bannerImages.map((img, idx) => `
@@ -1179,11 +1213,12 @@
                             </div>
                         `).join('')}
                     </div>
-                    <p style="font-size:11px; color:var(--text-muted);">⚠️ الصورة الأولى هي النشطة حالياً. تتغير الصور كل 3 ثوانٍ.</p>
+                    <p style="font-size:11px; color:var(--text-muted);">⚠️ الصورة الأولى هي النشطة حالياً. ${bannerImages.length > 1 ? 'تتغير الصور تلقائياً كل ' + (slideIntervalTime/1000) + ' ثانية.' : 'صورة واحدة فقط => ثابتة.'}</p>
                 </div>
 
-                <hr style="border-color:var(--border-glow); margin:15px 0;" />
+                <hr class="section-divider" />
 
+                <!-- قسم إظهار/إخفاء أزرار المنتجات -->
                 <h4 style="color:var(--accent-gold); margin-bottom:10px;">🔘 إظهار/إخفاء أزرار المنتجات</h4>
                 <div class="toggle-group">
                     <div class="toggle-item">
@@ -1200,19 +1235,44 @@
                     </div>
                 </div>
 
+                <hr class="section-divider" />
+
+                <!-- قسم إضافة منتج جديد -->
+                <h4 style="color:var(--accent-gold); margin-bottom:10px;">➕ إضافة منتج جديد</h4>
+                <div class="admin-input-group" style="flex-direction:column; gap:10px;">
+                    <select id="newProductCat" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-glow); background:rgba(3,7,18,0.7); color:#fff;">
+                        <option value="لاصق ديكور">لاصق ديكور</option>
+                        <option value="لاصق مسابح">لاصق مسابح</option>
+                        <option value="لاصق غرانيت">لاصق غرانيت</option>
+                        <option value="لاصق خارجي">لاصق خارجي</option>
+                        <option value="طينة">طينة</option>
+                        <option value="روبة">روبة</option>
+                        <option value="عوازل">عوازل</option>
+                    </select>
+                    <input type="text" id="newProductName" placeholder="اسم المنتج" />
+                    <input type="text" id="newProductImg" placeholder="رابط الصورة (مباشر)" />
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <input type="number" id="newProductAd" placeholder="الالتصاق (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                        <input type="number" id="newProductWat" placeholder="الماء (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                        <input type="number" id="newProductFlex" placeholder="المرونة (0-100)" min="0" max="100" style="flex:1; min-width:80px;" />
+                    </div>
+                    <button onclick="addNewProduct()" style="padding:10px; border-radius:8px; border:none; background:var(--accent-gold); color:#000; font-weight:700; cursor:pointer; width:100%;">➕ إضافة المنتج</button>
+                </div>
+
+                <hr class="section-divider" />
+
                 <button class="btn-save-admin" onclick="saveAdminSettings()">💾 حفظ جميع الإعدادات</button>
             `;
         }
 
         // ============================================================
-        // 12. دوال التحكم في الأزرار وإدارة البانر
+        // 12. دوال التحكم في الأزرار وإدارة البانر والمنتجات
         // ============================================================
         function toggleAction(action) {
             const checked = document.getElementById(`toggle${action.charAt(0).toUpperCase() + action.slice(1)}`).checked;
             if (action === 'test') showTestBtn = checked;
             else if (action === 'edit') showEditBtn = checked;
             else if (action === 'delete') showDeleteBtn = checked;
-            // التحديث فوري بعد تغيير التبديل
             renderCurrentView();
         }
 
@@ -1225,8 +1285,7 @@
                 initSlider();
                 renderAdminContent();
                 input.value = '';
-                // حفظ في localStorage
-                localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+                saveBannerSettings();
                 alert('✅ تم إضافة الصورة بنجاح');
             } else {
                 alert('⚠️ الرجاء إدخال رابط صورة صحيح');
@@ -1242,12 +1301,76 @@
             currentSlideIdx = 0;
             initSlider();
             renderAdminContent();
-            localStorage.setItem('katanbuild_banner_images', JSON.stringify(bannerImages));
+            saveBannerSettings();
             alert('✅ تم حذف الصورة');
         }
 
+        function updateSlideInterval() {
+            const val = parseFloat(document.getElementById('slideIntervalInput').value);
+            if (val && val > 0) {
+                slideIntervalTime = val * 1000;
+                saveBannerSettings();
+                initSlider();
+                renderAdminContent();
+                alert('✅ تم تحديث فترة التغير');
+            } else {
+                alert('⚠️ الرجاء إدخال قيمة صحيحة (أكبر من 0)');
+            }
+        }
+
+        function addNewProduct() {
+            const cat = document.getElementById('newProductCat').value;
+            const name = document.getElementById('newProductName').value.trim();
+            const img = document.getElementById('newProductImg').value.trim();
+            const ad = parseInt(document.getElementById('newProductAd').value);
+            const wat = parseInt(document.getElementById('newProductWat').value);
+            const flex = parseInt(document.getElementById('newProductFlex').value);
+
+            if (!name || !img || isNaN(ad) || isNaN(wat) || isNaN(flex)) {
+                alert('⚠️ الرجاء ملء جميع الحقول بشكل صحيح');
+                return;
+            }
+
+            const newId = PRODUCTS.length ? Math.max(...PRODUCTS.map(p => p.id)) + 1 : 1;
+            // تحديد tag بناءً على القسم
+            const tagMap = {
+                'لاصق ديكور': 'decor',
+                'لاصق مسابح': 'pool',
+                'لاصق غرانيت': 'heavy',
+                'لاصق خارجي': 'outdoor',
+                'طينة': 'plaster',
+                'روبة': 'grout',
+                'عوازل': 'insulation'
+            };
+            const tag = tagMap[cat] || 'decor';
+
+            PRODUCTS.push({
+                id: newId,
+                name: name,
+                cat: cat,
+                tag: tag,
+                img: img,
+                ad: ad,
+                wat: wat,
+                flex: flex
+            });
+
+            saveProductsToStorage();
+            renderCurrentView();
+            renderAdminContent(); // تحديث واجهة لوحة التحكم
+            // تنظيف الحقول
+            document.getElementById('newProductName').value = '';
+            document.getElementById('newProductImg').value = '';
+            document.getElementById('newProductAd').value = '';
+            document.getElementById('newProductWat').value = '';
+            document.getElementById('newProductFlex').value = '';
+            alert('✅ تم إضافة المنتج بنجاح');
+        }
+
         function saveAdminSettings() {
-            // حفظ حالة الأزرار في localStorage
+            saveBannerSettings();
+            saveProductsToStorage();
+            // حفظ حالة الأزرار
             localStorage.setItem('katanbuild_showTest', JSON.stringify(showTestBtn));
             localStorage.setItem('katanbuild_showEdit', JSON.stringify(showEditBtn));
             localStorage.setItem('katanbuild_showDelete', JSON.stringify(showDeleteBtn));
@@ -1258,15 +1381,9 @@
         // 13. تحميل الإعدادات المحفوظة
         // ============================================================
         function loadSettings() {
-            // تحميل صور البانر
-            const storedBanner = localStorage.getItem('katanbuild_banner_images');
-            if (storedBanner) {
-                try {
-                    const parsed = JSON.parse(storedBanner);
-                    if (parsed.length > 0) bannerImages = parsed;
-                } catch(e) {}
-            }
-
+            // تحميل صور البانر والفترة
+            loadBannerSettings();
+            
             // تحميل حالة الأزرار
             const testVal = localStorage.getItem('katanbuild_showTest');
             if (testVal !== null) showTestBtn = JSON.parse(testVal);
@@ -1294,18 +1411,11 @@
             renderCategories();
             renderProducts(PRODUCTS);
             calculateMaterials();
-            // تهيئة البانر بعد تحميل الصفحة
             initSlider();
-            // بدء تشغيل الآلة الكاتبة بعد تحميل الصفحة
-            setTimeout(() => {
-                if (document.getElementById('splashScreen').style.visibility === 'hidden') {
-                    runSiteTypewriter();
-                }
-            }, 1000);
         });
 
-        // بدء تشغيل الآلة الكاتبة إذا تم إغلاق شاشة الترحيب يدوياً
-        window.enterSite = enterSite;
+        // إذا تم إغلاق شاشة الترحيب يدوياً (لأي سبب)
+        window.triggerExplosionAndEnter = triggerExplosionAndEnter;
     </script>
 </body>
 </html>
