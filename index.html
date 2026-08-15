@@ -888,12 +888,13 @@
             document.getElementById('productModal').style.display = 'none';
         }
 
-        // ===== الفلترة =====
+        // ===== الفلترة (مُصلحة) =====
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                renderProducts(this.dataset.filter);
+                const filterValue = this.dataset.filter;
+                renderProducts(filterValue);
             });
         });
 
