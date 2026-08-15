@@ -72,7 +72,7 @@
             100% { transform: translateX(400%); }
         }
 
-        /* ===== الهيدر الشفاف ===== */
+        /* ===== الهيدر ===== */
         header {
             position: fixed; top:0; left:0; right:0; z-index:100;
             display: flex; justify-content: space-between; align-items: center;
@@ -135,7 +135,7 @@
             box-shadow: 0 0 25px rgba(212,175,55,0.3);
         }
 
-        /* ===== قسم البطل (Hero) مع خلفية متحركة ===== */
+        /* ===== قسم البطل (Hero) ===== */
         .hero {
             min-height: 100vh;
             display: flex; align-items: center;
@@ -688,7 +688,9 @@
     </div>
 
     <script>
-        // ===== إدارة صور الخلفية =====
+        // ============================================================
+        // 1. إدارة صور الخلفية
+        // ============================================================
         let sliderImages = [];
         let sliderInterval = null;
         let currentSlideIndex = 0;
@@ -804,10 +806,12 @@
             alert('✅ تم تعيين الصورة كنشطة');
         }
 
-        // ===== المنتجات =====
+        // ============================================================
+        // 2. المنتجات (مصفوفة كاملة)
+        // ============================================================
         const DEFAULT_PRODUCTS = [
             // ===== لاصق ديكور (7) =====
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/mVXhBN3c/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية. يتميز بقوة التصاق ممتازة وسهولة في الاستخدام.' },
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/mVXhBN3c/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/GfkgJs03/everest.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
             { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
             { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/1GZK0JGn/forever.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
@@ -863,22 +867,48 @@
 
         function loadProducts() {
             const stored = localStorage.getItem('katanbuild_products');
-            if (stored) { products = JSON.parse(stored); }
-            else { products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS)); saveProducts(); }
+            if (stored) {
+                try {
+                    products = JSON.parse(stored);
+                } catch (e) {
+                    products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+                    saveProducts();
+                }
+            } else {
+                products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+                saveProducts();
+            }
+            console.log('✅ تم تحميل المنتجات:', products.length);
         }
-        function saveProducts() { localStorage.setItem('katanbuild_products', JSON.stringify(products)); }
 
-        // ===== عرض المنتجات =====
+        function saveProducts() {
+            localStorage.setItem('katanbuild_products', JSON.stringify(products));
+        }
+
+        // ============================================================
+        // 3. عرض المنتجات
+        // ============================================================
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('productGrid');
-            // التأكد من تطابق الفلترة مع tag
-            const items = filter === 'all' ? products : products.filter(p => p.tag === filter);
+            
+            // اختيار العناصر حسب الفلتر
+            let items = [];
+            if (filter === 'all') {
+                items = products;
+            } else {
+                items = products.filter(p => p.tag === filter);
+            }
+            
+            console.log('🔄 عرض المنتجات - الفلتر:', filter, 'العدد:', items.length);
             
             if (items.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">
-                    <i class="fas fa-box-open" style="font-size:48px; display:block; margin-bottom:15px;"></i>
-                    لا توجد منتجات في هذا القسم
-                </div>`;
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--text-muted);">
+                        <i class="fas fa-box-open" style="font-size:64px; display:block; margin-bottom:20px; color:var(--accent-gold);"></i>
+                        <h3 style="color:var(--text-light); margin-bottom:10px;">لا توجد منتجات في هذا القسم</h3>
+                        <p>يمكنك إضافة منتجات جديدة من لوحة التحكم</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -894,28 +924,35 @@
             `).join('');
         }
 
-        // ===== البطاقة المنبثقة =====
+        // ============================================================
+        // 4. البطاقة المنبثقة
+        // ============================================================
         function openProductModal(id) {
             const p = products.find(pr => pr.id === id);
-            if (!p) return;
+            if (!p) {
+                console.error('❌ المنتج غير موجود:', id);
+                return;
+            }
 
             document.getElementById('modalTitle').textContent = p.name;
             document.getElementById('modalSubtitle').textContent = `${p.cat} - ${p.subcat}`;
 
             let specsHtml = '';
-            for (const [key, value] of Object.entries(p.specs)) {
-                specsHtml += `
-                    <div class="spec-item">
-                        <span class="label">${key}</span>
-                        <span class="value">${value}</span>
-                    </div>
-                `;
+            if (p.specs) {
+                for (const [key, value] of Object.entries(p.specs)) {
+                    specsHtml += `
+                        <div class="spec-item">
+                            <span class="label">${key}</span>
+                            <span class="value">${value}</span>
+                        </div>
+                    `;
+                }
             }
-            document.getElementById('modalSpecs').innerHTML = specsHtml;
+            document.getElementById('modalSpecs').innerHTML = specsHtml || '<p style="color:var(--text-muted);">لا توجد مواصفات</p>';
 
             document.getElementById('modalPdfContent').innerHTML = `
                 <strong>📄 محتوى الملف الفني (PDF):</strong><br>
-                ${p.pdf}
+                ${p.pdf || 'لا يوجد محتوى PDF'}
             `;
 
             document.getElementById('productModal').style.display = 'flex';
@@ -925,7 +962,9 @@
             document.getElementById('productModal').style.display = 'none';
         }
 
-        // ===== الفلترة =====
+        // ============================================================
+        // 5. الفلترة
+        // ============================================================
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -934,7 +973,9 @@
             });
         });
 
-        // ===== الحاسبة =====
+        // ============================================================
+        // 6. الحاسبة
+        // ============================================================
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
@@ -963,7 +1004,9 @@
             window.open('https://wa.me/0952725590?text=' + encodeURIComponent(msg), '_blank');
         }
 
-        // ===== لوحة التحكم =====
+        // ============================================================
+        // 7. لوحة التحكم
+        // ============================================================
         let clickCount = 0;
         document.getElementById('mainLogo').addEventListener('click', function() {
             clickCount++;
@@ -1045,7 +1088,9 @@
             alert('✅ تم التحديث');
         }
 
-        // ===== إغلاق المودال عند النقر خارجها =====
+        // ============================================================
+        // 8. إغلاق المودال عند النقر خارجها
+        // ============================================================
         window.onclick = function(event) {
             const modal = document.getElementById('productModal');
             if (event.target === modal) {
@@ -1053,17 +1098,36 @@
             }
         };
 
-        // ===== التهيئة =====
-        window.addEventListener('load', () => {
+        // ============================================================
+        // 9. التهيئة
+        // ============================================================
+        window.addEventListener('load', function() {
+            console.log('🚀 بدء تحميل الموقع...');
+            
+            // تحميل صور الخلفية
             loadSliderImages();
-            loadProducts();
             renderSlider();
+            
+            // تحميل المنتجات
+            loadProducts();
+            
+            // عرض المنتجات
             renderProducts('all');
+            
+            // حساب المواد
             calculateMaterials();
-            setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 1500);
+            
+            // إخفاء شاشة الترحيب
+            setTimeout(() => {
+                document.getElementById('splash').classList.add('fade-out');
+                console.log('✅ تم إخفاء شاشة الترحيب');
+            }, 1500);
+            
+            console.log('✅ تم تهيئة الموقع بنجاح');
         });
 
-        window.addEventListener('beforeunload', () => {
+        // تنظيف السلايدر عند مغادرة الصفحة
+        window.addEventListener('beforeunload', function() {
             stopSlider();
         });
     </script>
