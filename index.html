@@ -303,9 +303,14 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            animation: modalFadeIn 0.5s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         .modal-content {
-            background: var(--primary-dark);
+            background: linear-gradient(145deg, #0f1a3a, #1a2744);
             border: 1px solid var(--accent-gold);
             border-radius: 24px;
             padding: 35px;
@@ -314,7 +319,7 @@
             max-height: 80vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 0 50px rgba(212,175,55,0.2);
+            box-shadow: 0 0 60px rgba(212,175,55,0.3), inset 0 0 30px rgba(212,175,55,0.05);
         }
         .modal-content .close {
             position: absolute;
@@ -326,24 +331,33 @@
             transition: 0.3s;
         }
         .modal-content .close:hover {
-            transform: rotate(90deg);
+            transform: rotate(90deg) scale(1.2);
+        }
+        .modal-content .modal-icon {
+            font-size: 48px;
+            color: var(--accent-gold);
+            text-align: center;
+            margin-bottom: 10px;
         }
         .modal-content h2 {
             color: var(--accent-gold);
-            font-size: 24px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 10px;
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
         }
         .modal-content .subtitle {
             color: var(--text-muted);
             font-size: 14px;
+            text-align: center;
             margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 15px;
         }
         .modal-content .spec-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .modal-content .spec-item .label {
@@ -353,6 +367,19 @@
         .modal-content .spec-item .value {
             color: var(--accent-gold);
             font-weight: 700;
+        }
+        .modal-content .pdf-content {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(3,7,18,0.5);
+            border-radius: 12px;
+            border-right: 3px solid var(--accent-gold);
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .modal-content .pdf-content strong {
+            color: var(--accent-gold);
         }
 
         /* ===== التذييل ===== */
@@ -601,9 +628,11 @@
     <div id="productModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-icon">📄</div>
             <h2 id="modalTitle">اسم المنتج</h2>
             <div class="subtitle" id="modalSubtitle">التصنيف الفرعي</div>
             <div id="modalSpecs"></div>
+            <div class="pdf-content" id="modalPdfContent"></div>
         </div>
     </div>
 
@@ -648,6 +677,8 @@
                 </select>
                 <label>المواصفات (JSON)</label>
                 <textarea id="newSpecs" rows="4" placeholder='{"قوة الالتصاق": "≥ 0.5 نيوتن/مم²", "الوزن": "18-20 كغ"}' required></textarea>
+                <label>محتوى PDF (نص وصفي)</label>
+                <textarea id="newPdfContent" rows="4" placeholder="محتوى الملف PDF الخاص بالمنتج..."></textarea>
                 <button type="submit" class="btn-admin">➕ إضافة منتج</button>
             </form>
             <hr style="border-color:var(--border-glow); margin:20px 0;">
@@ -773,59 +804,59 @@
             alert('✅ تم تعيين الصورة كنشطة');
         }
 
-        // ===== المنتجات (مرتبة حسب الأقسام الجديدة) =====
+        // ===== المنتجات (مع الروابط الجديدة ومحتوى PDF) =====
         const DEFAULT_PRODUCTS = [
             // ===== لاصق ديكور (7) =====
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/pBvTDg7F/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/qY3JNYR9/everest.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/bj074vJT/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/ZpcgzCrF/forever.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/7xwK7LLr/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/B59xYdbM/claytor.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
-            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/d0vGgyjw/lazurd.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'} },
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/mVXhBN3c/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية. يتميز بقوة التصاق ممتازة وسهولة في الاستخدام.' },
+            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/GfkgJs03/everest.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
+            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
+            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/1GZK0JGn/forever.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
+            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/d4YVhwZh/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
+            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
+            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
 
             // ===== لاصق مسابح (8) =====
-            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/cc0w69Dy/aqua.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/99621j5f/basil.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/HD5ChQ8k/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/h1RXLgt1/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/MyhkjN2r/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/CqcfHGZ/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/Qv3d7XRT/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
-            { id: 15, name: 'عباس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/9kpp0ThV/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'} },
+            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE. يوفر قوة التصاق محسنة ≥ 1.0 نيوتن/مم²، مع مقاومة الانزلاق الرأسي وزمن مفتوح ممتد. مناسب للمسابح والأحجام الكبيرة.' },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/TDwZVW7R/basil.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE. مناسب للمسابح والأحجام الكبيرة.' },
+            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/6cr616P5/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
+            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
+            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/Z6kqm8wt/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
+            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/HDYtzRm5/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
+            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/DHdDTwtX/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
+            { id: 15, name: 'عباس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VW0QXqyG/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
 
             // ===== لاصق غرانيت (10) =====
-            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/4RNtff4m/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/Swxbp98f/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/d4SFXRCn/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/fYBVQdDn/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/d40T5H8d/span.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/BVxYrZzk/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/wjtKqjr/shurbaji.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/8t2JsMD/global.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/ksyMknZ9/laith.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
-            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/qLNhnMr8/onerlo.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'} },
+            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/gLDmLyHM/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان، مناسب لتركيب الغرانيت والبورسلان الكبير على الأسطح الداخلية والخارجية، يتميز بقوة التصاق عالية ومقاومة للإجهادات.' },
+            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/fYYX8W1m/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/rGrh2zq9/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/tw8DFGcT/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/Q3DBpnNX/span.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/tpYb9KHR/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/8n73h5xG/laith.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
+            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/21g55pWv/onerlo.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
 
             // ===== لاصق خارجي (3) =====
-            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/WNHBMYQP/r2b.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'} },
-            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/rRWyVDvs/raed.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'} },
-            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/60RpRPPh/raed-o.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'} },
+            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/DPCK57x1/r2b.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1. يتميز بقوة التصاق محسنة ≥ 1.0 نيوتن/مم²، مقاومة للانزلاق، زمن مفتوح ممتد، ومرونة عالية. مناسب للواجهات والشرفات والأسطح المكشوفة.' },
+            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1.' },
+            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1.' },
 
             // ===== طينة (5) =====
-            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', subcat: 'أكريليكية', tag: 'طينة', img: 'https://i.ibb.co/hxn0F1Nj/Paper-Bag-Mockup-Solid.png', specs: {'النوع': 'أكريليكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'} },
-            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', subcat: 'بلاستيكية', tag: 'طينة', img: 'https://i.ibb.co/4R97wPj6/Untitled-1.png', specs: {'النوع': 'بلاستيكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'} },
-            { id: 31, name: 'سولايد ميكس', cat: 'طينة', subcat: 'ميكس', tag: 'طينة', img: 'https://i.ibb.co/b56fvfG8/sulid-mix.png', specs: {'النوع': 'ميكس', 'الاستخدام': 'تشطيبات داخلية وخارجية', 'المقاومة': 'عالية'} },
-            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', subcat: 'اسمنتية', tag: 'طينة', img: 'https://i.ibb.co/NnL35s6j/Whats-App-Image-2026-06-18-at-1-10.png', specs: {'النوع': 'اسمنتية', 'الاستخدام': 'تشطيبات خارجية', 'المقاومة': 'عالية للضغط'} },
-            { id: 33, name: 'طينة غرانيت', cat: 'طينة', subcat: 'غرانيت', tag: 'طينة', img: 'https://i.ibb.co/gMwFp3VZ/image.png', specs: {'النوع': 'غرانيت', 'الاستخدام': 'تشطيبات فاخرة', 'المقاومة': 'عالية'} },
+            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', subcat: 'أكريليكية', tag: 'طينة', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', specs: {'النوع': 'أكريليكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'}, pdf: 'طينة اكريليكية عالية الجودة من مؤسسة قطان، تستخدم في التشطيبات الداخلية وتتميز بالمرونة العالية وسهولة الاستخدام.' },
+            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', subcat: 'بلاستيكية', tag: 'طينة', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', specs: {'النوع': 'بلاستيكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'}, pdf: 'طينة بلاستيكية من مؤسسة قطان، مناسبة للتشطيبات الداخلية.' },
+            { id: 31, name: 'سولايد ميكس', cat: 'طينة', subcat: 'ميكس', tag: 'طينة', img: 'https://i.ibb.co/sv947RvN/sulid-mix.png', specs: {'النوع': 'ميكس', 'الاستخدام': 'تشطيبات داخلية وخارجية', 'المقاومة': 'عالية'}, pdf: 'سولايد ميكس من مؤسسة قطان، طينة متعددة الاستخدامات للتشطيبات الداخلية والخارجية.' },
+            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', subcat: 'اسمنتية', tag: 'طينة', img: 'https://i.ibb.co/nNgC3hzH/Whats-App-Image-2026-06-18-at-1-10.png', specs: {'النوع': 'اسمنتية', 'الاستخدام': 'تشطيبات خارجية', 'المقاومة': 'عالية للضغط'}, pdf: 'سولايد اسمنتية من مؤسسة قطان، طينة اسمنتية عالية المقاومة للضغط للتشطيبات الخارجية.' },
+            { id: 33, name: 'طينة غرانيت', cat: 'طينة', subcat: 'غرانيت', tag: 'طينة', img: 'https://i.ibb.co/DDFN8TJF/image.png', specs: {'النوع': 'غرانيت', 'الاستخدام': 'تشطيبات فاخرة', 'المقاومة': 'عالية'}, pdf: 'طينة غرانيت من مؤسسة قطان، للتشطيبات الفاخرة وعالية المقاومة.' },
 
             // ===== روبة (2) =====
-            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/tPskSqWy/graft.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'} },
-            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/mFvsx0SF/qods.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'} },
+            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/39XZ6n5k/graft.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'}, pdf: 'روبة إسمنتية محسنة مطابقة للمواصفة الأوروبية EN 13888 بتصنيف CG2. تتميز بمقاومة محسنة للتآكل، انخفاض في امتصاص الماء، ثبات اللون، وقوام ناعم. مناسبة للحمامات والمطابخ والشرفات.' },
+            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/GQTn6NG1/qods.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'}, pdf: 'روبة إسمنتية محسنة مطابقة للمواصفة الأوروبية EN 13888 بتصنيف CG2.' },
 
             // ===== عوازل (3) =====
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', subcat: 'بلاستيكي', tag: 'عوازل', img: 'https://i.ibb.co/2RGTx2H/najar.png', specs: {'النوع': 'بلاستيكي', 'الاستخدام': 'عزل الأسطح', 'المقاومة': 'عالية للرطوبة'} },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', subcat: 'شفاف', tag: 'عوازل', img: 'https://i.ibb.co/Jjbzg53k/rocky.png', specs: {'النوع': 'شفاف', 'الاستخدام': 'عزل الحجر', 'المقاومة': 'عالية للأشعة'} },
-            { id: 38, name: 'عازل مركبين', cat: 'عوازل', subcat: 'مركب', tag: 'عوازل', img: 'https://i.ibb.co/mFq1m9MQ/graft.png', specs: {'النوع': 'مركب', 'الاستخدام': 'عزل متعدد', 'المقاومة': 'عالية'} }
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', subcat: 'بلاستيكي', tag: 'عوازل', img: 'https://i.ibb.co/fGKcxGHx/najar.png', specs: {'النوع': 'بلاستيكي', 'الاستخدام': 'عزل الأسطح', 'المقاومة': 'عالية للرطوبة'}, pdf: 'عازل بلاستيكي من مؤسسة قطان، يستخدم لعزل الأسطح ويتميز بمقاومة عالية للرطوبة.' },
+            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', subcat: 'شفاف', tag: 'عوازل', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', specs: {'النوع': 'شفاف', 'الاستخدام': 'عزل الحجر', 'المقاومة': 'عالية للأشعة'}, pdf: 'عازل حجر شفاف من مؤسسة قطان، يستخدم لعزل الحجر ويتميز بمقاومة عالية للأشعة.' },
+            { id: 38, name: 'عازل مركبين', cat: 'عوازل', subcat: 'مركب', tag: 'عوازل', img: 'https://i.ibb.co/m553JtKC/image.png', specs: {'النوع': 'مركب', 'الاستخدام': 'عزل متعدد', 'المقاومة': 'عالية'}, pdf: 'عازل مركبين من مؤسسة قطان، للاستخدامات المتعددة في العزل.' }
         ];
 
         let products = [];
@@ -881,6 +912,11 @@
             }
             document.getElementById('modalSpecs').innerHTML = specsHtml;
 
+            document.getElementById('modalPdfContent').innerHTML = `
+                <strong>📄 محتوى الملف الفني (PDF):</strong><br>
+                ${p.pdf}
+            `;
+
             document.getElementById('productModal').style.display = 'flex';
         }
 
@@ -888,13 +924,12 @@
             document.getElementById('productModal').style.display = 'none';
         }
 
-        // ===== الفلترة (مُصلحة) =====
+        // ===== الفلترة =====
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                const filterValue = this.dataset.filter;
-                renderProducts(filterValue);
+                renderProducts(this.dataset.filter);
             });
         });
 
@@ -965,8 +1000,9 @@
             const subcat = document.getElementById('newSubcat').value.trim();
             const tag = document.getElementById('newTag').value;
             const specsText = document.getElementById('newSpecs').value.trim();
+            const pdfContent = document.getElementById('newPdfContent').value.trim();
 
-            if (!img || !name || !cat || !subcat || !specsText) {
+            if (!img || !name || !cat || !subcat || !specsText || !pdfContent) {
                 alert('املأ جميع الحقول');
                 return;
             }
@@ -974,7 +1010,7 @@
             try {
                 const specs = JSON.parse(specsText);
                 const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                products.push({ id, name, cat, subcat, tag, img, specs });
+                products.push({ id, name, cat, subcat, tag, img, specs, pdf: pdfContent });
                 saveProducts();
                 renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
                 renderAdminList();
@@ -1001,6 +1037,7 @@
             const newCat = prompt('التصنيف:', p.cat); if (newCat) p.cat = newCat.trim();
             const newSubcat = prompt('التصنيف الفرعي:', p.subcat); if (newSubcat) p.subcat = newSubcat.trim();
             const newImg = prompt('رابط الصورة:', p.img); if (newImg) p.img = newImg.trim();
+            const newPdf = prompt('محتوى PDF:', p.pdf); if (newPdf) p.pdf = newPdf.trim();
             saveProducts();
             renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
             renderAdminList();
