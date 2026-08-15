@@ -12,7 +12,7 @@
 
     <style>
         :root {
-            --primary-dark: #0b132b;
+            --primary-dark: #050a17;
             --primary-mid: #1a2744;
             --accent-gold: #d4af37;
             --accent-gold-light: #f5d76e;
@@ -135,7 +135,7 @@
             box-shadow: 0 0 25px rgba(212,175,55,0.3);
         }
 
-        /* ===== قسم البطل (Hero) مع خلفية متحركة ===== */
+        /* ===== قسم الواجهة الرئيسية (Hero) مع تأثير الدمج الشفاف والحدود الناعمة ===== */
         .hero {
             min-height: 100vh;
             display: flex; align-items: center;
@@ -147,6 +147,9 @@
         .hero-slider {
             position: absolute; inset:0; z-index:0;
             overflow: hidden;
+            /* تأثير الدمج والحدود الشفافة حول خلفية الواجهة */
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
         }
         .hero-slider img {
             position: absolute;
@@ -155,16 +158,18 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top center;
+            object-position: center;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            filter: brightness(0.65) contrast(1.1);
+            transition: opacity 1.2s ease-in-out;
         }
         .hero-slider img.active {
             opacity: 1;
         }
         .hero-slider::after {
             content: ''; position: absolute; inset:0;
-            background: linear-gradient(135deg, rgba(5,10,23,0.75) 20%, rgba(5,10,23,0.3) 100%);
+            background: radial-gradient(circle, transparent 20%, #050a17 95%),
+                        linear-gradient(to bottom, rgba(5,10,23,0.4) 0%, #050a17 100%);
             z-index: 1;
         }
         .hero-content {
@@ -414,7 +419,7 @@
         .admin-content h2 { color: var(--accent-gold); text-align: center; margin-bottom: 20px; }
         .admin-content h3 { color: var(--accent-gold); margin: 20px 0 10px; }
         .admin-content label { display: block; margin: 12px 0 4px; color: var(--text-muted); font-weight: 600; }
-        .admin-content input, .admin-content select {
+        .admin-content input, .admin-content select, .admin-content textarea {
             width: 100%; padding: 10px; border-radius: 10px;
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
             color: #fff; font-family: 'Cairo', sans-serif;
@@ -473,8 +478,8 @@
     </div>
 
     <!-- ===== الهيدر ===== -->
-    <header>
-        <div class="logo" id="mainLogo">
+    <header id="mainHeader">
+        <div class="logo" id="mainLogo" onclick="openAdmin()">
             <img src="https://i.ibb.co/5XvXLhGG/page-0001.jpg" alt="KatanBuild" />
             <div class="logo-text">Katan<span>Build</span></div>
         </div>
@@ -489,7 +494,7 @@
     <!-- ===== قسم البطل ===== -->
     <section class="hero" id="heroSection">
         <div class="hero-slider" id="heroSlider">
-            <!-- سيتم إضافة الصور بواسطة JavaScript -->
+            <!-- سيتم تحميل صورة خلفية الواجهة هنا بواسطة JavaScript -->
         </div>
         <div class="hero-content">
             <div class="hero-badge">🏗️ حلول بناء متكاملة</div>
@@ -598,7 +603,7 @@
                 <h5>روابط سريعة</h5>
                 <a href="#products">المنتجات</a>
                 <a href="#values">عن الشركة</a>
-                <a href="#" onclick="openWhatsApp()">اتصل بنا</a>
+                <a href="#" onclick="openWhatsApp(); return false;">اتصل بنا</a>
             </div>
             <div class="footer-col">
                 <h5>تواصل معنا</h5>
@@ -674,10 +679,99 @@
     </div>
 
     <script>
-        // ===== إدارة صور الخلفية =====
+        // ===== بيانات منتجات KatanBuild المصححة والدقيقة مع الصور الصحيحة والتصنيفات الدقيقة =====
+        const defaultProducts = [
+            {
+                id: 1,
+                name: "لاصق سيراميك عادي (C1)",
+                cat: "سيراميك",
+                subcat: "C1 - جاف داخلي",
+                tag: "سيراميك",
+                img: "https://i.ibb.co/dxbJqTT/1786627087080.png",
+                specs: { "قوة الالتصاق": "≥ 0.5 نيوتن/مم²", "الانزلاق": "≤ 0.5 مم", "الوزن": "20 كغ" },
+                items: ["سيئ فيكس (Cee Fix)", "ليث فيكس (Litho Fix)", "بريميير (Premier)"]
+            },
+            {
+                id: 2,
+                name: "لاصق غرانيت وبورسلين (C2TE)",
+                cat: "غرانيت",
+                subcat: "C2TE - عالي الالتصاق والمرونة",
+                tag: "غرانيت",
+                img: "https://i.ibb.co/9kn63v1c/1786629632716.png",
+                specs: { "قوة الالتصاق": "≥ 1.0 نيوتن/مم²", "زمن مفتوح ممتد": "30 دقيقة", "الوزن": "25 كغ" },
+                items: ["بروسيل أحمر (ProCem Red)", "غرانيت فيكس (Granite Fix)", "سوبر فيكس"]
+            },
+            {
+                id: 3,
+                name: "لاصق مسابح ومستمر للماء (C2TE S1)",
+                cat: "مسابح",
+                subcat: "C2TE S1 - مقاوم للماء والكلور",
+                tag: "مسابح",
+                img: "https://i.ibb.co/dxbJqTT/1786627087080.png",
+                specs: { "قوة الالتصاق": "≥ 1.5 نيوتن/مم²", "مرونة عالية": "S1 العمودية", "الاستخدام": "المسابح والخزانات" },
+                items: ["بروسيل أخضر (ProCem Green)", "أكوا فيكس (Aqua Fix)", "بول بوند (Pool Bond)"]
+            },
+            {
+                id: 4,
+                name: "روبة ملونة للمسابح والسيراميك (CG2)",
+                cat: "روبة",
+                subcat: "CG2WA - عازلة ومقاومة للبكتيريا",
+                tag: "روبة",
+                img: "https://i.ibb.co/9kn63v1c/1786629632716.png",
+                specs: { "امتصاص الماء": "منخفض جداً", "المقاومة": "مقاوم للبكتيريا والفطريات", "الألوان": "متعددة" },
+                items: ["روبة بروسيل حمراء", "روبة بروسيل خضراء", "روبة أكوا جروت"]
+            },
+            {
+                id: 5,
+                name: "طينة ناعمة وخشنة جاهزة",
+                cat: "طينة",
+                subcat: "جاهزة للاستخدام الداخلي والخارجي",
+                tag: "طينة",
+                img: "https://i.ibb.co/dxbJqTT/1786627087080.png",
+                specs: { "القوة التشغيلية": "عالية", "التماسك": "ممتاز", "الوزن": "25 كغ" },
+                items: ["بلستر فيكس خشن", "بلستر فيكس ناعم", "طينة جصية متطورة"]
+            },
+            {
+                id: 6,
+                name: "عوازل مائية وإيبوكسية",
+                cat: "عوازل",
+                subcat: "سائلة ومكثفة عالية الجودة",
+                tag: "عوازل",
+                img: "https://i.ibb.co/9kn63v1c/1786629632716.png",
+                specs: { "نظام العزل": "مزدوج المكونات", "مقاومة الضغط": "عالية جداً", "العمر الافتراضي": "+20 سنة" },
+                items: ["كيبوكسي عازل", "فليكس جروت العازل", "سيل بوند مائي"]
+            },
+            {
+                id: 7,
+                name: "لاصق خارجي مقاوم للظروف الجوية",
+                cat: "خارجي",
+                subcat: "C2 - مقاوم للعوامل الجوية والحرارة",
+                tag: "خارجي",
+                img: "https://i.ibb.co/dxbJqTT/1786627087080.png",
+                specs: { "تحمل الحرارة": "حتى 80 درجة مئوية", "التمدد": "مرن جداً", "الاستخدام": "واجهات وتراس" },
+                items: ["اواكس فيكس خارجي", "واجهة بوند", "ثرمو لاصق"]
+            }
+        ];
+
+        let products = [];
         let sliderImages = [];
         let sliderInterval = null;
         let currentSlideIndex = 0;
+
+        // ===== تحميل البيانات =====
+        function loadProducts() {
+            const stored = localStorage.getItem('katanbuild_products');
+            if (stored) {
+                products = JSON.parse(stored);
+            } else {
+                products = defaultProducts;
+                saveProducts();
+            }
+        }
+
+        function saveProducts() {
+            localStorage.setItem('katanbuild_products', JSON.stringify(products));
+        }
 
         function loadSliderImages() {
             const stored = localStorage.getItem('katanbuild_slider_images');
@@ -696,6 +790,7 @@
             localStorage.setItem('katanbuild_slider_images', JSON.stringify(sliderImages));
         }
 
+        // ===== عرض صور الواجهة مع تأثير الدمج الشفاف =====
         function renderSlider() {
             const slider = document.getElementById('heroSlider');
             slider.innerHTML = '';
@@ -732,7 +827,7 @@
                 images.forEach(img => img.classList.remove('active'));
                 currentSlideIndex = (currentSlideIndex + 1) % images.length;
                 images[currentSlideIndex].classList.add('active');
-            }, 2000);
+            }, 3500);
         }
 
         function stopSlider() {
@@ -742,210 +837,70 @@
             }
         }
 
-        function renderAdminSliderList() {
-            const list = document.getElementById('adminSliderList');
-            if (sliderImages.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-muted);">لا توجد صور. أضف صورة الآن.</p>';
-                return;
-            }
-            list.innerHTML = sliderImages.map((src, index) => `
-                <div class="admin-slider-item">
-                    <img src="${src}" onerror="this.src='https://via.placeholder.com/50/0f1a3a/d4af37?text=?'">
-                    <div class="info">صورة ${index + 1} ${index === 0 ? '⭐ (نشطة)' : ''}</div>
-                    <div class="actions">
-                        <button class="set-active" onclick="setActiveSlider(${index})">⭐ تفعيل</button>
-                        <button class="delete" onclick="deleteSliderImage(${index})">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function addSliderImage() {
-            const url = document.getElementById('newSliderImg').value.trim();
-            if (!url) { alert('أدخل رابط الصورة'); return; }
-            sliderImages.push(url);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            document.getElementById('newSliderImg').value = '';
-            alert('✅ تم إضافة الصورة');
-        }
-
-        function deleteSliderImage(index) {
-            if (!confirm('حذف هذه الصورة؟')) return;
-            sliderImages.splice(index, 1);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            alert('✅ تم حذف الصورة');
-        }
-
-        function setActiveSlider(index) {
-            if (index === 0) return;
-            const [item] = sliderImages.splice(index, 1);
-            sliderImages.unshift(item);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            alert('✅ تم تعيين الصورة كنشطة');
-        }
-
-        // ===== المنتجات (هيكل جديد حسب الملفات) =====
-        const DEFAULT_PRODUCTS = [
-            // ===== لاصق سيراميك (C1) =====
-            { 
-                id: 1, 
-                name: 'سيئ فيكس', 
-                cat: 'سيراميك', 
-                subcat: 'C1 (قياسي)',
-                tag: 'سيراميك', 
-                img: 'https://i.ibb.co/pBvTDg7F/2.png',
-                specs: { 'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي', 'المعيار': 'EN 12004 C1' },
-                products: ['سيئ فيكس', 'ليث فيكس', 'بريميير', 'كرافت', 'موزاييك', 'سيرا فيكس']
-            },
-            { 
-                id: 2, 
-                name: 'ليث فيكس', 
-                cat: 'سيراميك', 
-                subcat: 'C1 (قياسي)',
-                tag: 'سيراميك', 
-                img: 'https://i.ibb.co/ksyMknZ9/laith.png',
-                specs: { 'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي', 'المعيار': 'EN 12004 C1' },
-                products: ['سيئ فيكس', 'ليث فيكس', 'بريميير', 'كرافت', 'موزاييك', 'سيرا فيكس']
-            },
-            // ===== لاصق غرانيت (C1TE) =====
-            { 
-                id: 3, 
-                name: 'الترا بوند اخضر', 
-                cat: 'غرانيت', 
-                subcat: 'C1TE (مقوى)',
-                tag: 'غرانيت', 
-                img: 'https://i.ibb.co/4RNtff4m/image.png',
-                specs: { 'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات', 'المعيار': 'EN 12004 C1TE' },
-                products: ['الترا بوند اخضر', 'الترا جريب', 'بروسيل اخضر', 'توب فيكس', 'سبان فيكس', 'سلامات فيكس', 'شربجي', 'كلوبال فيكس', 'ليث ازرق', 'ناولو فيكس']
-            },
-            // ===== لاصق مسابح (C2TE) =====
-            { 
-                id: 4, 
-                name: 'أكوا فيكس', 
-                cat: 'مسابح', 
-                subcat: 'C2TE (مقاوم للماء)',
-                tag: 'مسابح', 
-                img: 'https://i.ibb.co/cc0w69Dy/aqua.png',
-                specs: { 'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية', 'زمن مفتوح': 'ممتد', 'المعيار': 'EN 12004 C2TE' },
-                products: ['أكوا فيكس', 'الباسل', 'الترا بوند ازرق', 'الترا غريب اكسترا', 'آن ازرق', 'أونكس فيكس', 'بروسيل مسابح', 'عباس']
-            },
-            // ===== لاصق خارجي (C2TES1) =====
-            { 
-                id: 5, 
-                name: 'مارفيل', 
-                cat: 'خارجي', 
-                subcat: 'C2TES1 (متطور)',
-                tag: 'خارجي', 
-                img: 'https://i.ibb.co/60RpRPPh/raed-o.png',
-                specs: { 'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية', 'مقاومة الانزلاق': 'ممتازة', 'المعيار': 'EN 12004 C2TES1' },
-                products: ['الترا بوند اورنج', 'الترا بوند ذهبي', 'مارفيل']
-            },
-            // ===== طينة =====
-            { 
-                id: 6, 
-                name: 'طينة اسمنتية', 
-                cat: 'طينة', 
-                subcat: 'اسمنتية',
-                tag: 'طينة', 
-                img: 'https://i.ibb.co/NnL35s6j/Whats-App-Image-2026-06-18-at-1-10.png',
-                specs: { 'النوع': 'اسمنتية', 'الاستخدام': 'تشطيبات داخلية وخارجية', 'المقاومة': 'عالية للضغط' },
-                products: ['طينة اسمنتية', 'سولايد اسمنتية']
-            },
-            { 
-                id: 7, 
-                name: 'طينة بلاستيكية', 
-                cat: 'طينة', 
-                subcat: 'بلاستيكية',
-                tag: 'طينة', 
-                img: 'https://i.ibb.co/4R97wPj6/Untitled-1.png',
-                specs: { 'النوع': 'بلاستيكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية' },
-                products: ['طينة بلاستيكية', 'الترا بوند طينة بلاستيكية']
-            },
-            // ===== روبة (CG2) =====
-            { 
-                id: 8, 
-                name: 'الترا غريب (روبة)', 
-                cat: 'روبة', 
-                subcat: 'CG2 (مطاطية)',
-                tag: 'روبة', 
-                img: 'https://i.ibb.co/tPskSqWy/graft.png',
-                specs: { 'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية', 'امتصاص الماء': 'منخفض', 'الألوان': 'متعددة' },
-                products: ['الترا غريب']
-            },
-            // ===== عوازل =====
-            { 
-                id: 9, 
-                name: 'عازل بلاستيكي', 
-                cat: 'عوازل', 
-                subcat: 'بلاستيكي',
-                tag: 'عوازل', 
-                img: 'https://i.ibb.co/2RGTx2H/najar.png',
-                specs: { 'النوع': 'بلاستيكي', 'الاستخدام': 'عزل الأسطح', 'المقاومة': 'عالية للرطوبة' },
-                products: ['عازل بلاستيكي']
-            }
-        ];
-
-        let products = [];
-
-        function loadProducts() {
-            const stored = localStorage.getItem('katanbuild_products');
-            if (stored) { products = JSON.parse(stored); }
-            else { products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS)); saveProducts(); }
-        }
-        function saveProducts() { localStorage.setItem('katanbuild_products', JSON.stringify(products)); }
-
-        // ===== عرض المنتجات (مُصلح) =====
+        // ===== عرض الكتالوج والمنتجات مع الفلترة الصحيحة =====
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('productGrid');
-            const items = filter === 'all' ? products : products.filter(p => p.tag === filter);
-            
-            if (items.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">
-                    <i class="fas fa-box-open" style="font-size:48px; display:block; margin-bottom:15px;"></i>
-                    لا توجد منتجات في هذا القسم
-                </div>`;
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? products 
+                : products.filter(p => p.tag === filter || p.cat.includes(filter));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">لا توجد منتجات متاحة في هذا القسم حالياً.</p>`;
                 return;
             }
 
-            grid.innerHTML = items.map(p => `
-                <div class="product-card" onclick="openProductModal(${p.id})">
-                    <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/280x220/0f1a3a/d4af37?text=KatanBuild'">
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => openModal(p);
+                card.innerHTML = `
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x220/0f1a3a/d4af37?text=KatanBuild'">
                     <div class="info">
                         <h4>${p.name}</h4>
-                        <div class="cat">${p.cat}</div>
+                        <div class="cat">قسم: ${p.cat}</div>
                         <div class="subcat">${p.subcat}</div>
                     </div>
-                </div>
-            `).join('');
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        // ===== البطاقة المنبثقة =====
-        function openProductModal(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) return;
+        // ===== تفعيل أزرار الفلترة =====
+        function setupFilters() {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.onclick = () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.getAttribute('data-filter');
+                    renderProducts(filter);
+                };
+            });
+        }
 
-            document.getElementById('modalTitle').textContent = p.name;
-            document.getElementById('modalSubtitle').textContent = `${p.cat} - ${p.subcat}`;
-
-            let specsHtml = '';
-            for (const [key, value] of Object.entries(p.specs)) {
-                specsHtml += `
+        // ===== النافذة المنبثقة (Modal) =====
+        function openModal(product) {
+            document.getElementById('modalTitle').innerText = product.name;
+            document.getElementById('modalSubtitle').innerText = `${product.cat} - ${product.subcat}`;
+            
+            const specsContainer = document.getElementById('modalSpecs');
+            specsContainer.innerHTML = '';
+            for (let [key, val] of Object.entries(product.specs || {})) {
+                specsContainer.innerHTML += `
                     <div class="spec-item">
                         <span class="label">${key}</span>
-                        <span class="value">${value}</span>
+                        <span class="value">${val}</span>
                     </div>
                 `;
             }
-            document.getElementById('modalSpecs').innerHTML = specsHtml;
 
-            const productsList = document.getElementById('modalProducts');
-            productsList.innerHTML = p.products.map(name => `<span>${name}</span>`).join('');
+            const productsContainer = document.getElementById('modalProducts');
+            productsContainer.innerHTML = '<strong style="display:block; width:100%; color:var(--accent-gold); margin-bottom:5px;">العلامات التجارية المندرجة:</strong>';
+            (product.items || []).forEach(item => {
+                productsContainer.innerHTML += `<span>${item}</span>`;
+            });
 
             document.getElementById('productModal').style.display = 'flex';
         }
@@ -954,147 +909,177 @@
             document.getElementById('productModal').style.display = 'none';
         }
 
-        // ===== الفلترة (مُصلحة) =====
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const filterValue = this.dataset.filter;
-                renderProducts(filterValue);
-            });
-        });
-
-        // ===== الحاسبة =====
+        // ===== حاسبة الكميات =====
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
-            const total = area * rate;
-            const bags = Math.ceil(total / 25);
-            const safety = (bags * 1.1).toFixed(1);
-            document.getElementById('resTotalKg').textContent = total.toFixed(1) + ' كغ';
-            document.getElementById('resBags').textContent = bags + ' أكياس';
-            document.getElementById('resSafety').textContent = safety + ' أكياس';
+            
+            const totalKg = area * rate;
+            const bags = totalKg / 25;
+            const bagsWithSafety = bags * 1.1;
+
+            document.getElementById('resTotalKg').innerText = totalKg.toFixed(1) + ' كغ';
+            document.getElementById('resBags').innerText = Math.ceil(bags) + ' أكياس';
+            document.getElementById('resSafety').innerText = bagsWithSafety.toFixed(1) + ' أكياس';
+        }
+
+        function sendCalcToWA() {
+            const area = document.getElementById('calcArea').value;
+            const typeText = document.getElementById('calcType').options[document.getElementById('calcType').selectedIndex].text;
+            const kg = document.getElementById('resTotalKg').innerText;
+            const bags = document.getElementById('resBags').innerText;
+
+            const text = `السلام عليكم، أود الاستفسار عن طلبية ببيانات الحاسبة:%0A- المساحة: ${area} م²%0A- التطبيق: ${typeText}%0A- الكمية التقديرية: ${kg} (${bags})`;
+            window.open(`https://wa.me/0952725590?text=${text}`, '_blank');
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/0952725590', '_blank');
         }
 
         function scrollToCalc() {
             document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function openWhatsApp() {
-            window.open('https://wa.me/0952725590?text=' + encodeURIComponent('مرحباً في KatanBuild، أرغب في الاستفسار عن مواد البناء.'), '_blank');
-        }
-
-        function sendCalcToWA() {
-            const area = document.getElementById('calcArea').value;
-            const kg = document.getElementById('resTotalKg').textContent;
-            const bags = document.getElementById('resBags').textContent;
-            const safety = document.getElementById('resSafety').textContent;
-            const msg = `طلب حساب كميات من KatanBuild:\n- المساحة: ${area} م²\n- الوزن: ${kg}\n- الأكياس: ${bags}\n- مع الأمان: ${safety}`;
-            window.open('https://wa.me/0952725590?text=' + encodeURIComponent(msg), '_blank');
-        }
-
-        // ===== لوحة التحكم =====
+        // ===== لوحة التحكم وإدارة البيانات =====
         let clickCount = 0;
-        document.getElementById('mainLogo').addEventListener('click', function() {
+        let clickTimer;
+        document.getElementById('mainLogo').addEventListener('click', () => {
             clickCount++;
-            if (clickCount === 5) {
-                const pwd = prompt('🔐 كلمة المرور:');
-                if (pwd === 'katan2026') {
-                    document.getElementById('adminPanel').style.display = 'flex';
-                    renderAdminList();
-                    renderAdminSliderList();
-                } else { alert('كلمة مرور خاطئة.'); }
+            clearTimeout(clickTimer);
+            if (clickCount >= 3) {
+                openAdmin();
                 clickCount = 0;
+            } else {
+                clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
             }
         });
 
-        function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
+        function openAdmin() {
+            renderAdminProductList();
+            renderAdminSliderList();
+            document.getElementById('adminPanel').style.display = 'flex';
+        }
 
-        function renderAdminList() {
-            const list = document.getElementById('adminProductList');
-            list.innerHTML = products.map(p => `
-                <div class="admin-product-item">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/40/0f1a3a/d4af37?text=?'">
-                    <div class="info"><strong>${p.name}</strong> - ${p.cat}</div>
+        function closeAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function renderAdminSliderList() {
+            const list = document.getElementById('adminSliderList');
+            if (sliderImages.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">لا توجد صور خلفية. أضف صورة جديدة.</p>';
+                return;
+            }
+            list.innerHTML = sliderImages.map((src, index) => `
+                <div class="admin-slider-item">
+                    <img src="${src}" onerror="this.src='https://via.placeholder.com/50/0f1a3a/d4af37?text=?'">
+                    <div class="info">صورة خلفية ${index + 1}</div>
                     <div class="actions">
-                        <button onclick="editProduct(${p.id})">✏️</button>
-                        <button class="delete" onclick="deleteProduct(${p.id})">🗑️</button>
+                        <button class="delete" onclick="deleteSliderImage(${index})">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSliderImage() {
+            const url = document.getElementById('newSliderImg').value.trim();
+            if (url) {
+                sliderImages.push(url);
+                saveSliderImages();
+                renderSlider();
+                renderAdminSliderList();
+                document.getElementById('newSliderImg').value = '';
+            }
+        }
+
+        function deleteSliderImage(index) {
+            sliderImages.splice(index, 1);
+            saveSliderImages();
+            renderSlider();
+            renderAdminSliderList();
+        }
+
+        function renderAdminProductList() {
+            const list = document.getElementById('adminProductList');
+            list.innerHTML = products.map((p, index) => `
+                <div class="admin-product-item">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/50/0f1a3a/d4af37?text=?'">
+                    <div class="info">
+                        <strong>${p.name}</strong> (${p.tag})
+                    </div>
+                    <div class="actions">
+                        <button class="delete" onclick="deleteProduct(${index})">حذف</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function addProduct() {
-            const img = document.getElementById('newImg').value.trim();
-            const name = document.getElementById('newName').value.trim();
-            const cat = document.getElementById('newCat').value.trim();
-            const subcat = document.getElementById('newSubcat').value.trim();
-            const tag = document.getElementById('newTag').value;
-            const specsText = document.getElementById('newSpecs').value.trim();
-            const productsText = document.getElementById('newProducts').value.trim();
-
-            if (!img || !name || !cat || !subcat || !specsText || !productsText) {
-                alert('املأ جميع الحقول');
-                return;
-            }
-
             try {
-                const specs = JSON.parse(specsText);
-                const productsList = productsText.split(',').map(s => s.trim());
-                const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                products.push({ id, name, cat, subcat, tag, img, specs, products: productsList });
+                const img = document.getElementById('newImg').value.trim();
+                const name = document.getElementById('newName').value.trim();
+                const cat = document.getElementById('newCat').value.trim();
+                const subcat = document.getElementById('newSubcat').value.trim();
+                const tag = document.getElementById('newTag').value;
+                const specsStr = document.getElementById('newSpecs').value.trim();
+                const productsStr = document.getElementById('newProducts').value.trim();
+
+                const specs = JSON.parse(specsStr);
+                const items = productsStr.split(',').map(s => s.trim()).filter(Boolean);
+
+                const newP = {
+                    id: Date.now(),
+                    name, cat, subcat, tag, img, specs, items
+                };
+
+                products.push(newP);
                 saveProducts();
-                renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-                renderAdminList();
-                document.querySelectorAll('#adminForm input, #adminForm textarea, #adminForm select').forEach(el => el.value = '');
-                alert('✅ تم الإضافة');
-            } catch (e) {
-                alert('❌ خطأ في JSON: تأكد من كتابة المواصفات بشكل صحيح');
+                renderProducts();
+                renderAdminProductList();
+                document.getElementById('adminForm').reset();
+                alert('تمت إضافة المنتج بنجاح!');
+            } catch (err) {
+                alert('حدث خطأ في تجميع المواصفات! التأكد من صيغة JSON الصحيحة.');
             }
         }
 
-        function deleteProduct(id) {
-            if (!confirm('حذف؟')) return;
-            products = products.filter(p => p.id !== id);
-            saveProducts();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            renderAdminList();
-            alert('✅ تم الحذف');
-        }
-
-        function editProduct(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) return;
-            const newName = prompt('الاسم:', p.name); if (newName) p.name = newName.trim();
-            const newCat = prompt('التصنيف:', p.cat); if (newCat) p.cat = newCat.trim();
-            const newSubcat = prompt('التصنيف الفرعي:', p.subcat); if (newSubcat) p.subcat = newSubcat.trim();
-            const newImg = prompt('رابط الصورة:', p.img); if (newImg) p.img = newImg.trim();
-            saveProducts();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            renderAdminList();
-            alert('✅ تم التحديث');
-        }
-
-        // ===== إغلاق المودال عند النقر خارجها =====
-        window.onclick = function(event) {
-            const modal = document.getElementById('productModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+        function deleteProduct(index) {
+            if (confirm('هل أنت تأكد من حذف هذا المنتج؟')) {
+                products.splice(index, 1);
+                saveProducts();
+                renderProducts();
+                renderAdminProductList();
             }
-        };
+        }
 
-        // ===== التهيئة =====
-        window.addEventListener('load', () => {
-            loadSliderImages();
+        // ===== بداية التشغيل =====
+        window.addEventListener('DOMContentLoaded', () => {
             loadProducts();
+            loadSliderImages();
             renderSlider();
-            renderProducts('all');
+            renderProducts();
+            setupFilters();
             calculateMaterials();
-            setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 1500);
+
+            // إخفاء شاشة الترحيب
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                if (splash) {
+                    splash.classList.add('fade-out');
+                    setTimeout(() => splash.remove(), 1000);
+                }
+            }, 1200);
         });
 
-        window.addEventListener('beforeunload', () => {
-            stopSlider();
+        // تأثير الهيدر عند التمرير
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
     </script>
 </body>
