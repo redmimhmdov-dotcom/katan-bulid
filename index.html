@@ -804,7 +804,7 @@
             alert('✅ تم تعيين الصورة كنشطة');
         }
 
-        // ===== المنتجات (مع الروابط الجديدة ومحتوى PDF) =====
+        // ===== المنتجات =====
         const DEFAULT_PRODUCTS = [
             // ===== لاصق ديكور (7) =====
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/mVXhBN3c/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية. يتميز بقوة التصاق ممتازة وسهولة في الاستخدام.' },
@@ -871,6 +871,7 @@
         // ===== عرض المنتجات =====
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('productGrid');
+            // التأكد من تطابق الفلترة مع tag
             const items = filter === 'all' ? products : products.filter(p => p.tag === filter);
             
             if (items.length === 0) {
