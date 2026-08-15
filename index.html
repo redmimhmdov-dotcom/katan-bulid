@@ -3,1133 +3,738 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>KatanBuild | حلول البناء المتكاملة</title>
+    <title>KATANBUILD | المنصة الهندسية الذكية</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
-            --primary-dark: #0b132b;
-            --primary-mid: #1a2744;
-            --accent-gold: #d4af37;
-            --accent-gold-light: #f5d76e;
+            --bg-dark-indigo: radial-gradient(ellipse at center, #0b132b 0%, #030712 100%);
+            --card-glass: rgba(15, 23, 42, 0.55); 
+            --accent-gold: #ffd700;
+            --accent-cyan: #38bdf8;
             --text-light: #f1f5f9;
-            --text-muted: #94a3b8;
-            --card-bg: rgba(255,255,255,0.03);
-            --border-glow: rgba(212, 175, 55, 0.15);
-            --shadow-gold: 0 0 30px rgba(212, 175, 55, 0.15);
+            --border-glow: rgba(255, 215, 0, 0.25);
+            --border-indigo: rgba(56, 189, 248, 0.25);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
         
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: #050a17;
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: var(--bg-dark-indigo);
             color: var(--text-light);
-            direction: rtl;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
         }
 
-        a { text-decoration: none; color: inherit; }
-
-        /* ===== شاشة الترحيب ===== */
-        #splash {
-            position: fixed; inset:0; z-index:9999;
-            background: var(--primary-dark);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 1; transition: opacity 1s ease;
-        }
-        #splash.fade-out { opacity: 0; pointer-events: none; }
-        .splash-content { text-align: center; }
-        .splash-content img {
-            width: 120px; border-radius: 50%;
-            border: 3px solid var(--accent-gold);
-            box-shadow: 0 0 40px rgba(212,175,55,0.3);
-            margin-bottom: 15px;
-        }
-        .splash-content h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px; color: #fff; letter-spacing: 2px;
-        }
-        .splash-content .sub {
-            color: var(--accent-gold); font-size: 14px; letter-spacing: 4px;
-        }
-        .splash-loader {
-            margin-top: 20px; width: 200px; height: 2px;
-            background: rgba(255,255,255,0.1); border-radius: 2px;
-            overflow: hidden; margin-left: auto; margin-right: auto;
-        }
-        .splash-loader::after {
-            content: ''; display: block; width: 30%; height: 100%;
-            background: var(--accent-gold); border-radius: 2px;
-            animation: loading 1.2s ease-in-out infinite;
-        }
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
+        /* ===== 🎆 1. صفحة الترحيب والشعار (Splash Screen) ===== */
+        #splashScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #030712;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
 
-        /* ===== الهيدر ===== */
-        header {
-            position: fixed; top:0; left:0; right:0; z-index:100;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%;
-            background: rgba(5, 10, 23, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-glow);
-            transition: 0.3s ease;
-        }
-        header.scrolled {
-            background: rgba(5, 10, 23, 0.95);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .logo img {
-            width: 45px; height: 45px; border-radius: 50%;
+        .splash-logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
             border: 2px solid var(--accent-gold);
-            object-fit: cover;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.4);
+            animation: pulseSplash 2.5s infinite alternate ease-in-out;
+            margin-bottom: 25px;
         }
-        .logo-text {
+
+        @keyframes pulseSplash {
+            0% { transform: scale(0.95); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+            100% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255, 215, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.6); }
+        }
+
+        .splash-title {
             font-family: 'Orbitron', sans-serif;
-            font-weight: 700; font-size: 22px; color: #fff;
-            letter-spacing: 1px;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
         }
-        .logo-text span { color: var(--accent-gold); }
 
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a {
-            font-size: 14px; font-weight: 600; color: var(--text-muted);
-            transition: 0.3s; position: relative;
+        .splash-sub {
+            color: var(--accent-cyan);
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 35px;
+            font-weight: 600;
         }
-        .nav-links a:hover { color: var(--accent-gold); }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: -4px; right: 0;
-            width: 0; height: 2px; background: var(--accent-gold);
+
+        .btn-enter {
+            background: linear-gradient(135deg, var(--accent-gold), #997a15);
+            color: #000;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
             transition: 0.3s;
+            font-family: 'Cairo';
         }
-        .nav-links a:hover::after { width: 100%; }
 
-        .btn-gold {
-            background: var(--accent-gold); color: #000;
-            padding: 10px 24px; border-radius: 30px; font-weight: 700;
-            border: none; cursor: pointer; transition: 0.3s;
-            font-family: 'Cairo', sans-serif; font-size: 14px;
+        .btn-enter:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
         }
-        .btn-gold:hover {
-            background: var(--accent-gold-light);
-            box-shadow: 0 0 25px rgba(212,175,55,0.4);
+
+        /* ===== 🌟 2. شعار الخلفية المضيء بالنيون ===== */
+        .watermark-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            max-width: 900px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.22;
+            animation: watermarkNeonPulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes watermarkNeonPulse {
+            0% { opacity: 0.15; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2)) saturate(100%); }
+            100% { opacity: 0.30; filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 25px rgba(56, 189, 248, 0.4)) saturate(160%); }
+        }
+
+        #bgCanvas {
+            position: fixed; top:0; left:0; width:100vw; height:100vh;
+            pointer-events: none; z-index: 0; opacity: 0.6;
+        }
+
+        /* ===== 🏛️ 3. الهيدر الفاخر ===== */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 5%; 
+            background: rgba(7, 13, 27, 0.75); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow); 
+            position: sticky; top:0; z-index:100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
+        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 12px rgba(255, 215, 0, 0.4); }
+        .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
+        .logo-sub { font-size:10px; color:var(--accent-cyan); letter-spacing:3px; display:block; }
+        
+        .header-actions { display:flex; align-items:center; gap:12px; }
+        .btn-cyber {
+            background: rgba(255, 215, 0, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--accent-gold); color: #fff;
+            padding: 10px 20px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; transition: 0.3s ease; font-size: 13px;
+            display: flex; align-items: center; gap: 8px;
+            font-family: 'Cairo';
+        }
+        .btn-cyber:hover {
+            background: var(--accent-gold); color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
             transform: translateY(-2px);
         }
-        .btn-outline-gold {
-            background: transparent; color: var(--accent-gold);
-            padding: 10px 24px; border-radius: 30px; font-weight: 700;
-            border: 1.5px solid var(--accent-gold); cursor: pointer;
-            transition: 0.3s; font-family: 'Cairo', sans-serif; font-size: 14px;
-        }
-        .btn-outline-gold:hover {
-            background: var(--accent-gold); color: #000;
-            box-shadow: 0 0 25px rgba(212,175,55,0.3);
-        }
 
-        /* ===== قسم البطل (Hero) ===== */
-        .hero {
-            min-height: 100vh;
-            display: flex; align-items: center;
-            padding: 100px 5% 60px;
-            position: relative;
-            background: var(--primary-dark);
-            overflow: hidden;
-        }
-        .hero-slider {
-            position: absolute; inset:0; z-index:0;
-            overflow: hidden;
-        }
-        .hero-slider img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .hero-slider img.active {
-            opacity: 1;
-        }
-        .hero-slider::after {
-            content: ''; position: absolute; inset:0;
-            background: linear-gradient(135deg, rgba(5,10,23,0.75) 20%, rgba(5,10,23,0.3) 100%);
-            z-index: 1;
-        }
-        .hero-content {
-            max-width: 700px; position: relative; z-index: 2;
-        }
-        .hero-badge {
-            display: inline-block;
-            background: rgba(212,175,55,0.15);
-            border: 1px solid rgba(212,175,55,0.2);
-            color: var(--accent-gold);
-            padding: 4px 16px; border-radius: 30px;
-            font-size: 12px; font-weight: 600; margin-bottom: 20px;
-        }
-        .hero h1 {
-            font-size: 52px; font-weight: 900; line-height: 1.1;
-            margin-bottom: 20px;
-        }
-        .hero h1 span { color: var(--accent-gold); }
-        .hero p {
-            font-size: 18px; color: var(--text-muted);
-            max-width: 500px; line-height: 1.8;
+        .container { max-width: 95%; margin: auto; padding: 25px 10px; position: relative; z-index: 1; }
+
+        /* ===== ⌨️ 4. شريط الرسالة المتغيرة ===== */
+        .typewriter-banner {
+            background: rgba(11, 19, 43, 0.65);
+            border: 1px solid var(--border-indigo);
+            border-radius: 16px;
+            padding: 16px 25px;
             margin-bottom: 30px;
-        }
-        .hero-actions { display: flex; gap: 15px; flex-wrap: wrap; }
-
-        .hero-stats {
-            display: flex; gap: 50px; margin-top: 50px;
-        }
-        .stat-item h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px; color: var(--accent-gold);
-        }
-        .stat-item p { font-size: 14px; color: var(--text-muted); }
-
-        /* ===== قسم القيم ===== */
-        .values-section {
-            padding: 80px 5%;
-            background: var(--primary-dark);
-            border-top: 1px solid var(--border-glow);
-        }
-        .section-header {
-            text-align: center; margin-bottom: 50px;
-        }
-        .section-header h2 {
-            font-size: 36px; font-weight: 800;
-        }
-        .section-header h2 span { color: var(--accent-gold); }
-        .section-header p {
-            color: var(--text-muted); max-width: 600px;
-            margin: 10px auto 0;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(56, 189, 248, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .values-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px; max-width: 1100px; margin: auto;
+        .typewriter-icon {
+            font-size: 20px;
+            background: rgba(255, 215, 0, 0.15);
+            width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            flex-shrink: 0;
         }
-        .value-card {
-            background: var(--card-bg);
+
+        .typewriter-text-box {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1.5;
+            min-height: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .typewriter-text-box::after {
+            content: '❚';
+            animation: blink 0.7s infinite;
+            margin-right: 6px;
+            color: var(--accent-gold);
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== 🤖 5. المساعد الهندسي ===== */
+        .smart-assistant-card {
+            background: var(--card-glass);
             border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 30px 20px;
-            text-align: center; transition: 0.4s;
+            border-radius: 20px; padding: 22px 28px; margin-bottom: 35px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .value-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--accent-gold);
-            box-shadow: var(--shadow-gold);
+        .assistant-title {
+            font-size: 19px; font-weight: 800; color: var(--accent-gold);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
         }
-        .value-card .icon {
-            font-size: 36px; color: var(--accent-gold);
-            margin-bottom: 15px;
+        .assistant-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+        .chip {
+            background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-indigo);
+            color: #d1d5db; padding: 9px 20px; border-radius: 30px; cursor: pointer;
+            font-size: 13px; transition: 0.3s; font-weight: 600;
         }
-        .value-card h4 { font-size: 18px; margin-bottom: 8px; }
-        .value-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+        .chip:hover, .chip.active {
+            background: linear-gradient(135deg, var(--accent-gold), #997a15);
+            color: #000; font-weight: 800; border-color: #fff;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+        }
 
-        /* ===== قسم المنتجات ===== */
-        .products-section {
-            padding: 80px 5%;
-            background: #050a17;
+        /* ===== 🧮 6. حاسبة المشاريع ===== */
+        .calculator-section {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px; padding: 30px; margin-bottom: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(20px);
         }
-        .products-section .section-header h2 { color: #fff; }
+        @media (max-width: 900px) { .calculator-section { grid-template-columns: 1fr; } }
+        
+        .calc-inputs input, .calc-inputs select {
+            width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 18px;
+            background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-glow);
+            color: #fff; border-radius: 12px; font-family: 'Cairo'; font-size: 14px;
+        }
+        .calc-inputs input:focus, .calc-inputs select:focus {
+            outline: none; border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255,215,0,0.4);
+        }
+        .calc-result-box {
+            background: rgba(7, 13, 27, 0.8); border-radius: 16px;
+            border: 1px dashed var(--accent-gold); padding: 22px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .res-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
+        .res-value { font-weight: 800; color: var(--accent-gold); font-size: 19px; }
 
-        .filter-bar {
-            display: flex; gap: 12px; justify-content: center;
-            flex-wrap: wrap; margin-bottom: 40px;
-        }
+        /* ===== 📦 7. الفلترة ===== */
+        .filter-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 25px; }
         .filter-btn {
-            background: transparent; border: 1px solid var(--border-glow);
-            color: var(--text-muted); padding: 8px 24px;
-            border-radius: 30px; cursor: pointer; font-size: 14px;
-            font-weight: 600; transition: 0.3s; font-family: 'Cairo', sans-serif;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
+            color: #fff; padding: 9px 22px; border-radius: 30px; white-space: nowrap;
+            cursor: pointer; transition: 0.3s; font-size: 13px; font-weight: 600;
         }
         .filter-btn.active, .filter-btn:hover {
-            background: var(--accent-gold); color: #000; border-color: var(--accent-gold);
+            background: var(--accent-gold); color: #000; font-weight: 800;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.5);
         }
 
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
             gap: 25px;
-            max-width: 1300px; margin: auto;
         }
+        
+        /* ===== 🖼️ 8. بطاقات المنتجات الشفافة والمبسطة ===== */
         .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
+            background: var(--card-glass);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 215, 0, 0.2); 
             overflow: hidden;
-            transition: 0.4s;
-            cursor: pointer;
+            transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; 
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
+
         .product-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-gold);
-            box-shadow: var(--shadow-gold);
+            transform: translateY(-6px) scale(1.02);
+            border-color: #ffd700;
+            background: rgba(15, 23, 42, 0.75);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
         }
+
+        .img-container { 
+            height: 230px; position: relative; 
+            background: rgba(3, 7, 18, 0.2); 
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            padding: 12px;
+        }
+
         .product-card img {
-            width: 100%; height: 220px; object-fit: cover;
-            background: #0f1a3a;
+            max-width: 100%; max-height: 100%;
+            object-fit: contain;
+            filter: contrast(120%) saturate(115%);
+            transition: transform 0.5s ease;
+            opacity: 0;
         }
-        .product-card .info { padding: 18px; }
-        .product-card .info h4 { font-size: 17px; margin-bottom: 4px; }
-        .product-card .info .cat {
-            font-size: 12px; color: var(--accent-gold);
-            font-weight: 600;
-        }
-        .product-card .info .subcat {
-            font-size: 12px; color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* ===== البطاقة المنبثقة (Modal) ===== */
-        .modal {
-            position: fixed; inset: 0; z-index: 1000;
-            background: rgba(2, 5, 12, 0.9);
-            backdrop-filter: blur(15px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: modalFadeIn 0.5s ease;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-content {
-            background: linear-gradient(145deg, #0f1a3a, #1a2744);
+        .product-card img.loaded { opacity: 1; }
+        .product-card:hover img { transform: scale(1.1); }
+        
+        .badge-cat {
+            position: absolute; top: 12px; right: 12px; z-index: 2;
+            background: rgba(3, 7, 18, 0.85); color: var(--accent-gold);
+            padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 800;
             border: 1px solid var(--accent-gold);
-            border-radius: 24px;
-            padding: 35px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 0 60px rgba(212,175,55,0.3), inset 0 0 30px rgba(212,175,55,0.05);
-        }
-        .modal-content .close {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            font-size: 30px;
-            color: var(--accent-gold);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .modal-content .close:hover {
-            transform: rotate(90deg) scale(1.2);
-        }
-        .modal-content .modal-icon {
-            font-size: 48px;
-            color: var(--accent-gold);
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .modal-content h2 {
-            color: var(--accent-gold);
-            font-size: 26px;
-            text-align: center;
-            margin-bottom: 5px;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .modal-content .subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 15px;
-        }
-        .modal-content .spec-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .modal-content .spec-item .label {
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .modal-content .spec-item .value {
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-        .modal-content .pdf-content {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(3,7,18,0.5);
-            border-radius: 12px;
-            border-right: 3px solid var(--accent-gold);
-            color: var(--text-light);
-            font-size: 14px;
-            line-height: 1.8;
-        }
-        .modal-content .pdf-content strong {
-            color: var(--accent-gold);
         }
 
-        /* ===== التذييل ===== */
-        footer {
-            background: var(--primary-dark);
-            border-top: 1px solid var(--border-glow);
-            padding: 50px 5% 30px;
+        .product-info { padding: 18px; text-align: center; }
+        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+        
+        .btn-card-single {
+            width: 100%; padding: 10px; border-radius: 10px; 
+            border: 1px solid var(--accent-gold);
+            background: rgba(255, 215, 0, 0.12); color: #fff; 
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; font-family: 'Cairo';
         }
-        .footer-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 40px; max-width: 1200px; margin: auto;
-        }
-        .footer-col h5 {
-            color: #fff; font-size: 16px; margin-bottom: 15px;
-        }
-        .footer-col p, .footer-col a {
-            color: var(--text-muted); font-size: 14px;
-            display: block; margin-bottom: 8px;
-            transition: 0.3s;
-        }
-        .footer-col a:hover { color: var(--accent-gold); }
-        .footer-bottom {
-            text-align: center; padding-top: 30px;
-            border-top: 1px solid var(--border-glow);
-            margin-top: 30px;
-            color: var(--text-muted); font-size: 13px;
-        }
+        .btn-card-single:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
 
-        /* ===== لوحة التحكم ===== */
-        .admin-panel {
-            position: fixed; inset:0; z-index:9999;
-            background: rgba(5,10,23,0.95); backdrop-filter: blur(15px);
+        /* ===== 💬 9. النافذة المنبثقة العصرية المخصصة ===== */
+        .cyber-modal-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(2, 5, 12, 0.8); backdrop-filter: blur(15px);
             display: none; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s ease;
         }
-        .admin-content {
-            background: #0f1a3a; border: 1px solid var(--accent-gold);
-            border-radius: 24px; padding: 35px; width: 95%; max-width: 700px;
-            max-height: 85vh; overflow-y: auto;
-            position: relative;
-        }
-        .admin-content .close {
-            position: absolute; top: 15px; left: 20px;
-            font-size: 28px; color: var(--accent-gold); cursor: pointer;
-        }
-        .admin-content h2 { color: var(--accent-gold); text-align: center; margin-bottom: 20px; }
-        .admin-content h3 { color: var(--accent-gold); margin: 20px 0 10px; }
-        .admin-content label { display: block; margin: 12px 0 4px; color: var(--text-muted); font-weight: 600; }
-        .admin-content input, .admin-content select {
-            width: 100%; padding: 10px; border-radius: 10px;
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
-            color: #fff; font-family: 'Cairo', sans-serif;
-        }
-        .admin-content .btn-admin {
-            width: 100%; padding: 12px; margin-top: 15px;
-            background: var(--accent-gold); color: #000; font-weight: 800;
-            border: none; border-radius: 10px; cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-        }
-        .admin-product-item, .admin-slider-item {
-            display: flex; align-items: center; gap: 12px;
-            background: rgba(255,255,255,0.03); padding: 10px;
-            border-radius: 10px; margin: 6px 0;
-        }
-        .admin-product-item img, .admin-slider-item img {
-            width: 50px; height: 50px; object-fit: cover; border-radius: 6px;
-        }
-        .admin-product-item .info, .admin-slider-item .info { flex: 1; font-size: 13px; }
-        .admin-product-item .actions button, .admin-slider-item .actions button {
-            background: transparent; border: 1px solid var(--border-glow);
-            color: #fff; padding: 2px 10px; border-radius: 6px; cursor: pointer;
-        }
-        .admin-product-item .actions .delete:hover, .admin-slider-item .actions .delete:hover {
-            background: #b91c1c;
-        }
-        .admin-slider-item .actions .set-active {
-            border-color: var(--accent-gold); color: var(--accent-gold);
-        }
-        .admin-slider-item .actions .set-active:hover {
-            background: var(--accent-gold); color: #000;
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .cyber-modal-card {
+            background: rgba(11, 19, 43, 0.95);
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px; padding: 30px; width: 90%; max-width: 450px;
+            position: relative; color: #fff; text-align: center;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            transform: scale(0.9);
+            animation: modalPop 0.3s forwards ease;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 32px; }
-            .hero-stats { gap: 25px; flex-wrap: wrap; }
-            .nav-links { display: none; }
-            .values-grid { grid-template-columns: 1fr 1fr; }
+        @keyframes modalPop { to { transform: scale(1); } }
+
+        .modal-icon-badge {
+            width: 60px; height: 60px; margin: 0 auto 15px;
+            background: rgba(255, 215, 0, 0.1); border-radius: 50%;
+            border: 1px solid var(--accent-gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; color: var(--accent-gold);
         }
-        @media (max-width: 480px) {
-            .values-grid { grid-template-columns: 1fr; }
-            .product-grid { grid-template-columns: 1fr; }
-        }
+
+        .metric-bar { margin: 12px 0; text-align: right; }
+        .bar-outer { height: 8px; background: rgba(3, 7, 18, 0.8); border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold)); transition: width 0.8s ease; }
+
     </style>
 </head>
 <body>
 
-    <!-- ===== شاشة الترحيب ===== -->
-    <div id="splash">
-        <div class="splash-content">
-            <img src="https://i.ibb.co/5XvXLhGG/page-0001.jpg" alt="KatanBuild" />
-            <h1>KatanBuild</h1>
-            <div class="sub">مواد بناء متطورة</div>
-            <div class="splash-loader"></div>
-        </div>
+    <!-- 🎆 1. شاشة الترحيب بالشعار المضيء عند دخول الموقع -->
+    <div id="splashScreen">
+        <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="splash-logo" alt="KATANBUILD Logo" />
+        <div class="splash-title">KATANBUILD</div>
+        <div class="splash-sub">DEEP INDIGO & CYBER EDITION</div>
+        <button class="btn-enter" onclick="enterSite()">دخول المنصة الهندسة 🚀</button>
     </div>
+
+    <!-- 🌟 2. الشعار الخلفي المدمج بأسلوب النيون -->
+    <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo" alt="Neon Watermark" />
+
+    <!-- خلفية النجوم -->
+    <canvas id="bgCanvas"></canvas>
 
     <!-- ===== الهيدر ===== -->
     <header>
-        <div class="logo" id="mainLogo">
-            <img src="https://i.ibb.co/5XvXLhGG/page-0001.jpg" alt="KatanBuild" />
-            <div class="logo-text">Katan<span>Build</span></div>
+        <div class="logo">
+            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="42" width="42" />
+            <div>
+                <span class="logo-text">KATANBUILD</span>
+                <span class="logo-sub">DEEP INDIGO & CYBER EDITION</span>
+            </div>
         </div>
-        <nav class="nav-links">
-            <a href="#products">المنتجات</a>
-            <a href="#values">عن الشركة</a>
-            <button class="btn-outline-gold" onclick="openWhatsApp()">📞 تواصل</button>
-            <button class="btn-gold" onclick="scrollToCalc()">🧮 حاسبة</button>
-        </nav>
+        <div class="header-actions">
+            <button class="btn-cyber" onclick="showCustomAlert('لوحة التحكم الذكية', 'تم تحميل كافة إعدادات النظام وتحديث البيانات بنجاح.')">⚙️ لوحة التحكم</button>
+            <button class="btn-cyber" onclick="scrollToCalc()">🧮 الحاسبة</button>
+            <button class="btn-cyber" onclick="openWhatsApp()">📞 التواصل</button>
+        </div>
     </header>
 
-    <!-- ===== قسم البطل ===== -->
-    <section class="hero" id="heroSection">
-        <div class="hero-slider" id="heroSlider">
-            <!-- سيتم إضافة الصور بواسطة JavaScript -->
-        </div>
-        <div class="hero-content">
-            <div class="hero-badge">🏗️ حلول بناء متكاملة</div>
-            <h1>نعيد تعريف <span>جودة</span> مواد البناء</h1>
-            <p>في KatanBuild، نجمع بين الخبرة الهندسية والابتكار الكيميائي لنقدم مواد بناء تلبي أعلى المعايير العالمية.</p>
-            <div class="hero-actions">
-                <button class="btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">استكشف منتجاتنا</button>
-                <button class="btn-outline-gold" onclick="openWhatsApp()">📞 اتصل بنا</button>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-item"><h3>25+</h3><p>خطوط إنتاج</p></div>
-                <div class="stat-item"><h3>120+</h3><p>مشروع منجز</p></div>
-                <div class="stat-item"><h3>20</h3><p>سنوات خبرة</p></div>
-            </div>
-        </div>
-    </section>
+    <div class="container">
 
-    <!-- ===== قسم القيم ===== -->
-    <section class="values-section" id="values">
-        <div class="section-header">
-            <h2>نعيد تعريف <span>معايير الجودة</span> في عالم مواد البناء</h2>
-            <p>نجمع بين الدقة الهندسية والابتكار الكيميائي لنقدم لكل بناء القوة التي يستحقها والحماية التي تدوم.</p>
-        </div>
-        <div class="values-grid">
-            <div class="value-card">
-                <div class="icon">⚙️</div>
-                <h4>دقة تقنية</h4>
-                <p>نؤمن بأن كيمياء البناء علم لا مكان فيه للخطأ، لذلك نتبع أعلى معايير الدقة في كل خلطة.</p>
-            </div>
-            <div class="value-card">
-                <div class="icon">⭐</div>
-                <h4>جودة فائقة</h4>
-                <p>لا نقبل التنازل عن جودة المواد الخام، نختار أفضل المكونات لضمان أداء يتجاوز التوقعات.</p>
-            </div>
-            <div class="value-card">
-                <div class="icon">💡</div>
-                <h4>ابتكار مستمر</h4>
-                <p>نطور منتجاتنا في مختبراتنا لمواكبة أحدث الحلول العالمية في العزل والتشطيبات.</p>
-            </div>
-            <div class="value-card">
-                <div class="icon">🌱</div>
-                <h4>استدامة</h4>
-                <p>نصنع مواد تحمي المباني وتصمد أمام الزمن والظروف المناخية القاسية.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== قسم المنتجات ===== -->
-    <section class="products-section" id="products">
-        <div class="section-header">
-            <h2>📦 <span>كتالوج</span> المنتجات</h2>
-            <p>مجموعة متكاملة من المواد عالية الأداء لمشاريعك السكنية والتجارية</p>
+        <!-- ===== ⌨️ الرسالة المتغيرة الديناميكية داخل الموقع ===== -->
+        <div class="typewriter-banner">
+            <div class="typewriter-icon">💡</div>
+            <div class="typewriter-text-box" id="siteTypewriterText"></div>
         </div>
 
-        <div class="filter-bar" id="filterBar">
-            <button class="filter-btn active" data-filter="all">جميع المنتجات</button>
-            <button class="filter-btn" data-filter="لاصق ديكور">🎨 لاصق ديكور</button>
-            <button class="filter-btn" data-filter="لاصق مسابح">🏊 لاصق مسابح</button>
-            <button class="filter-btn" data-filter="لاصق غرانيت">🏛️ لاصق غرانيت</button>
-            <button class="filter-btn" data-filter="لاصق خارجي">☀️ لاصق خارجي</button>
-            <button class="filter-btn" data-filter="طينة">🧱 طينة</button>
-            <button class="filter-btn" data-filter="روبة">🛠️ روبة</button>
-            <button class="filter-btn" data-filter="عوازل">🛡️ عوازل</button>
+        <!-- ===== المساعد الهندسي الذكي ===== -->
+        <div class="smart-assistant-card">
+            <div class="assistant-title">
+                🤖 المساعد الهندسي: حدد التحدي التقني في مشروعك لاختيار المادة المناسبة
+            </div>
+            <div class="assistant-chips">
+                <div class="chip active" onclick="filterByTag('all', this)">كافة المنتجات (38)</div>
+                <div class="chip" onclick="filterByTag('decor', this)">🎨 التكسيات والديكورات الداخلية</div>
+                <div class="chip" onclick="filterByTag('pool', this)">🏊‍♂️ المسابح والضغط المائي الفائق</div>
+                <div class="chip" onclick="filterByTag('heavy', this)">🏛️ البورسلين والغرانيت الضخم</div>
+                <div class="chip" onclick="filterByTag('outdoor', this)">☀️ الواجهات الخارجية ومقاومة الحرارة</div>
+                <div class="chip" onclick="filterByTag('plaster', this)">🧱 الطينة الجاهزة والأكريليك</div>
+                <div class="chip" onclick="filterByTag('grout', this)">🛠️ الروبة وجراوت الترميم</div>
+                <div class="chip" onclick="filterByTag('insulation', this)">🛡️ عوازل الحماية والتكتيم</div>
+            </div>
         </div>
 
+        <!-- ===== حاسبة الكميات للمشاريع ===== -->
+        <div class="calculator-section" id="calcSection">
+            <div class="calc-inputs">
+                <h3 style="color:var(--accent-gold); margin-bottom:15px;">🧮 حاسبة الاحتياجات والميزانية</h3>
+                <label>مساحة المشروع الإجمالية (m²):</label>
+                <input type="number" id="calcArea" value="50" min="1" oninput="calculateMaterials()" />
+
+                <label>نوع التطبيق والمادة:</label>
+                <select id="calcType" onchange="calculateMaterials()">
+                    <option value="4">لاصق ديكور داخلي (~4 كغ/m²)</option>
+                    <option value="5">لاصق غرانيت وبورسلين (~5 كغ/m²)</option>
+                    <option value="6">لاصق مسابح وعوازل (~6 كغ/m²)</option>
+                    <option value="0.5">روبة وملء فواصل (~0.5 كغ/m²)</option>
+                </select>
+            </div>
+
+            <div class="calc-result-box">
+                <h4 style="color:#fff; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">📊 التقرير الفني التقديري:</h4>
+                <div class="res-item">
+                    <span>الوزن المطلق المطلوبة:</span>
+                    <span class="res-value" id="resTotalKg">200 كغ</span>
+                </div>
+                <div class="res-item">
+                    <span>عدد الأكياس (25 كغ):</span>
+                    <span class="res-value" id="resBags">8 أكياس</span>
+                </div>
+                <div class="res-item">
+                    <span>مع نسبة الأمان والهدر (+10%):</span>
+                    <span class="res-value" id="resSafety">8.8 أكياس</span>
+                </div>
+                <button class="btn-cyber" style="width:100%; margin-top:12px; justify-content:center;" onclick="sendCalcToWA()">📲 إرسال التقرير عبر الواتساب</button>
+            </div>
+        </div>
+
+        <!-- ===== الفلترة المعروضة ===== -->
+        <h2 style="margin-bottom:16px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات المعروضة</h2>
+        <div class="filter-bar" id="filterBar"></div>
+
+        <!-- شبكة المنتجات الـ 38 الممتدة -->
         <div class="product-grid" id="productGrid"></div>
-    </section>
 
-    <!-- ===== حاسبة المشاريع ===== -->
-    <section class="values-section" id="calcSection" style="border-top: none;">
-        <div class="section-header">
-            <h2>🧮 <span>حاسبة</span> الاحتياجات</h2>
-            <p>احسب الكميات المطلوبة لمشروعك بدقة</p>
-        </div>
-        <div style="max-width: 800px; margin: auto; background: var(--card-bg); border: 1px solid var(--border-glow); border-radius: 20px; padding: 30px;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-                <div>
-                    <label style="color: var(--text-muted);">مساحة المشروع (م²):</label>
-                    <input type="number" id="calcArea" value="50" min="1" oninput="calculateMaterials()" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-glow); color:#fff; margin-top:6px;">
-                    <label style="color: var(--text-muted); display:block; margin-top:15px;">نوع التطبيق:</label>
-                    <select id="calcType" onchange="calculateMaterials()" style="width:100%; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--border-glow); color:#fff; margin-top:6px;">
-                        <option value="4">لاصق سيراميك (~4 كغ/م²)</option>
-                        <option value="5">لاصق غرانيت (~5 كغ/م²)</option>
-                        <option value="6">لاصق مسابح (~6 كغ/م²)</option>
-                        <option value="0.5">روبة (~0.5 كغ/م²)</option>
-                    </select>
-                </div>
-                <div style="background:rgba(0,0,0,0.2); border-radius:16px; padding:20px; border:1px dashed var(--accent-gold);">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>الوزن المطلوب:</span><span style="color:var(--accent-gold); font-weight:800;" id="resTotalKg">200.0 كغ</span></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>عدد الأكياس (25 كغ):</span><span style="color:var(--accent-gold); font-weight:800;" id="resBags">8 أكياس</span></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><span>مع الأمان (+10%):</span><span style="color:var(--accent-gold); font-weight:800;" id="resSafety">8.8 أكياس</span></div>
-                    <button class="btn-gold" style="width:100%;" onclick="sendCalcToWA()">📲 إرسال التقرير</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== التذييل ===== -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h5>KatanBuild</h5>
-                <p>حلول بناء متكاملة بجودة عالمية</p>
-            </div>
-            <div class="footer-col">
-                <h5>روابط سريعة</h5>
-                <a href="#products">المنتجات</a>
-                <a href="#values">عن الشركة</a>
-                <a href="#" onclick="openWhatsApp()">اتصل بنا</a>
-            </div>
-            <div class="footer-col">
-                <h5>تواصل معنا</h5>
-                <a href="https://wa.me/0952725590">📞 0952725590</a>
-                <a href="mailto:info@katanbuild.com">📧 info@katanbuild.com</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            © 2026 KatanBuild - جميع الحقوق محفوظة
-        </div>
-    </footer>
-
-    <!-- ===== البطاقة المنبثقة (Modal) ===== -->
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div class="modal-icon">📄</div>
-            <h2 id="modalTitle">اسم المنتج</h2>
-            <div class="subtitle" id="modalSubtitle">التصنيف الفرعي</div>
-            <div id="modalSpecs"></div>
-            <div class="pdf-content" id="modalPdfContent"></div>
-        </div>
     </div>
 
-    <!-- ===== لوحة التحكم ===== -->
-    <div id="adminPanel" class="admin-panel">
-        <div class="admin-content">
-            <span class="close" onclick="closeAdmin()">&times;</span>
-            <h2>🔐 لوحة التحكم</h2>
+    <!-- ===== 💬 النافذة المنبثقة العصرية التفاعلية ===== -->
+    <div id="cyberModal" class="cyber-modal-overlay">
+        <div class="cyber-modal-card">
+            <div class="modal-icon-badge" id="modalIcon">🧪</div>
+            <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="modalTitle">عنوان التنبيه</h3>
+            <p id="modalBody" style="font-size:14px; color:#d1d5db; line-height:1.6; margin-bottom:20px;"></p>
             
-            <h3>🖼️ صور الخلفية (Hero Slider)</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-                أضف صورة واحدة للثبات، أو أكثر للتحرك التلقائي.
-            </p>
-            <form id="sliderForm" onsubmit="event.preventDefault(); addSliderImage();">
-                <label>رابط الصورة الجديدة</label>
-                <input type="text" id="newSliderImg" placeholder="https://example.com/image.jpg" required>
-                <button type="submit" class="btn-admin">➕ إضافة صورة</button>
-            </form>
-            <div id="adminSliderList" style="margin-top:15px;"></div>
+            <div id="modalCustomContent"></div>
 
-            <hr style="border-color:var(--border-glow); margin:25px 0;" />
-
-            <h3>📦 إدارة المنتجات</h3>
-            <form id="adminForm" onsubmit="event.preventDefault(); addProduct();">
-                <label>رابط الصورة</label>
-                <input type="text" id="newImg" placeholder="https://example.com/image.jpg" required>
-                <label>اسم المنتج</label>
-                <input type="text" id="newName" placeholder="اسم المنتج" required>
-                <label>التصنيف الرئيسي</label>
-                <input type="text" id="newCat" placeholder="مثل: لاصق ديكور، لاصق مسابح" required>
-                <label>التصنيف الفرعي</label>
-                <input type="text" id="newSubcat" placeholder="مثل: C1, C2TE" required>
-                <label>العلامة (للفلترة)</label>
-                <select id="newTag">
-                    <option value="لاصق ديكور">🎨 لاصق ديكور</option>
-                    <option value="لاصق مسابح">🏊 لاصق مسابح</option>
-                    <option value="لاصق غرانيت">🏛️ لاصق غرانيت</option>
-                    <option value="لاصق خارجي">☀️ لاصق خارجي</option>
-                    <option value="طينة">🧱 طينة</option>
-                    <option value="روبة">🛠️ روبة</option>
-                    <option value="عوازل">🛡️ عوازل</option>
-                </select>
-                <label>المواصفات (JSON)</label>
-                <textarea id="newSpecs" rows="4" placeholder='{"قوة الالتصاق": "≥ 0.5 نيوتن/مم²", "الوزن": "18-20 كغ"}' required></textarea>
-                <label>محتوى PDF (نص وصفي)</label>
-                <textarea id="newPdfContent" rows="4" placeholder="محتوى الملف PDF الخاص بالمنتج..."></textarea>
-                <button type="submit" class="btn-admin">➕ إضافة منتج</button>
-            </form>
-            <hr style="border-color:var(--border-glow); margin:20px 0;">
-            <h3 style="color:var(--accent-gold);">📋 قائمة المنتجات</h3>
-            <div id="adminProductList"></div>
+            <button class="btn-cyber" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeCyberModal()">موافق / إغلاق</button>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // 1. إدارة صور الخلفية
-        // ============================================================
-        let sliderImages = [];
-        let sliderInterval = null;
-        let currentSlideIndex = 0;
-
-        function loadSliderImages() {
-            const stored = localStorage.getItem('katanbuild_slider_images');
-            if (stored) {
-                sliderImages = JSON.parse(stored);
-            } else {
-                sliderImages = [
-                    'https://i.ibb.co/dxbJqTT/1786627087080.png',
-                    'https://i.ibb.co/9kn63v1c/1786629632716.png'
-                ];
-                saveSliderImages();
-            }
+        // إخفاء صفحة الترحيب والدخول للموقع
+        function enterSite() {
+            const splash = document.getElementById('splashScreen');
+            splash.style.opacity = '0';
+            splash.style.visibility = 'hidden';
+            runSiteTypewriter();
         }
 
-        function saveSliderImages() {
-            localStorage.setItem('katanbuild_slider_images', JSON.stringify(sliderImages));
-        }
-
-        function renderSlider() {
-            const slider = document.getElementById('heroSlider');
-            slider.innerHTML = '';
-            
-            if (sliderImages.length === 0) {
-                const img = document.createElement('img');
-                img.src = 'https://i.ibb.co/dxbJqTT/1786627087080.png';
-                img.alt = 'خلفية KatanBuild';
-                img.classList.add('active');
-                slider.appendChild(img);
-                return;
-            }
-
-            sliderImages.forEach((src, index) => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = 'خلفية KatanBuild';
-                if (index === 0) img.classList.add('active');
-                slider.appendChild(img);
-            });
-
-            if (sliderImages.length > 1) {
-                startSlider();
-            } else {
-                stopSlider();
-            }
-        }
-
-        function startSlider() {
-            stopSlider();
-            sliderInterval = setInterval(() => {
-                const images = document.querySelectorAll('#heroSlider img');
-                if (images.length === 0) return;
-                images.forEach(img => img.classList.remove('active'));
-                currentSlideIndex = (currentSlideIndex + 1) % images.length;
-                images[currentSlideIndex].classList.add('active');
-            }, 2000);
-        }
-
-        function stopSlider() {
-            if (sliderInterval) {
-                clearInterval(sliderInterval);
-                sliderInterval = null;
-            }
-        }
-
-        function renderAdminSliderList() {
-            const list = document.getElementById('adminSliderList');
-            if (sliderImages.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-muted);">لا توجد صور. أضف صورة الآن.</p>';
-                return;
-            }
-            list.innerHTML = sliderImages.map((src, index) => `
-                <div class="admin-slider-item">
-                    <img src="${src}" onerror="this.src='https://via.placeholder.com/50/0f1a3a/d4af37?text=?'">
-                    <div class="info">صورة ${index + 1} ${index === 0 ? '⭐ (نشطة)' : ''}</div>
-                    <div class="actions">
-                        <button class="set-active" onclick="setActiveSlider(${index})">⭐ تفعيل</button>
-                        <button class="delete" onclick="deleteSliderImage(${index})">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function addSliderImage() {
-            const url = document.getElementById('newSliderImg').value.trim();
-            if (!url) { alert('أدخل رابط الصورة'); return; }
-            sliderImages.push(url);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            document.getElementById('newSliderImg').value = '';
-            alert('✅ تم إضافة الصورة');
-        }
-
-        function deleteSliderImage(index) {
-            if (!confirm('حذف هذه الصورة؟')) return;
-            sliderImages.splice(index, 1);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            alert('✅ تم حذف الصورة');
-        }
-
-        function setActiveSlider(index) {
-            if (index === 0) return;
-            const [item] = sliderImages.splice(index, 1);
-            sliderImages.unshift(item);
-            saveSliderImages();
-            renderSlider();
-            renderAdminSliderList();
-            alert('✅ تم تعيين الصورة كنشطة');
-        }
-
-        // ============================================================
-        // 2. المنتجات (مصفوفة كاملة)
-        // ============================================================
-        const DEFAULT_PRODUCTS = [
-            // ===== لاصق ديكور (7) =====
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/mVXhBN3c/2.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/GfkgJs03/everest.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/hJDtVZWQ/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/1GZK0JGn/forever.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/d4YVhwZh/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/99kk5MCZ/claytor.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', subcat: 'C1 قياسي', tag: 'لاصق ديكور', img: 'https://i.ibb.co/ns5KMdJK/lazurd.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الوزن': '18-20 كغ', 'الاستخدام': 'داخلي'}, pdf: 'منتج لاصق ديكور عالي الجودة من مؤسسة قطان، يستخدم في تركيب السيراميك والخزف على الجدران والأرضيات الداخلية.' },
-
-            // ===== لاصق مسابح (8) =====
-            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VcgQvT9k/aqua.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE. يوفر قوة التصاق محسنة ≥ 1.0 نيوتن/مم²، مع مقاومة الانزلاق الرأسي وزمن مفتوح ممتد. مناسب للمسابح والأحجام الكبيرة.' },
-            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/TDwZVW7R/basil.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE. مناسب للمسابح والأحجام الكبيرة.' },
-            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/6cr616P5/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VcCqx3wL/mockup.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/Z6kqm8wt/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/HDYtzRm5/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/DHdDTwtX/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-            { id: 15, name: 'عباس', cat: 'لاصق مسابح', subcat: 'C2TE مقاوم للماء', tag: 'لاصق مسابح', img: 'https://i.ibb.co/VW0QXqyG/image.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مقاومة الانزلاق': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TE.' },
-
-            // ===== لاصق غرانيت (10) =====
-            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/gLDmLyHM/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان، مناسب لتركيب الغرانيت والبورسلان الكبير على الأسطح الداخلية والخارجية، يتميز بقوة التصاق عالية ومقاومة للإجهادات.' },
-            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/fYYX8W1m/mockup.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/rGrh2zq9/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/tw8DFGcT/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/Q3DBpnNX/span.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/tpYb9KHR/image.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/ccy8XFXy/shurbaji.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/Rkd2Mpkj/global.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/8n73h5xG/laith.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', subcat: 'C1TE مقوى', tag: 'لاصق غرانيت', img: 'https://i.ibb.co/21g55pWv/onerlo.png', specs: {'قوة الالتصاق': '≥ 0.5 نيوتن/مم²', 'الاستخدام': 'داخلي/خارجي', 'المقاومة': 'عالية للإجهادات'}, pdf: 'لاصق غرانيت C1TE من مؤسسة قطان.' },
-
-            // ===== لاصق خارجي (3) =====
-            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/DPCK57x1/r2b.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1. يتميز بقوة التصاق محسنة ≥ 1.0 نيوتن/مم²، مقاومة للانزلاق، زمن مفتوح ممتد، ومرونة عالية. مناسب للواجهات والشرفات والأسطح المكشوفة.' },
-            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/BVXVzBmZ/raed.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1.' },
-            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', subcat: 'C2TES1 متطور', tag: 'لاصق خارجي', img: 'https://i.ibb.co/Cs08vYMV/raed-o.png', specs: {'قوة الالتصاق': '≥ 1.0 نيوتن/مم²', 'الوزن': '20 كغ', 'مرونة': 'عالية'}, pdf: 'لاصق سيراميك إسمنتي عالي الأداء مطابق للمواصفة الأوروبية EN 12004 بتصنيف C2TES1.' },
-
-            // ===== طينة (5) =====
-            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', subcat: 'أكريليكية', tag: 'طينة', img: 'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', specs: {'النوع': 'أكريليكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'}, pdf: 'طينة اكريليكية عالية الجودة من مؤسسة قطان، تستخدم في التشطيبات الداخلية وتتميز بالمرونة العالية وسهولة الاستخدام.' },
-            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', subcat: 'بلاستيكية', tag: 'طينة', img: 'https://i.ibb.co/9HP2LCPY/Untitled-1.png', specs: {'النوع': 'بلاستيكية', 'الاستخدام': 'تشطيبات داخلية', 'المرونة': 'عالية'}, pdf: 'طينة بلاستيكية من مؤسسة قطان، مناسبة للتشطيبات الداخلية.' },
-            { id: 31, name: 'سولايد ميكس', cat: 'طينة', subcat: 'ميكس', tag: 'طينة', img: 'https://i.ibb.co/sv947RvN/sulid-mix.png', specs: {'النوع': 'ميكس', 'الاستخدام': 'تشطيبات داخلية وخارجية', 'المقاومة': 'عالية'}, pdf: 'سولايد ميكس من مؤسسة قطان، طينة متعددة الاستخدامات للتشطيبات الداخلية والخارجية.' },
-            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', subcat: 'اسمنتية', tag: 'طينة', img: 'https://i.ibb.co/nNgC3hzH/Whats-App-Image-2026-06-18-at-1-10.png', specs: {'النوع': 'اسمنتية', 'الاستخدام': 'تشطيبات خارجية', 'المقاومة': 'عالية للضغط'}, pdf: 'سولايد اسمنتية من مؤسسة قطان، طينة اسمنتية عالية المقاومة للضغط للتشطيبات الخارجية.' },
-            { id: 33, name: 'طينة غرانيت', cat: 'طينة', subcat: 'غرانيت', tag: 'طينة', img: 'https://i.ibb.co/DDFN8TJF/image.png', specs: {'النوع': 'غرانيت', 'الاستخدام': 'تشطيبات فاخرة', 'المقاومة': 'عالية'}, pdf: 'طينة غرانيت من مؤسسة قطان، للتشطيبات الفاخرة وعالية المقاومة.' },
-
-            // ===== روبة (2) =====
-            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/39XZ6n5k/graft.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'}, pdf: 'روبة إسمنتية محسنة مطابقة للمواصفة الأوروبية EN 13888 بتصنيف CG2. تتميز بمقاومة محسنة للتآكل، انخفاض في امتصاص الماء، ثبات اللون، وقوام ناعم. مناسبة للحمامات والمطابخ والشرفات.' },
-            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', subcat: 'CG2 مطاطية', tag: 'روبة', img: 'https://i.ibb.co/GQTn6NG1/qods.png', specs: {'المعيار': 'EN 13888 CG2', 'الوزن': '5 كغ', 'مقاومة التآكل': 'عالية'}, pdf: 'روبة إسمنتية محسنة مطابقة للمواصفة الأوروبية EN 13888 بتصنيف CG2.' },
-
-            // ===== عوازل (3) =====
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', subcat: 'بلاستيكي', tag: 'عوازل', img: 'https://i.ibb.co/fGKcxGHx/najar.png', specs: {'النوع': 'بلاستيكي', 'الاستخدام': 'عزل الأسطح', 'المقاومة': 'عالية للرطوبة'}, pdf: 'عازل بلاستيكي من مؤسسة قطان، يستخدم لعزل الأسطح ويتميز بمقاومة عالية للرطوبة.' },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', subcat: 'شفاف', tag: 'عوازل', img: 'https://i.ibb.co/CsbDvRsb/rocky.png', specs: {'النوع': 'شفاف', 'الاستخدام': 'عزل الحجر', 'المقاومة': 'عالية للأشعة'}, pdf: 'عازل حجر شفاف من مؤسسة قطان، يستخدم لعزل الحجر ويتميز بمقاومة عالية للأشعة.' },
-            { id: 38, name: 'عازل مركبين', cat: 'عوازل', subcat: 'مركب', tag: 'عوازل', img: 'https://i.ibb.co/m553JtKC/image.png', specs: {'النوع': 'مركب', 'الاستخدام': 'عزل متعدد', 'المقاومة': 'عالية'}, pdf: 'عازل مركبين من مؤسسة قطان، للاستخدامات المتعددة في العزل.' }
+        // 1. نظام الآلة الكاتبة المتعاقب الديناميكي داخل الموقع
+        const messages = [
+            "أهلاً بكم في KATANBUILD | المرجع الأول لابتكار وتطوير مواد البناء المتقدمة.",
+            "الموقع مصمم بأسلوب الكحلي الملكي والتأثير الزجاجي المضيء لتوفير تجربة تصفح هادئة وفاخرة.",
+            "استخدم المساعد الهندسي والحاسبة التفاعلية لتقدير احتياجات مشروعك بدقة متناهية."
         ];
 
-        let products = [];
+        let msgIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+        const speed = 40;
+        const deleteSpeed = 20;
+        const delayBetween = 2200;
 
-        function loadProducts() {
-            const stored = localStorage.getItem('katanbuild_products');
-            if (stored) {
-                try {
-                    products = JSON.parse(stored);
-                } catch (e) {
-                    products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-                    saveProducts();
+        function runSiteTypewriter() {
+            const currentMsg = messages[msgIdx];
+            const displayTarget = document.getElementById("siteTypewriterText");
+
+            if (!displayTarget) return;
+
+            if (!isDeleting) {
+                displayTarget.innerText = currentMsg.substring(0, charIdx + 1);
+                charIdx++;
+                if (charIdx === currentMsg.length) {
+                    isDeleting = true;
+                    setTimeout(runSiteTypewriter, delayBetween);
+                    return;
                 }
             } else {
-                products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-                saveProducts();
+                displayTarget.innerText = currentMsg.substring(0, charIdx - 1);
+                charIdx--;
+                if (charIdx === 0) {
+                    isDeleting = false;
+                    msgIdx = (msgIdx + 1) % messages.length;
+                }
             }
-            console.log('✅ تم تحميل المنتجات:', products.length);
+            setTimeout(runSiteTypewriter, isDeleting ? deleteSpeed : speed);
         }
 
-        function saveProducts() {
-            localStorage.setItem('katanbuild_products', JSON.stringify(products));
+        // 2. خلفية النجوم الديناميكية
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.4 + 0.5;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.015 + 0.005;
+                this.growing = Math.random() > 0.5;
+            }
+            update() {
+                if (this.growing) {
+                    this.alpha += this.speed;
+                    if (this.alpha >= 0.8) this.growing = false;
+                } else {
+                    this.alpha -= this.speed;
+                    if (this.alpha <= 0.15) this.growing = true;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(186, 230, 253, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        // ============================================================
-        // 3. عرض المنتجات
-        // ============================================================
-        function renderProducts(filter = 'all') {
-            const grid = document.getElementById('productGrid');
+        for (let i = 0; i < 80; i++) stars.push(new Star());
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => { s.update(); s.draw(); });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        // 3. قائمة المنتجات الـ 38
+        const PRODUCTS = [
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
+            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },
+            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/35m6YGQ0/بروسيل-احمر.jpg', ad: 94, wat: 78, flex: 82 },
+            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfSkd10Y/فوريفر-فيكس.jpg', ad: 93, wat: 72, flex: 84 },
+            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/7N0RWnvP/كاربوفيكس.jpg', ad: 91, wat: 70, flex: 80 },
+            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/BVQ2Yfg2/كلايتور.jpg', ad: 90, wat: 74, flex: 83 },
+            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/xthHpF5G/لازورد.jpg', ad: 95, wat: 80, flex: 86 },
+
+            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg', ad: 99, wat: 100, flex: 95 },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg', ad: 97, wat: 98, flex: 92 },
+            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/NgFkRVRL/الترا-بوند-ازرق.jpg', ad: 98, wat: 99, flex: 94 },
+            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/35FdwgSL/الترا-غريب-اكسترا.jpg', ad: 99, wat: 97, flex: 96 },
+            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/zhJvWCdx/آن-ازرق.jpg', ad: 95, wat: 96, flex: 90 },
+            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/992BBQX7/أونكس-فيكس.jpg', ad: 96, wat: 98, flex: 93 },
+            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/JWs3tZrj/بروسيل-مسابح.jpg', ad: 97, wat: 99, flex: 91 },
+            { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Jj0wY6rV/عباس.jpg', ad: 94, wat: 95, flex: 89 },
+
+            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg', ad: 98, wat: 88, flex: 92 },
+            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg', ad: 97, wat: 86, flex: 90 },
+            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/s96mf8zR/بروسيل-اخضر.jpg', ad: 96, wat: 85, flex: 88 },
+            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/twSLHwgC/توب-فيكس.jpg', ad: 95, wat: 84, flex: 87 },
+            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/XZHZ3YF3/سبان-فيكس.jpg', ad: 94, wat: 82, flex: 86 },
+            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/B210rXJ9/سلامات-فيكس.jpg', ad: 93, wat: 80, flex: 85 },
+            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/pvtp7pWW/شربجي.jpg', ad: 95, wat: 85, flex: 88 },
+            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/fV9ph6mK/كلوبال-فيكس.jpg', ad: 96, wat: 87, flex: 89 },
+            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/CKNMFZBC/ليث-ازرق.jpg', ad: 94, wat: 83, flex: 87 },
+            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rL94Rv8/ناولو-فيكس.jpg', ad: 95, wat: 84, flex: 88 },
+
+            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg', ad: 99, wat: 94, flex: 98 },
+            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg', ad: 98, wat: 92, flex: 99 },
+            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/B2Y414rf/مارفيل.jpg', ad: 96, wat: 90, flex: 95 },
+
+            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg', ad: 92, wat: 88, flex: 93 },
+            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/JWT5rBsr/الترا-بوند-طينة-بلاستيكية.jpg', ad: 90, wat: 85, flex: 91 },
+            { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/ZpT7rgpH/سولايد-ميكس.jpg', ad: 91, wat: 82, flex: 88 },
+            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/LzWJ1dXG/سولايد-ميكس-اسمنتية.jpg', ad: 94, wat: 89, flex: 87 },
+            { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/mr2CNfwM/طينة-غرانيت.jpg', ad: 95, wat: 90, flex: 92 },
+
+            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GfBQ9LxV/الترا-جريب.jpg', ad: 93, wat: 95, flex: 89 },
+            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/B5FQmxt8/جراولت-اصلاح-الترا-بوند.jpg', ad: 98, wat: 96, flex: 94 },
+
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 95, wat: 100, flex: 97 },
+            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg', ad: 89, wat: 98, flex: 86 },
+            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/7dSKY11t/عازل-مركبين.jpg', ad: 97, wat: 100, flex: 98 }
+        ];
+
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
+        let waNumber = '0952725590';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts(PRODUCTS);
+            calculateMaterials();
+        });
+
+        function renderCategories() {
+            const container = document.getElementById('filterBar');
+            container.innerHTML = CATEGORIES.map(c => `
+                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
+            `).join('');
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filtered = cat === 'الكل' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
+            renderProducts(filtered);
+        }
+
+        function filterByTag(tag, chip) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
             
-            // اختيار العناصر حسب الفلتر
-            let items = [];
-            if (filter === 'all') {
-                items = products;
+            if(tag === 'all') {
+                renderProducts(PRODUCTS);
             } else {
-                items = products.filter(p => p.tag === filter);
+                const filtered = PRODUCTS.filter(p => p.tag === tag);
+                renderProducts(filtered);
             }
-            
-            console.log('🔄 عرض المنتجات - الفلتر:', filter, 'العدد:', items.length);
-            
-            if (items.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--text-muted);">
-                        <i class="fas fa-box-open" style="font-size:64px; display:block; margin-bottom:20px; color:var(--accent-gold);"></i>
-                        <h3 style="color:var(--text-light); margin-bottom:10px;">لا توجد منتجات في هذا القسم</h3>
-                        <p>يمكنك إضافة منتجات جديدة من لوحة التحكم</p>
-                    </div>
-                `;
-                return;
-            }
+        }
 
-            grid.innerHTML = items.map(p => `
-                <div class="product-card" onclick="openProductModal(${p.id})">
-                    <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/280x220/0f1a3a/d4af37?text=KatanBuild'">
-                    <div class="info">
-                        <h4>${p.name}</h4>
-                        <div class="cat">${p.cat}</div>
-                        <div class="subcat">${p.subcat}</div>
+        function renderProducts(list) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = list.map(p => `
+                <div class="product-card">
+                    <div class="img-container">
+                        <span class="badge-cat">${p.cat}</span>
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" />
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <button class="btn-card-single" onclick="openTestModal(${p.id})">🧪 الاختبار الفني الكفاءة</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // ============================================================
-        // 4. البطاقة المنبثقة
-        // ============================================================
-        function openProductModal(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) {
-                console.error('❌ المنتج غير موجود:', id);
-                return;
-            }
-
-            document.getElementById('modalTitle').textContent = p.name;
-            document.getElementById('modalSubtitle').textContent = `${p.cat} - ${p.subcat}`;
-
-            let specsHtml = '';
-            if (p.specs) {
-                for (const [key, value] of Object.entries(p.specs)) {
-                    specsHtml += `
-                        <div class="spec-item">
-                            <span class="label">${key}</span>
-                            <span class="value">${value}</span>
-                        </div>
-                    `;
-                }
-            }
-            document.getElementById('modalSpecs').innerHTML = specsHtml || '<p style="color:var(--text-muted);">لا توجد مواصفات</p>';
-
-            document.getElementById('modalPdfContent').innerHTML = `
-                <strong>📄 محتوى الملف الفني (PDF):</strong><br>
-                ${p.pdf || 'لا يوجد محتوى PDF'}
-            `;
-
-            document.getElementById('productModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('productModal').style.display = 'none';
-        }
-
-        // ============================================================
-        // 5. الفلترة
-        // ============================================================
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                renderProducts(this.dataset.filter);
-            });
-        });
-
-        // ============================================================
-        // 6. الحاسبة
-        // ============================================================
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
-            const total = area * rate;
-            const bags = Math.ceil(total / 25);
-            const safety = (bags * 1.1).toFixed(1);
-            document.getElementById('resTotalKg').textContent = total.toFixed(1) + ' كغ';
-            document.getElementById('resBags').textContent = bags + ' أكياس';
-            document.getElementById('resSafety').textContent = safety + ' أكياس';
-        }
 
-        function scrollToCalc() {
-            document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' });
-        }
+            const totalKg = area * rate;
+            const bags = Math.ceil(totalKg / 25);
+            const safetyBags = (bags * 1.1).toFixed(1);
 
-        function openWhatsApp() {
-            window.open('https://wa.me/0952725590?text=' + encodeURIComponent('مرحباً في KatanBuild، أرغب في الاستفسار عن مواد البناء.'), '_blank');
+            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
+            document.getElementById('resBags').innerText = `${bags} أكياس`;
+            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
         }
 
         function sendCalcToWA() {
             const area = document.getElementById('calcArea').value;
-            const kg = document.getElementById('resTotalKg').textContent;
-            const bags = document.getElementById('resBags').textContent;
-            const safety = document.getElementById('resSafety').textContent;
-            const msg = `طلب حساب كميات من KatanBuild:\n- المساحة: ${area} م²\n- الوزن: ${kg}\n- الأكياس: ${bags}\n- مع الأمان: ${safety}`;
-            window.open('https://wa.me/0952725590?text=' + encodeURIComponent(msg), '_blank');
+            const bags = document.getElementById('resSafety').innerText;
+            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // ============================================================
-        // 7. لوحة التحكم
-        // ============================================================
-        let clickCount = 0;
-        document.getElementById('mainLogo').addEventListener('click', function() {
-            clickCount++;
-            if (clickCount === 5) {
-                const pwd = prompt('🔐 كلمة المرور:');
-                if (pwd === 'katan2026') {
-                    document.getElementById('adminPanel').style.display = 'flex';
-                    renderAdminList();
-                    renderAdminSliderList();
-                } else { alert('كلمة مرور خاطئة.'); }
-                clickCount = 0;
-            }
-        });
+        // 4. نظام النوافذ المنبثقة العصرية
+        function showCustomAlert(title, text, icon = '✨') {
+            document.getElementById('modalIcon').innerText = icon;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('modalCustomContent').innerHTML = '';
+            document.getElementById('cyberModal').style.display = 'flex';
+        }
 
-        function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
+        function openTestModal(id) {
+            const p = PRODUCTS.find(item => item.id === id);
+            if(!p) return;
 
-        function renderAdminList() {
-            const list = document.getElementById('adminProductList');
-            list.innerHTML = products.map(p => `
-                <div class="admin-product-item">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/40/0f1a3a/d4af37?text=?'">
-                    <div class="info"><strong>${p.name}</strong> - ${p.cat}</div>
-                    <div class="actions">
-                        <button onclick="editProduct(${p.id})">✏️</button>
-                        <button class="delete" onclick="deleteProduct(${p.id})">🗑️</button>
+            document.getElementById('modalIcon').innerText = '🧪';
+            document.getElementById('modalTitle').innerText = `اختبار الكفاءة: ${p.name}`;
+            document.getElementById('modalBody').innerText = `المواصفات الفنية ومؤشرات القوة الخاصة بمادة (${p.name}) تحت الاختبار الميداني:`;
+            
+            document.getElementById('modalCustomContent').innerHTML = `
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>قوة الالتصاق والربط (Adhesion)</span>
+                        <span>${p.ad}%</span>
                     </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.ad}%;"></div></div>
                 </div>
-            `).join('');
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>مقاومة الماء والظروف الجوية</span>
+                        <span>${p.wat}%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.wat}%;"></div></div>
+                </div>
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>المرونة واستيعاب إجهاد المباني</span>
+                        <span>${p.flex}%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" style="width:${p.flex}%;"></div></div>
+                </div>
+            `;
+
+            document.getElementById('cyberModal').style.display = 'flex';
         }
 
-        function addProduct() {
-            const img = document.getElementById('newImg').value.trim();
-            const name = document.getElementById('newName').value.trim();
-            const cat = document.getElementById('newCat').value.trim();
-            const subcat = document.getElementById('newSubcat').value.trim();
-            const tag = document.getElementById('newTag').value;
-            const specsText = document.getElementById('newSpecs').value.trim();
-            const pdfContent = document.getElementById('newPdfContent').value.trim();
-
-            if (!img || !name || !cat || !subcat || !specsText || !pdfContent) {
-                alert('املأ جميع الحقول');
-                return;
-            }
-
-            try {
-                const specs = JSON.parse(specsText);
-                const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                products.push({ id, name, cat, subcat, tag, img, specs, pdf: pdfContent });
-                saveProducts();
-                renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-                renderAdminList();
-                document.querySelectorAll('#adminForm input, #adminForm textarea, #adminForm select').forEach(el => el.value = '');
-                alert('✅ تم الإضافة');
-            } catch (e) {
-                alert('❌ خطأ في JSON: تأكد من كتابة المواصفات بشكل صحيح');
-            }
+        function closeCyberModal() {
+            document.getElementById('cyberModal').style.display = 'none';
         }
 
-        function deleteProduct(id) {
-            if (!confirm('حذف؟')) return;
-            products = products.filter(p => p.id !== id);
-            saveProducts();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            renderAdminList();
-            alert('✅ تم الحذف');
-        }
-
-        function editProduct(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) return;
-            const newName = prompt('الاسم:', p.name); if (newName) p.name = newName.trim();
-            const newCat = prompt('التصنيف:', p.cat); if (newCat) p.cat = newCat.trim();
-            const newSubcat = prompt('التصنيف الفرعي:', p.subcat); if (newSubcat) p.subcat = newSubcat.trim();
-            const newImg = prompt('رابط الصورة:', p.img); if (newImg) p.img = newImg.trim();
-            const newPdf = prompt('محتوى PDF:', p.pdf); if (newPdf) p.pdf = newPdf.trim();
-            saveProducts();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            renderAdminList();
-            alert('✅ تم التحديث');
-        }
-
-        // ============================================================
-        // 8. إغلاق المودال عند النقر خارجها
-        // ============================================================
-        window.onclick = function(event) {
-            const modal = document.getElementById('productModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
-
-        // ============================================================
-        // 9. التهيئة
-        // ============================================================
-        window.addEventListener('load', function() {
-            console.log('🚀 بدء تحميل الموقع...');
-            
-            // تحميل صور الخلفية
-            loadSliderImages();
-            renderSlider();
-            
-            // تحميل المنتجات
-            loadProducts();
-            
-            // عرض المنتجات
-            renderProducts('all');
-            
-            // حساب المواد
-            calculateMaterials();
-            
-            // إخفاء شاشة الترحيب
-            setTimeout(() => {
-                document.getElementById('splash').classList.add('fade-out');
-                console.log('✅ تم إخفاء شاشة الترحيب');
-            }, 1500);
-            
-            console.log('✅ تم تهيئة الموقع بنجاح');
-        });
-
-        // تنظيف السلايدر عند مغادرة الصفحة
-        window.addEventListener('beforeunload', function() {
-            stopSlider();
-        });
+        function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
+        function openWhatsApp() { window.open(`https://wa.me/${waNumber}`, '_blank'); }
     </script>
 </body>
-  </html>
+</html>
