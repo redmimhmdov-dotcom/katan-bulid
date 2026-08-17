@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KATANBUILD | طلب شراء</title>
+    <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
+    <style>
+        :root { --bg:#030712; --gold:#ffd700; --cyan:#38bdf8; --glass:rgba(15,23,42,0.6); --border:rgba(255,215,0,0.25); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Cairo',sans-serif; background:var(--bg); color:#f1f5f9; min-height:100vh; overflow-x:hidden; }
+        .container { max-width:900px; margin:0 auto; padding:20px; }
+        .header { background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:12px 0; }
+        .header-inner { display:flex; justify-content:space-between; align-items:center; }
+        .logo img { height:48px; filter:drop-shadow(0 0 20px var(--gold)); }
+        .nav { display:flex; gap:24px; }
+        .nav a { color:#f1f5f9; text-decoration:none; font-weight:700; transition:0.3s; }
+        .nav a:hover { color:var(--gold); }
+        .card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:24px; margin:20px 0; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .field { display:flex; flex-direction:column; gap:4px; }
+        .field label { font-weight:600; }
+        .field input, .field select, .field textarea { padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; font-family:'Cairo'; }
+        .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:var(--gold); }
+        .selected-products { display:flex; flex-direction:column; gap:6px; margin:12px 0; }
+        .selected-item { display:flex; justify-content:space-between; padding:8px 14px; background:rgba(3,7,18,0.5); border-radius:10px; border:1px solid var(--border); }
+        .btn-gold { background:var(--gold); color:#000; padding:10px 24px; border-radius:12px; font-weight:800; border:none; cursor:pointer; transition:0.3s; box-shadow:0 0 20px rgba(255,215,0,0.2); }
+        .btn-gold:hover { box-shadow:0 0 40px rgba(255,215,0,0.4); transform:translateY(-2px); }
+        .btn-outline { background:transparent; border:1px solid var(--border); color:#f1f5f9; padding:10px 24px; border-radius:12px; cursor:pointer; }
+        .btn-outline:hover { background:var(--gold); color:#000; }
+        .summary { background:rgba(3,7,18,0.5); padding:16px; border-radius:12px; margin:12px 0; }
+        .summary .line { display:flex; justify-content:space-between; padding:4px 0; }
+        .summary .total { font-size:20px; font-weight:900; color:var(--gold); border-top:1px solid var(--border); padding-top:8px; }
+        .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+        .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a class="logo" href="/"><img src="https://katanbuild.com/storage/branding/logo-dark.png" /></a>
+            <nav class="nav"><a href="/">الرئيسية</a><a href="/orders.html">طلب</a></nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1 style="font-family:'Orbitron'; text-align:center; margin:20px 0;">طلب شراء</h1>
+        <div class="card">
+            <div class="form-row">
+                <div class="field"><label>اسم الزبون</label><input type="text" id="customerName" placeholder="محمد أحمد" /></div>
+                <div class="field"><label>رقم الهاتف</label><input type="tel" id="customerPhone" placeholder="09xxxxxxxx" /></div>
+            </div>
+            <div class="field"><label>العنوان</label><input type="text" id="customerAddress" placeholder="دمشق - جرمانا" /></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin:12px 0;">
+                <div class="field" style="flex:1;"><label>القسم</label><select id="selCategory"><option value="">اختر</option></select></div>
+                <div class="field" style="flex:1;"><label>المنتج</label><select id="selProduct"><option value="">اختر</option></select></div>
+                <div class="field" style="flex:0 0 80px;"><label>الكمية</label><input type="number" id="selQty" value="1" min="1" /></div>
+                <button class="btn-gold" onclick="addItem()" style="align-self:end;">➕</button>
+            </div>
+            <div class="selected-products" id="selectedProducts"></div>
+            <div class="summary" id="summary">
+                <div class="line"><span>المجموع</span><span id="subTotal">0</span></div>
+                <div class="line total"><span>الإجمالي</span><span id="grandTotal">0</span></div>
+                <div class="line" style="font-size:13px; color:#94a3b8;"><span>بالليرة</span><span id="sypTotal">0</span></div>
+            </div>
+            <div class="actions">
+                <button class="btn-gold" onclick="submitOrder()">تأكيد الطلب</button>
+                <button class="btn-outline" onclick="resetOrder()">تعديل</button>
+            </div>
+            <div id="orderNote" style="margin-top:12px; color:var(--cyan);"></div>
+        </div>
+    </div>
+    <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
+    <script>
+        const PRODUCTS = {
+            'لاصق ديكور': ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست'],
+            'لاصق مسبح': ['آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق'],
+            'لاصق غرانيت': ['ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر'],
+            'لاصق سيراميك': ['سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي'],
+            'لاصق خارجي': ['مارفيل','الترا بوند ذهبي','الترا بوند اورنج'],
+            'طينة': ['طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت'],
+            'روبة': ['الترا جريب','جراوت اصلاح الترا بوند'],
+            'عوازل': ['عازل مركبين','عازل بلاستيكي','عازل حجر شفاف']
+        };
+        const catSelect = document.getElementById('selCategory');
+        const prodSelect = document.getElementById('selProduct');
+        Object.keys(PRODUCTS).forEach(c => catSelect.innerHTML += `<option value="${c}">${c}</option>`);
+        catSelect.addEventListener('change', function() {
+            prodSelect.innerHTML = '<option value="">اختر</option>';
+            if (this.value && PRODUCTS[this.value]) PRODUCTS[this.value].forEach(p => prodSelect.innerHTML += `<option value="${p}">${p}</option>`);
+        });
+        let items = [];
+        function addItem() {
+            const cat = catSelect.value, prod = prodSelect.value, qty = parseInt(document.getElementById('selQty').value)||1;
+            if (!cat || !prod) return alert('اختر القسم والمنتج');
+            const prices = JSON.parse(localStorage.getItem('katan_prices') || '{}');
+            const price = prices[prod] || Math.floor(Math.random()*20)+5;
+            items.push({ cat, name: prod, qty, price });
+            renderSelected(); updateSummary();
+        }
+        function removeItem(i) { items.splice(i,1); renderSelected(); updateSummary(); }
+        function renderSelected() {
+            const c = document.getElementById('selectedProducts');
+            c.innerHTML = items.map((item,i) => `
+                <div class="selected-item"><span>${item.name} (${item.qty} × $${item.price}) = $${(item.qty*item.price).toFixed(2)}</span>
+                <button onclick="removeItem(${i})" style="background:#ef4444;border:none;color:#fff;padding:2px 12px;border-radius:6px;cursor:pointer;">✕</button></div>
+            `).join('');
+        }
+        function updateSummary() {
+            const sub = items.reduce((s,i) => s + i.qty * i.price, 0);
+            const exchange = 13000;
+            document.getElementById('subTotal').textContent = `$${sub.toFixed(2)}`;
+            document.getElementById('grandTotal').textContent = `$${sub.toFixed(2)}`;
+            document.getElementById('sypTotal').textContent = `≈ ${(sub * exchange).toFixed(0)} SYP`;
+        }
+        function submitOrder() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            if (!name || !phone || items.length===0) return alert('املأ البيانات وأضف منتجات');
+            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, items, total: items.reduce((s,i)=>s+i.qty*i.price,0) };
+            let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('katan_orders', JSON.stringify(orders));
+            // Send to Telegram
+            const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
+            const chatId = '8938601996';
+            const msg = `🆕 طلب جديد\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\nالمواد: ${items.map(i=>`- ${i.name} (${i.qty} × $${i.price})`).join('\n')}\nالإجمالي: $${order.total.toFixed(2)}`;
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({chat_id:chatId, text:msg})
+            });
+            document.getElementById('orderNote').textContent = '✅ تم تأكيد الطلب!';
+            items = []; renderSelected(); updateSummary();
+            // WhatsApp auto-message
+            const waMsg = `السلام عليكم السيد ${name} لقد تلقينا طلبكم بالمواد التالية:\n${items.map(i=>`- ${i.name} (${i.qty})`).join('\n')}\nالمبلغ الكامل: $${order.total.toFixed(2)} (≈ ${(order.total*13000).toFixed(0)} SYP)\nسيتم تجهيز طلبكم خلال ساعات، تفضل بزيارتنا لاستكمال الإجراءات.`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`, '_blank');
+        }
+        function resetOrder() { items=[]; renderSelected(); updateSummary(); document.getElementById('orderNote').textContent=''; }
+    </script>
+</body>
+</html>
