@@ -1,112 +1,2519 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-lang="ar">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KATANBUILD | مواد بناء فاخرة</title>
+    <meta name="csrf-token" content="VMU5KuJcLIOrRrwl4WN65mfI28Q8W9PZtfg3oZRy" />
     <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <link rel="apple-touch-icon" href="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <title>مؤسسة قطان التجارية | Katanbuild — لواصق، طينة، عوازل وروبة لمواد البناء في سوريا</title>
+    <meta name="description" content="مؤسسة قطان التجارية Katanbuild: لواصق سيراميك وغرانيت مطابقة لـ EN 12004، طينة ديكور، عوازل وروبة بمواد أولية ألمانية واعتماد ISO 9001 و CE. توريد منتظم للمستودعات ومحلات مواد البناء وشركات الإنشاءات في دمشق وريف دمشق ودرعا." />
+    <meta name="keywords" content="لواصق سيراميك, لاصق غرانيت, طينة ديكور, عوازل, روبة, UltraBond, مواد بناء سوريا, دمشق" />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#0b132b" />
+    <link rel="canonical" href="https://katanbuild.com/ar" />
+    <link rel="alternate" hreflang="ar" href="https://katanbuild.com/ar" />
+    <link rel="alternate" hreflang="en" href="https://katanbuild.com/en" />
+    <link rel="alternate" hreflang="x-default" href="https://katanbuild.com/ar" />
+    <meta property="og:site_name" content="مؤسسة قطان التجارية" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="مؤسسة قطان التجارية | Katanbuild — لواصق، طينة، عوازل وروبة لمواد البناء في سوريا" />
+    <meta property="og:description" content="مؤسسة قطان التجارية Katanbuild: لواصق سيراميك وغرانيت مطابقة لـ EN 12004، طينة ديكور، عوازل وروبة بمواد أولية ألمانية واعتماد ISO 9001 و CE. توريد منتظم للمستودعات ومحلات مواد البناء وشركات الإنشاءات في دمشق وريف دمشق ودرعا." />
+    <meta property="og:url" content="https://katanbuild.com/ar" />
+    <meta property="og:locale" content="ar_SY" />
+    <meta property="og:image" content="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="مؤسسة قطان التجارية | Katanbuild — لواصق، طينة، عوازل وروبة لمواد البناء في سوريا" />
+    <meta name="twitter:description" content="مؤسسة قطان التجارية Katanbuild: لواصق سيراميك وغرانيت مطابقة لـ EN 12004، طينة ديكور، عوازل وروبة بمواد أولية ألمانية واعتماد ISO 9001 و CE. توريد منتظم للمستودعات ومحلات مواد البناء وشركات الإنشاءات في دمشق وريف دمشق ودرعا." />
+    <meta name="twitter:image" content="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <script type="application/ld+json">{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "مؤسسة قطان التجارية",
+        "url": "https://katanbuild.com",
+        "description": "مؤسسة قطان التجارية Katanbuild: لواصق سيراميك وغرانيت مطابقة لـ EN 12004، طينة ديكور، عوازل وروبة بمواد أولية ألمانية واعتماد ISO 9001 و CE. توريد منتظم للمستودعات ومحلات مواد البناء وشركات الإنشاءات في دمشق وريف دمشق ودرعا.",
+        "telephone": "+963933478343",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "SY",
+            "addressLocality": "ريف دمشق — جرمانا"
+        }
+    }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
+
     <style>
+        /* ===== CORE VARIABLES ===== */
         :root {
-            --bg: #030712; --gold: #ffd700; --cyan: #38bdf8;
-            --glass: rgba(15,23,42,0.6); --border: rgba(255,215,0,0.25);
-            --shadow: 0 0 30px rgba(255,215,0,0.15);
+            --bg-dark-indigo: radial-gradient(ellipse at center, #0b132b 0%, #030712 100%);
+            --card-glass: rgba(15, 23, 42, 0.55);
+            --accent-gold: #ffd700;
+            --accent-cyan: #38bdf8;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(255, 215, 0, 0.25);
+            --border-indigo: rgba(56, 189, 248, 0.25);
+            --shadow-glow: 0 0 40px rgba(255, 215, 0, 0.2);
+            --radius-card: 20px;
+            --transition-fast: 0.3s ease;
+            --transition-smooth: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Cairo', sans-serif; background: var(--bg); color: #f1f5f9;
-            min-height: 100vh; overflow-x: hidden;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-dark-indigo);
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        #bgCanvas { position: fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; opacity:0.6; }
-        .watermark {
-            position: fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-            width:80vw; max-width:700px; pointer-events:none; z-index:0;
-            opacity:0.06; filter:drop-shadow(0 0 60px var(--gold));
-            animation:pulse 6s infinite alternate;
+
+        /* ===== BLEND LOGO ===== */
+        .blend-logo {
+            mix-blend-mode: screen;
+            filter: brightness(1.1) contrast(1.1);
+            object-fit: contain;
         }
-        @keyframes pulse { 0%{opacity:0.06;transform:scale(0.95);} 100%{opacity:0.15;transform:scale(1.05);} }
-        .header { position:sticky; top:0; z-index:100; background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:12px 0; }
-        .header-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
-        .logo img { height:48px; filter:drop-shadow(0 0 20px var(--gold)); }
-        .nav { display:flex; gap:24px; }
-        .nav a { color:#f1f5f9; text-decoration:none; font-weight:700; transition:0.3s; position:relative; }
-        .nav a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px; background:var(--gold); transition:0.3s; }
-        .nav a:hover::after { width:100%; }
-        .nav a:hover { color:var(--gold); }
-        .btn-gold { background:var(--gold); color:#000; padding:12px 32px; border-radius:12px; font-weight:800; text-decoration:none; display:inline-block; transition:0.3s; box-shadow:0 0 30px rgba(255,215,0,0.2); }
-        .btn-gold:hover { box-shadow:0 0 60px rgba(255,215,0,0.4); transform:translateY(-2px); }
-        .hero { padding:60px 0 80px; text-align:center; position:relative; z-index:1; }
-        .hero h1 { font-family:'Orbitron'; font-size:48px; font-weight:900; text-shadow:0 0 40px rgba(255,215,0,0.3); }
-        .hero h1 span { color:var(--gold); }
-        .hero p { color:#94a3b8; font-size:18px; max-width:600px; margin:20px auto; }
-        .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; margin:40px 0; }
-        .product-card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:0.3s; text-align:center; }
-        .product-card:hover { transform:translateY(-6px); border-color:var(--gold); box-shadow:var(--shadow); }
-        .product-card img { width:100%; height:180px; object-fit:cover; border-bottom:1px solid var(--border); }
-        .product-card .title { padding:16px; font-weight:800; font-size:18px; }
-        .product-items-popup { max-height:0; overflow:hidden; transition:0.4s ease; padding:0 16px; background:rgba(3,7,18,0.5); }
-        .product-card.open .product-items-popup { max-height:300px; padding:16px; }
-        .product-items-popup ul { list-style:none; display:flex; flex-wrap:wrap; gap:6px; }
-        .product-items-popup li { background:rgba(255,215,0,0.1); border:1px solid var(--border); padding:4px 12px; border-radius:20px; font-size:13px; }
-        .footer { padding:30px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
-        @media (max-width:768px) { .hero h1 { font-size:32px; } .products-grid { grid-template-columns:1fr 1fr; } }
+
+        /* ===== WATERMARK LOGO ===== */
+        .watermark-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            max-width: 800px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.10;
+            animation: watermarkNeonPulse 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes watermarkNeonPulse {
+            0% { opacity: 0.08; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.15)) saturate(100%); }
+            100% { opacity: 0.20; filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 25px rgba(56, 189, 248, 0.3)) saturate(150%); }
+        }
+
+        /* ===== BACKGROUND CANVAS (STARS) ===== */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        /* ===== LOADER ===== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #030712;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-inner {
+            text-align: center;
+        }
+
+        .loader-mark {
+            margin-bottom: 20px;
+        }
+
+        .loader-brick {
+            width: 80px;
+            height: 56px;
+            margin: 0 auto;
+        }
+
+        .loader-brick .b {
+            fill: var(--accent-gold);
+            opacity: 0.3;
+            animation: brickPulse 1.2s infinite alternate;
+        }
+
+        .loader-brick .b1 { animation-delay: 0s; }
+        .loader-brick .b2 { animation-delay: 0.2s; }
+        .loader-brick .b3 { animation-delay: 0.4s; }
+
+        @keyframes brickPulse {
+            0% { opacity: 0.3; fill: var(--accent-gold); }
+            100% { opacity: 1; fill: var(--accent-cyan); }
+        }
+
+        .loader-bar {
+            display: block;
+            width: 160px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 16px auto 0;
+            overflow: hidden;
+        }
+
+        #loaderBar {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .loader-text {
+            margin-top: 20px;
+        }
+
+        .loader-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        .loader-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan));
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+
+        /* ===== SKIP LINK ===== */
+        .skip-link {
+            position: absolute;
+            top: -1000px;
+            left: 20px;
+            z-index: 10000;
+            padding: 12px 24px;
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 800;
+            border-radius: 8px;
+            font-family: 'Cairo';
+        }
+
+        .skip-link:focus {
+            top: 20px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7, 13, 27, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.3));
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: var(--transition-fast);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: var(--transition-fast);
+        }
+
+        .menu a:hover::after, .menu a.active::after {
+            width: 100%;
+        }
+
+        .menu a:hover, .menu a.active {
+            color: var(--accent-gold);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lang-toggle {
+            display: inline-block;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .lang-toggle-inner {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 4px;
+            border: 1px solid var(--border-indigo);
+            gap: 4px;
+        }
+
+        .lang-opt {
+            display: block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: var(--transition-fast);
+            opacity: 0.5;
+        }
+
+        .lang-opt .flag {
+            display: block;
+            border-radius: 2px;
+        }
+
+        .lang-toggle .lang-opt.active {
+            opacity: 1;
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-decoration: none;
+            font-family: 'Cairo';
+            border: none;
+        }
+
+        .btn.primary {
+            background: var(--accent-gold);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn.primary:hover {
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn.outline {
+            background: transparent;
+            border: 1px solid var(--border-glow);
+            color: var(--text-light);
+        }
+
+        .btn.outline:hover {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn.lg {
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .btn.whatsapp {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .btn.whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .nav-cta-btn {
+            padding: 8px 20px;
+            font-size: 13px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-light);
+            border-radius: 2px;
+            transition: var(--transition-fast);
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            padding: 60px 0 80px;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-bg-glow {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-bg-mortar {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero-bg-grain {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 60%);
+        }
+
+        .hero-bg-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(3, 7, 18, 0.6) 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-copy {
+            position: relative;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .hero-badges li {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--border-glow);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-title-accent {
+            color: var(--accent-gold);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .hero-lead {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .hero-trust {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .hero-trust li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .hero-trust li svg {
+            color: var(--accent-gold);
+            flex-shrink: 0;
+        }
+
+        .hero-trust li b {
+            color: var(--text-light);
+            display: block;
+            font-size: 14px;
+        }
+
+        .hero-trust li span {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-grid-lines {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 215, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .hero-plinth {
+            position: absolute;
+            width: 80%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-product {
+            position: relative;
+            max-width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.2));
+            z-index: 1;
+        }
+
+        .hero-spec-card {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 16px 20px;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .hero-spec-std {
+            display: block;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .hero-spec-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+
+        .hero-spec-row .muted {
+            color: var(--text-muted);
+        }
+
+        .hero-spec-code {
+            display: block;
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* ===== TRUST ===== */
+        .trust {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .trust-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            text-align: center;
+        }
+
+        .trust-row li {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trust-row b {
+            font-size: 16px;
+            color: var(--accent-gold);
+        }
+
+        .trust-row span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section--alt {
+            background: rgba(3, 7, 18, 0.3);
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .section-head {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+
+        .eyebrow-mark {
+            width: 20px;
+            height: 2px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .section-head h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-copy h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .about-copy p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-ticks {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .tick {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .tick-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            min-width: 36px;
+        }
+
+        .tick strong {
+            display: block;
+            color: #fff;
+        }
+
+        .tick .muted {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .about-foot {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .about-foot-note {
+            font-size: 13px;
+        }
+
+        .about-media {
+            position: relative;
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .about-media img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-media-tag {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            border: 1px solid var(--border-glow);
+        }
+
+        /* ===== SEGMENTS ===== */
+        .segments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .segment {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 24px 16px;
+            text-align: center;
+            transition: var(--transition-fast);
+            cursor: default;
+        }
+
+        .segment:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+
+        .seg-ico {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        .segment b {
+            display: block;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        /* ===== FAMILIES ===== */
+        .families {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .family {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            transition: var(--transition-fast);
+        }
+
+        .family:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .family--feature {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .family--wide {
+            grid-template-columns: 1fr;
+        }
+
+        .family--wide .family-media {
+            max-height: 300px;
+        }
+
+        .family-media {
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+        }
+
+        .family-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .family-std {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            border: 1px solid var(--border-glow);
+        }
+
+        .family-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .family-body h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .family-body p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .family-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            list-style: none;
+        }
+
+        .family-specs li {
+            background: rgba(3, 7, 18, 0.5);
+            border: 1px solid var(--border-indigo);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .family-specs li span:first-child {
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .family-specs li span:last-child {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* ===== FEATURED ===== */
+        .featured {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .feat-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            transition: var(--transition-fast);
+        }
+
+        .feat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+
+        .feat-card--accent {
+            border-color: var(--accent-cyan);
+        }
+
+        .feat-card--accent:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+        }
+
+        .feat-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .feat-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .feat-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .feat-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .feat-meta div {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+        }
+
+        .feat-meta dt {
+            color: var(--text-muted);
+        }
+
+        .feat-meta dd {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* ===== BAND ===== */
+        .band {
+            position: relative;
+            padding: 60px 0;
+            overflow: hidden;
+        }
+
+        .band-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .band-veil {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(3, 7, 18, 0.8), rgba(3, 7, 18, 0.4));
+            z-index: 0;
+        }
+
+        .band-inner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .band-inner h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .band-inner p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        /* ===== SERVICES ===== */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .service {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 24px 16px;
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .service:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+
+        .svc-ico {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        .service b {
+            display: block;
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .service .muted {
+            font-size: 13px;
+        }
+
+        .services-cta {
+            margin-top: 30px;
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .services-cta-copy h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .services-cta-copy .muted {
+            font-size: 14px;
+        }
+
+        /* ===== COVERAGE ===== */
+        .coverage-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .coverage-copy h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .coverage-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .cov-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cov-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--text-muted);
+        }
+
+        .cov-item--active .cov-dot {
+            background: #22c55e;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .cov-item--soon .cov-dot {
+            background: var(--accent-gold);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .cov-item strong {
+            display: block;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .cov-item .muted {
+            font-size: 14px;
+        }
+
+        .coverage-map {
+            position: relative;
+        }
+
+        .map-frame {
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .syria-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        .map-legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .map-legend .ld {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .map-legend .ld--active {
+            background: #22c55e;
+        }
+
+        .map-legend .ld--soon {
+            background: var(--accent-gold);
+        }
+
+        /* ===== QUALITY ===== */
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .qcard {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .qcard:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+
+        .qcard b {
+            display: block;
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .qcard span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .qcard--cta {
+            border-color: var(--accent-cyan);
+        }
+
+        .qcard--cta:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+        }
+
+        .link-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            margin-top: 4px;
+            transition: var(--transition-fast);
+        }
+
+        .link-arrow:hover {
+            gap: 10px;
+        }
+
+        .season {
+            margin-top: 30px;
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .season-text h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .season-text .muted {
+            font-size: 14px;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            transition: var(--transition-fast);
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .faq-q {
+            width: 100%;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-align: right;
+        }
+
+        .faq-q:hover {
+            color: var(--accent-gold);
+        }
+
+        .faq-q[aria-expanded="true"] {
+            color: var(--accent-gold);
+        }
+
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .faq-icon::before,
+        .faq-icon::after {
+            content: '';
+            position: absolute;
+            background: currentColor;
+            border-radius: 2px;
+            transition: var(--transition-fast);
+        }
+
+        .faq-icon::before {
+            width: 2px;
+            height: 16px;
+            top: 2px;
+            left: 9px;
+        }
+
+        .faq-icon::after {
+            width: 16px;
+            height: 2px;
+            top: 9px;
+            left: 2px;
+        }
+
+        .faq-q[aria-expanded="true"] .faq-icon::before {
+            transform: rotate(90deg);
+            opacity: 0;
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .faq-item[aria-expanded="true"] .faq-a {
+            max-height: 300px;
+            padding: 0 20px 20px;
+        }
+
+        .faq-a p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .contact-intro {
+            margin-bottom: 24px;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .contact-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .cl-ico {
+            color: var(--accent-gold);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .contact-list strong {
+            display: block;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .contact-list a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-list a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .contact-form-wrap {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-card);
+            padding: 30px;
+        }
+
+        .contact-form-wrap h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .field span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .field span i {
+            color: #ef4444;
+            font-style: normal;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border-indigo);
+            background: rgba(3, 7, 18, 0.6);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 14px;
+            transition: var(--transition-fast);
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .field select option {
+            background: #0b132b;
+            color: #fff;
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .field-error {
+            font-size: 12px;
+            color: #ef4444;
+            min-height: 18px;
+        }
+
+        .form-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .form-note {
+            font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-glow);
+            padding: 40px 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-fast);
+            font-size: 14px;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .footer-contact a {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .footer-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
+            font-size: 13px;
+        }
+
+        .footer-made {
+            font-size: 13px;
+        }
+
+        /* ===== WA FLOAT ===== */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .wa-float:hover {
+            transform: scale(1.05);
+        }
+
+        .wa-float-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(37, 211, 102, 0.3);
+            animation: ringPulse 2s infinite;
+        }
+
+        @keyframes ringPulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .wa-float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: var(--transition-fast);
+        }
+
+        .wa-float-btn svg {
+            width: 34px;
+            height: 34px;
+        }
+
+        .wa-float-label {
+            background: rgba(3, 7, 18, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            border: 1px solid var(--border-glow);
+            white-space: nowrap;
+            display: none;
+        }
+
+        .wa-float:hover .wa-float-label {
+            display: block;
+        }
+
+        /* ===== TOAST ===== */
+        .toast-stack {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 14px 20px;
+            border-radius: var(--radius-card);
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 4s forwards;
+            min-width: 250px;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        /* ===== REVEAL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: heroFadeIn 0.8s ease 0.4s forwards;
+        }
+
+        .hero-enter:nth-child(2) { animation-delay: 0.6s; }
+        .hero-enter:nth-child(3) { animation-delay: 0.8s; }
+        .hero-enter:nth-child(4) { animation-delay: 1.0s; }
+
+        @keyframes heroFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-grid,
+            .about-grid,
+            .coverage-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .hero-product {
+                max-height: 350px;
+            }
+
+            .hero-spec-card {
+                position: relative;
+                bottom: 0;
+                right: 0;
+                margin-top: 16px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 8px 0;
+            }
+
+            .menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 16px 0;
+                gap: 12px;
+                background: rgba(7, 13, 27, 0.95);
+                backdrop-filter: blur(20px);
+                border-radius: 12px;
+                margin-top: 12px;
+            }
+
+            .menu.open {
+                display: flex;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .section-head h2 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .family {
+                grid-template-columns: 1fr;
+            }
+
+            .family-media {
+                min-height: 200px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .wa-float-label {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .nav-cta-btn {
+                display: none;
+            }
+
+            .hero-trust {
+                flex-direction: column;
+            }
+
+            .trust-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .segments,
+            .featured,
+            .services,
+            .quality-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .season,
+            .services-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-actions {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- ===== BACKGROUND CANVAS ===== -->
     <canvas id="bgCanvas"></canvas>
-    <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark" />
-    <header class="header">
-        <div class="container header-inner">
-            <a class="logo" href="/"><img src="https://katanbuild.com/storage/branding/logo-dark.png" /></a>
-            <nav class="nav"><a href="/">الرئيسية</a><a href="/orders.html">طلب</a></nav>
+
+    <!-- ===== WATERMARK LOGO ===== -->
+    <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo blend-logo" alt="Neon Watermark" />
+
+    <!-- ===== LOADER ===== -->
+    <div class="loader" id="loader" aria-hidden="true">
+        <div class="loader-inner">
+            <div class="loader-mark">
+                <svg class="loader-brick" viewBox="0 0 80 56" fill="none" aria-hidden="true">
+                    <rect class="b b1" x="14" y="34" width="52" height="16" rx="2"></rect>
+                    <rect class="b b2" x="22" y="22" width="36" height="16" rx="2"></rect>
+                    <rect class="b b3" x="30" y="10" width="20" height="16" rx="2"></rect>
+                </svg>
+                <span class="loader-bar"><i id="loaderBar"></i></span>
+            </div>
+            <div class="loader-text">
+                <span class="loader-name">KATANBUILD</span>
+                <span class="loader-sub" id="loaderSub">نُجهّز مواد البناء…</span>
+            </div>
+        </div>
+        <div class="loader-veil" aria-hidden="true"></div>
+    </div>
+
+    <!-- ===== SCROLL PROGRESS ===== -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- ===== SKIP LINK ===== -->
+    <a class="skip-link" href="#products">تخطَّ إلى المنتجات</a>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="container nav">
+            <a class="logo" href="#home" aria-label="شركة كتان للخدمات الإنشائية — الصفحة الرئيسية">
+                <img src="https://katanbuild.com/storage/branding/logo-dark.png" alt="Katanbuild — شركة كتان للخدمات الإنشائية" width="288" height="64" class="blend-logo" />
+            </a>
+            <nav class="menu" id="menu" aria-label="روابط سريعة">
+                <a href="#home" class="active">الرئيسية</a>
+                <a href="#about">من نحن</a>
+                <a href="#products">المنتجات</a>
+                <a href="#quality">الجودة</a>
+                <a href="#coverage">التغطية</a>
+                <a href="#faq">الأسئلة الشائعة</a>
+                <a href="#contact">تواصل معنا</a>
+            </nav>
+            <div class="nav-cta">
+                <a class="lang-toggle" id="langToggle" href="/en" data-current="ar" aria-label="التبديل إلى الإنجليزية">
+                    <span class="lang-toggle-inner" aria-hidden="true">
+                        <span class="lang-opt" data-lang="ar">
+                            <svg class="flag" viewBox="0 0 30 20" width="22" height="15" role="img" preserveAspectRatio="xMidYMid slice">
+                                <defs><clipPath id="clipSA"><rect width="30" height="20" rx="2.5"></rect></clipPath></defs>
+                                <g clip-path="url(#clipSA)">
+                                    <rect width="30" height="20" fill="#006c35"></rect>
+                                    <text x="15" y="8.6" text-anchor="middle" fill="#fff" font-size="3" font-weight="700" direction="rtl" font-family="'Tajawal','Readex Pro','Segoe UI',serif">لا إله إلا الله</text>
+                                    <g fill="#fff">
+                                        <path d="M6 12.4 L22 12.4 L22 13.1 L6 13.1 Z"></path>
+                                        <path d="M5 12.55 L6.6 12.05 L6.6 13.45 Z"></path>
+                                        <rect x="22" y="11.9" width="1.6" height="1.6" rx="0.3"></rect>
+                                    </g>
+                                </g>
+                                <rect width="30" height="20" rx="2.5" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="0.6"></rect>
+                            </svg>
+                        </span>
+                        <span class="lang-opt" data-lang="en">
+                            <svg class="flag" viewBox="0 0 24 18" width="22" height="16" role="img" preserveAspectRatio="xMidYMid slice">
+                                <clipPath id="clipGB"><rect width="24" height="18" rx="2.5"></rect></clipPath>
+                                <g clip-path="url(#clipGB)">
+                                    <rect width="24" height="18" fill="#012169"></rect>
+                                    <path d="M0 0l24 18M24 0L0 18" stroke="#fff" stroke-width="3.6"></path>
+                                    <path d="M0 0l24 18M24 0L0 18" stroke="#c8102e" stroke-width="2"></path>
+                                    <path d="M12 0v18M0 9h24" stroke="#fff" stroke-width="2.4"></path>
+                                    <path d="M12 0v18M0 9h24" stroke="#c8102e" stroke-width="1.4"></path>
+                                </g>
+                                <rect width="24" height="18" rx="2.5" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="0.6"></rect>
+                            </svg>
+                        </span>
+                    </span>
+                </a>
+                <a class="btn primary nav-cta-btn" href="#contact">اطلب عرض سعر</a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="فتح القائمة" aria-expanded="false" aria-controls="menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
     </header>
-    <main>
-        <section class="hero">
-            <h1>مواد بناء<br /><span>تُبنى عليها الثقة.</span></h1>
-            <p>لواصق سيراميك وغرانيت، طينة ديكور، عوازل وروبة بمواد ألمانية.</p>
-            <a class="btn-gold" href="/orders.html">اطلب الآن</a>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="home">
+
+        <!-- ===== HERO ===== -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-bg" aria-hidden="true">
+                <div class="hero-bg-glow"></div>
+                <div class="hero-bg-mortar"></div>
+                <div class="hero-bg-grain"></div>
+                <div class="hero-bg-vignette"></div>
+            </div>
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <ul class="hero-badges hero-enter" aria-label="روابط سريعة">
+                        <li>EN 12004</li>
+                        <li>EN 13888 · CG2</li>
+                        <li>CE</li>
+                        <li>ISO 9001</li>
+                    </ul>
+                    <h1 class="hero-title hero-enter" id="hero-title">
+                        <span>مواد بناء</span><br />
+                        <span>تُبنى عليها</span>
+                        <span class="hero-title-accent">الثقة.</span>
+                    </h1>
+                    <p class="hero-lead hero-enter">
+                        لواصق سيراميك وغرانيت، طينة ديكور، عوازل وروبة بمواد أولية ألمانية ومواصفات أوروبية، موجّهة للمستودعات وشركات الإنشاءات والمقاولين.
+                    </p>
+                    <div class="hero-actions hero-enter">
+                        <a class="btn primary lg" href="#contact">
+                            <span>اطلب عرض سعر</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5"></path>
+                                <path d="M12 5l-7 7 7 7"></path>
+                            </svg>
+                        </a>
+                        <a class="btn outline lg" href="https://wa.me/963933478343" target="_blank" rel="noopener">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm4.4 12c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.3 7.3 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2A5.2 5.2 0 0 0 8 14.6a11.8 11.8 0 0 0 4.5 4 3 3 0 0 0 2.4.4 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .2-1.1c-.1-.1-.3-.2-.5-.3z"></path>
+                            </svg>
+                            <span>تواصل عبر واتساب</span>
+                        </a>
+                    </div>
+                    <ul class="hero-trust hero-enter">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2l3 6.5L22 10l-5 5 1.2 7L12 18.5 5.8 22 7 15l-5-5 7-1.5z"></path>
+                            </svg>
+                            <span><b>≥ 1.0 نيوتن/مم²</b><span>قوة التصاق</span></span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3v18"></path>
+                                <path d="M5 8h11a3 3 0 0 1 0 6H8a3 3 0 0 0 0 6h11"></path>
+                            </svg>
+                            <span><b>مواد أولية ألمانية</b><span>في تشكيلة UltraBond</span></span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                <path d="M17.5 14v6M14 17.5h7"></path>
+                            </svg>
+                            <span><b>QR · Barcode</b><span>تتبّع لكل عبوة</span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="hero-visual hero-enter" aria-hidden="false">
+                    <div class="hero-grid-lines" aria-hidden="true"></div>
+                    <div class="hero-plinth" aria-hidden="true"></div>
+                    <img class="hero-product" src="https://katanbuild.com/storage/hero/01KY7A6GECE2QZGETT69TAJBC7.png" alt="عبوة لاصق سيراميك وغرانيت UltraBond C2TE من مؤسسة قطان التجارية، 20 كغ" width="1536" height="1024" />
+                    <aside class="hero-spec-card hero-enter">
+                        <span class="hero-spec-std">EN 12004</span>
+                        <div class="hero-spec-row"><span class="muted">قوة الالتصاق</span><b>≥ 1.0 N/mm²</b></div>
+                        <div class="hero-spec-row"><span class="muted">العبوة</span><b>20 كغ</b></div>
+                        <span class="hero-spec-code">UltraBond · C2TE</span>
+                    </aside>
+                </div>
+            </div>
         </section>
-        <div class="container">
-            <h2 style="font-family:'Orbitron'; font-size:28px; text-align:center; margin:20px 0;">عائلات المنتجات</h2>
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
+
+        <!-- ===== TRUST ===== -->
+        <section class="trust" id="trust">
+            <div class="container">
+                <ul class="trust-row reveal">
+                    <li><b>EN 12004</b><span>لواصق إسمنتية</span></li>
+                    <li><b>EN 13888</b><span>روبة CG2</span></li>
+                    <li><b>ISO 9001</b><span>نظام جودة معتمد</span></li>
+                    <li><b>CE Marking</b><span>مطابقة أوروبية</span></li>
+                    <li><b>QR · Barcode</b><span>تتبّع وشفافية</span></li>
+                    <li><b>🇩🇪 DE</b><span>مواد أولية ألمانية</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ===== ABOUT ===== -->
+        <section class="section" id="about">
+            <div class="container about-grid">
+                <div class="about-copy">
+                    <p class="eyebrow reveal"><span class="eyebrow-mark"></span><span>من نحن</span></p>
+                    <h2 class="reveal">شريكك الموثوق في توريد مواد البناء والتشطيب الحديثة.</h2>
+                    <p class="reveal">مؤسسة قطان التجارية تورد أنظمة متكاملة للالتصاق والعزل والتشطيب، موجهة للمستودعات ومحلات مواد البناء وشركات الإنشاءات والمقاولين والموزعين. نمزج بين مواد أولية ألمانية ومعرفة محلية بالسوق لنقدّم جودة مطابقة للمعايير الأوروبية بأسعار تنافسية.</p>
+                    <div class="about-ticks">
+                        <div class="tick reveal"><span class="tick-num">01</span><div><strong>توريد منتظم</strong><span class="muted">حلول للجملة والمشاريع على مدار العام.</span></div></div>
+                        <div class="tick reveal"><span class="tick-num">02</span><div><strong>منتجات معتمدة</strong><span class="muted">ISO 9001 و CE ومواصفات EN الأوروبية.</span></div></div>
+                        <div class="tick reveal"><span class="tick-num">03</span><div><strong>أسعار منافسة</strong><span class="muted">قيمة عملية تخدم السوق التجاري.</span></div></div>
+                        <div class="tick reveal"><span class="tick-num">04</span><div><strong>دعم فني</strong><span class="muted">استشارات ومتابعة قبل البيع وبعده.</span></div></div>
+                    </div>
+                    <div class="about-foot reveal">
+                        <a class="btn outline" href="#products">استعرض عائلات المنتجات</a>
+                        <span class="muted about-foot-note">جرمانا · تل كردي</span>
+                    </div>
+                </div>
+                <div class="about-media reveal">
+                    <img src="https://katanbuild.com/storage/sections/about-building.jpg" alt="مبنى مؤسسة قطان التجارية — مقر جرمانا، ريف دمشق" loading="lazy" width="1500" height="1000" />
+                    <div class="about-media-tag">ريف دمشق · جرمانا</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SEGMENTS ===== -->
+        <section class="section section--alt">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>من نخدم</span></p>
+                    <h2>موجّهون للسوق التجاري والمشاريع، لا للبيع الفردي.</h2>
+                </div>
+                <div class="segments reveal">
+                    <article class="segment"><div class="seg-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"></path><path d="M4 9v11h16V9"></path><path d="M9 20v-6h6v6"></path></svg></div><b>المستودعات</b></article>
+                    <article class="segment"><div class="seg-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1"></rect><path d="M3 9h18M9 4v16M15 4v16"></path></svg></div><b>محلات مواد البناء</b></article>
+                    <article class="segment"><div class="seg-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-5h6v5"></path></svg></div><b>شركات الإنشاءات</b></article>
+                    <article class="segment"><div class="seg-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12M6 7l-2 5a3 3 0 0 0 6 0M18 7l2 5a3 3 0 0 1-6 0M9 17a3 3 0 0 0 6 0"></path></svg></div><b>المقاولون والمنفذون</b></article>
+                    <article class="segment"><div class="seg-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 7l4-4 4 4M21 7l-4-4-4 4"></path><path d="M3 7h6M21 7h-6M5 21h14"></path></svg></div><b>الموزعون والجملة</b></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PRODUCTS ===== -->
+        <section class="section" id="products">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>عائلات المنتجات</span></p>
+                    <h2>أربعة أنظمة متكاملة تغطّي دورة البناء والتشطيب.</h2>
+                    <p class="section-sub">من تثبيت البلاط وحشو الفواصل، إلى تشطيب الواجهات وحمايتها من الماء. كل عائلة مطابقة لمعيار أوروبي محدّد.</p>
+                </div>
+                <div class="families reveal">
+                    <article class="family family--feature">
+                        <div class="family-media"><img src="https://katanbuild.com/storage/product-families/01KY79NYHN1GWEMSFAX7ZYP9DR.png" alt="لواصق السيراميك والغرانيت" loading="lazy" width="1400" height="1000" /><span class="family-std">EN 12004</span></div>
+                        <div class="family-body"><h3>لواصق السيراميك والغرانيت</h3><p>أكثر عائلاتنا طلبًا. لواصق إسمنتية من C1 إلى C2TES1، بقوة التصاق تصل إلى 1.0 نيوتن/مم²، مع مقاومة انزلاق وزمن مفتوح ممتد للجدران والأرضيات والمسابح والواجهات الخارجية.</p><ul class="family-specs"><li><span>C1</span><span>تبليط داخلي قياسي</span></li><li><span>C1TE</span><span>مقاومة انزلاق + زمن مفتوح</span></li><li><span>C2TE</span><span>أحجام كبيرة ومسابح</span></li><li><span>C2TES1</span><span>مرونة للواجهات والتدفئة الأرضية</span></li></ul></div>
+                    </article>
+                    <article class="family">
+                        <div class="family-media"><img src="https://katanbuild.com/storage/product-families/cat-plaster.jpg" alt="الطينة والديكورات" loading="lazy" width="1400" height="1000" /><span class="family-std">UltraBond</span></div>
+                        <div class="family-body"><h3>الطينة والديكورات</h3><p>طينة غرافت إسمنتية وبلاستيكية مجرّحة، وطينة غرانيت بكسر رخام وحجر طبيعي بـ16 لونًا. مظهر فاخر ومقاومة للعوامل الجوية.</p></div>
+                    </article>
+                    <article class="family">
+                        <div class="family-media"><img src="https://katanbuild.com/storage/product-families/cat-waterproof.jpg" alt="العوازل" loading="lazy" width="1400" height="1000" /><span class="family-std">عزل إيجابي وسلبي</span></div>
+                        <div class="family-body"><h3>العوازل</h3><p>عازل بلاستيكي متعدد الألوان، عازل شفاف للحجر، وعازل مركّبين للأساسات والخزانات والمسابح. مرونة عالية ومقاومة UV.</p></div>
+                    </article>
+                    <article class="family family--wide">
+                        <div class="family-media"><img src="https://katanbuild.com/storage/product-families/cat-grout.jpg" alt="الروبة" loading="lazy" width="1400" height="1000" /><span class="family-std">EN 13888 · CG2</span></div>
+                        <div class="family-body"><h3>الروبة</h3><p>روبة إسمنتية مطّاطية مطابقة لـ EN 13888 بتصنيف CG2. مقاومة محسّنة للتآكل وانخفاض في امتصاص الماء، تضمن ثبات اللون ومتانة طويلة للفواصل في الحمامات والمطابخ والواجهات.</p></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FEATURED ===== -->
+        <section class="section section--alt" id="featured">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>منتجات مختارة</span></p>
+                    <h2>تشكيلة UltraBond — تركيبات فاخرة بمواد ألمانية.</h2>
+                </div>
+                <div class="featured reveal">
+                    <article class="feat-card"><div class="feat-num">C2TE</div><h3>لاصق مسابح وغرانيت</h3><p>قوة التصاق ≥ 1.0 نيوتن/مم²، مثالي للأحجام الكبيرة والمسابح والبورسلان منخفض الامتصاص. عبوّة 20 كغ.</p><dl class="feat-meta"><div><dt>المعيار</dt><dd>EN 12004</dd></div><div><dt>الوزن</dt><dd>20 كغ</dd></div></dl></article>
+                    <article class="feat-card feat-card--accent"><div class="feat-num">C2TES1</div><h3>لاصق خارجي مرن</h3><p>قابلية تشوه مرنة S1 تمتص تمدّد وانكماش الأسطح. للواجهات والشرفات والمسابح وأنظمة التدفئة الأرضية.</p><dl class="feat-meta"><div><dt>المعيار</dt><dd>EN 12004</dd></div><div><dt>الوزن</dt><dd>20 كغ</dd></div></dl></article>
+                    <article class="feat-card feat-card--accent"><div class="feat-num">c1</div><h3>ultrabond</h3><p>لاصق إسمنتي عالي الجودة للاستخدام الداخلي يتميز بسهولة التطبيق , تماسك جيد, وثبات مناسب أثناء العمل</p></article>
+                    <article class="feat-card"><div class="feat-num">CG2</div><h3>روبة مطّاطية للفواصل</h3><p>قوام ناعم وسهل التنظيف، مقاومة للتشقق والانكماش. ثبات لون طويل في الداخل والخارج. عبوّة 5 كغ.</p><dl class="feat-meta"><div><dt>المعيار</dt><dd>EN 13888</dd></div><div><dt>الوزن</dt><dd>5 كغ</dd></div></dl></article>
+                    <article class="feat-card"><div class="feat-num">UltraBond</div><h3>طينة غرانيت بلاستيكية</h3><p>كسر رخام وغرانيت وحجر طبيعي ضمن تركيبة بلاستيكية رغوية خفيفة. 16 لونًا طبيعيًا، تغطية 6–7 م²/سطل.</p><dl class="feat-meta"><div><dt>الوزن</dt><dd>16 كغ</dd></div><div><dt>التغطية</dt><dd>6–7 م²</dd></div></dl></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BAND ===== -->
+        <section class="band" id="band">
+            <div class="band-bg" style="background-image:url('https://katanbuild.com/storage/sections/texture-granite.webp')" aria-hidden="true"></div>
+            <div class="band-veil" aria-hidden="true"></div>
+            <div class="container band-inner reveal">
+                <p class="eyebrow"><span class="eyebrow-mark"></span><span>طينة UltraBond للغرانيت</span></p>
+                <h2>مظهر حجر طبيعي فاخر، دون ثقل الحجر.</h2>
+                <p>كسر رخام وغرانيت وأحجار طبيعية مختارة، ضمن معجونة بلاستيكية رغوية خفيفة الوزن. 16 تركيبة لونية ونقشة حجرية تناسب الواجهات والمداخل والديكورات الداخلية، مع مقاومة للرطوبة والحرارة والأشعة فوق البنفسجية.</p>
+                <a class="btn outline" href="#contact">استفسر عن الألوان المتوفرة</a>
+            </div>
+        </section>
+
+        <!-- ===== SERVICES ===== -->
+        <section class="section" id="services">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>خدماتنا</span></p>
+                    <h2>توريد ولوجستيات تواكب إيقاع المشاريع.</h2>
+                </div>
+                <div class="services reveal">
+                    <article class="service"><div class="svc-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11" rx="1"></rect><path d="M15 9h4l3 3v5h-7"></path><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="19" r="2"></circle></svg></div><b>توصيل للعميل</b><span class="muted">حسب المنطقة وحجم الطلب.</span></article>
+                    <article class="service"><div class="svc-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg></div><b>مندوب مبيعات</b><span class="muted">زيارة ومتابعة دورية للعملاء.</span></article>
+                    <article class="service"><div class="svc-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"></path><path d="M3 7v10l9 4 9-4V7"></path><path d="M12 11v10"></path></svg></div><b>سيارات نقل</b><span class="muted">مرنة وفق حجم الطلب.</span></article>
+                    <article class="service"><div class="svc-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.3 7L12 12l8.7-5M12 22V12"></path></svg></div><b>طلبات الجملة</b><span class="muted">تلبية احتياجات المشاريع.</span></article>
+                    <article class="service"><div class="svc-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><b>أسعار منافسة</b><span class="muted">قيمة توريد مناسبة للسوق.</span></article>
+                </div>
+                <div class="services-cta reveal">
+                    <div class="services-cta-copy"><h3>تحتاج توريدًا لمشروع أو مستودع؟</h3><p class="muted">اطلب مندوب مبيعات يزورك ويجهّز لك عرض سعر مفصّلًا.</p></div>
+                    <a class="btn primary" href="#contact">اطلب مندوب الآن</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== COVERAGE ===== -->
+        <section class="section section--alt" id="coverage">
+            <div class="container coverage-grid">
+                <div class="coverage-copy">
+                    <p class="eyebrow reveal"><span class="eyebrow-mark"></span><span>التغطية الجغرافية</span></p>
+                    <h2 class="reveal">نخدم مناطق رئيسية، ونتوسّع تدريجيًا نحو سوريا كاملة.</h2>
+                    <div class="coverage-list">
+                        <div class="cov-item cov-item--active reveal"><span class="cov-dot"></span><div><strong>نخدم حاليًا</strong><span class="muted">دمشق · ريف دمشق · درعا</span></div></div>
+                        <div class="cov-item cov-item--soon reveal"><span class="cov-dot"></span><div><strong>قيد التوسّع</strong><span class="muted">حلب · اللاذقية</span></div></div>
+                        <div class="cov-item reveal"><span class="cov-dot"></span><div><strong>الرؤية</strong><span class="muted">تغطية تدريجية لكل المحافظات السورية.</span></div></div>
+                    </div>
+                    <a class="btn primary reveal" href="#contact">تأكّد من تغطية منطقتك</a>
+                </div>
+                <div class="coverage-map reveal">
+                    <div class="map-frame"><img class="syria-img" src="https://katanbuild.com/storage/sections/map-syria.webp" alt="نخدم مناطق رئيسية، ونتوسّع تدريجيًا نحو سوريا كاملة." width="724" height="543" loading="lazy" /></div>
+                    <div class="map-legend"><span><i class="ld ld--active"></i><span>نخدم حاليًا</span></span><span><i class="ld ld--soon"></i><span>قيد التوسّع</span></span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== QUALITY ===== -->
+        <section class="section" id="quality">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>الجودة والاعتمادات</span></p>
+                    <h2>ثقة مدعومة بمعايير قابلة للتحقّق.</h2>
+                    <p class="section-sub">لكل منتج بطاقة مواصفات ورقم تعقّب. الجودة لدينا ادّعاء موثّق، لا شعار تسويقي.</p>
+                </div>
+                <div class="quality-grid reveal">
+                    <article class="qcard"><b>ISO 9001</b><span>نظام إدارة جودة معتمد</span></article>
+                    <article class="qcard"><b>CE</b><span>مطابقة المواصفات الأوروبية</span></article>
+                    <article class="qcard"><b>EN 12004</b><span>معيار اللواصق الإسمنتية</span></article>
+                    <article class="qcard"><b>EN 13888</b><span>معيار الروبة CG2</span></article>
+                    <article class="qcard"><b>QR Code</b><span>وصول رقمي سريع لكل منتج</span></article>
+                    <article class="qcard"><b>Barcode</b><span>تتبّع وتخزين دقيق</span></article>
+                    <article class="qcard"><b>🇩🇪 مواد ألمانية</b><span>تركيبات UltraBond الفاخرة</span></article>
+                    <article class="qcard qcard--cta"><b>اطلب بطاقة مواصفات</b><a class="link-arrow" href="#contact"><span>احصل على الوصف الفني الكامل</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 5l-7 7 7 7"></path></svg></a></article>
+                </div>
+                <div class="season reveal">
+                    <div class="season-text"><p class="eyebrow"><span class="eyebrow-mark"></span><span>موسم العوازل</span></p><h3>استعد للشتاء قبل أن يبدأ الطلب.</h3><p class="muted">حلول العزل تحمي منشأتك وتُسعِر أعمال التوريد قبل ذروة الموسم. احجز توريدك مبكرًا.</p></div>
+                    <a class="btn primary" href="#contact">اطلب منتجات العزل</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FAQ ===== -->
+        <section class="section section--alt" id="faq">
+            <div class="container faq-wrap">
+                <div class="section-head reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>الأسئلة الشائعة</span></p>
+                    <h2>ما يهمّ عملاءنا من المستودعات والمقاولين.</h2>
+                </div>
+                <div class="faq-list reveal">
+                    <div class="faq-item"><button class="faq-q" aria-expanded="false"><span>هل منتجاتكم مطابقة للمعايير العالمية؟</span><span class="faq-icon" aria-hidden="true"></span></button><div class="faq-a"><p>نعم. اللواصق مطابقة لـ EN 12004 بتصنيفات C1 وC1TE وC2TE وC2TES1، والروبة مطابقة لـ EN 13888 بتصنيف CG2. كما نحمل اعتماد ISO 9001 وCE Marking، ونستخدم مواد أولية ألمانية في تشكيلة UltraBond.</p></div></div>
+                    <div class="faq-item"><button class="faq-q" aria-expanded="false"><span>هل توفّرون التوصيل للمشاريع؟</span><span class="faq-icon" aria-hidden="true"></span></button><div class="faq-a"><p>نعم، التوصيل متوفّر بعربات نقل أو سيارات حسب حجم الطلب والمنطقة، مع مندوب مبيعات يتابع طلبك من الاتفاق حتى التسليم.</p></div></div>
+                    <div class="faq-item"><button class="faq-q" aria-expanded="false"><span>هل تتوفّر طلبات الجملة للموزّعين والمستودعات؟</span><span class="faq-icon" aria-hidden="true"></span></button><div class="faq-a"><p>نعم، خدماتنا موجّهة أساسًا للمستودعات ومحلات مواد البناء وشركات الإنشاءات والموزّعين والمقاولين، بأسعار توريد منافسة وكميات تلبّي احتياج المشاريع.</p></div></div>
+                    <div class="faq-item"><button class="faq-q" aria-expanded="false"><span>ما المناطق التي تخدمونها حاليًا؟</span><span class="faq-icon" aria-hidden="true"></span></button><div class="faq-a"><p>نخدم دمشق وريف دمشق ودرعا حاليًا، مع توسّع تدريجي نحو حلب واللاذقية. تواصل معنا للتأكّد من تغطية منطقتك.</p></div></div>
+                    <div class="faq-item"><button class="faq-q" aria-expanded="false"><span>ما أبرز فئات منتجاتكم؟</span><span class="faq-icon" aria-hidden="true"></span></button><div class="faq-a"><p>أربع عائلات رئيسية: لواصق السيراميك والغرانيت، الطينة والديكورات (بما فيها طينة غرانيت UltraBond)، العوازل (بلاستيكية وشفافة ومركّبين)، والروبة المطّاطية CG2.</p></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section class="section" id="contact">
+            <div class="container contact-grid">
+                <aside class="contact-info reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>تواصل معنا</span></p>
+                    <h2>بيانات التواصل</h2>
+                    <p class="muted contact-intro">فريقنا جاهز لردّك على واتساب أو الهاتف، وتجهيز عرض سعر مفصّل لطلبك.</p>
+                    <ul class="contact-list">
+                        <li><span class="cl-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"></path></svg></span><div><strong>الهواتف</strong><a href="tel:0933478343">0933478343</a> · <a href="tel:0956144445">0956144445</a> · <a href="tel:0934573402">0934573402</a></div></li>
+                        <li><span class="cl-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><div><strong>العنوان</strong><span class="muted">ريف دمشق — جرمانا</span></div></li>
+                        <li><span class="cl-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"></path><path d="M9 21v-6h6v6"></path></svg></span><div><strong>المعامل</strong><span class="muted">جرمانا · تل كردي</span></div></li>
+                    </ul>
+                    <div class="contact-actions">
+                        <a class="btn whatsapp" href="https://wa.me/963933478343" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm4.4 12c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.3 7.3 0 0 1-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2A5.2 5.2 0 0 0 8 14.6a11.8 11.8 0 0 0 4.5 4 3 3 0 0 0 2.4.4 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .2-1.1c-.1-.1-.3-.2-.5-.3z"></path></svg><span>واتساب</span></a>
+                        <a class="btn primary" href="tel:0933478343">اتصل الآن</a>
+                    </div>
+                </aside>
+                <div class="contact-form-wrap reveal">
+                    <p class="eyebrow"><span class="eyebrow-mark"></span><span>طلب عرض سعر</span></p>
+                    <h2>أخبرنا بطلبك ونرجع إليك بعرض سريع.</h2>
+                    <form class="form" id="quoteForm" action="https://katanbuild.com/ar/contact" method="post">
+                        <input type="hidden" name="_token" value="VMU5KuJcLIOrRrwl4WN65mfI28Q8W9PZtfg3oZRy" autocomplete="off" />
+                        <div class="form-row">
+                            <label class="field"><span><span>الاسم الكامل</span><i>*</i></span><input type="text" name="name" value="" required="" placeholder="مثال: محمد أحمد" /><span class="field-error" data-error-for="name"></span></label>
+                            <label class="field"><span><span>رقم الهاتف</span><i>*</i></span><input type="tel" name="phone" value="" required="" placeholder="09xxxxxxxx" inputmode="tel" /><span class="field-error" data-error-for="phone"></span></label>
+                        </div>
+                        <div class="form-row">
+                            <label class="field"><span>اسم الشركة / المستودع</span><input type="text" name="company" value="" placeholder="اختياري" /></label>
+                            <label class="field"><span>المدينة</span><input type="text" name="city" value="" placeholder="دمشق، حلب..." /></label>
+                        </div>
+                        <label class="field"><span><span>نوع النشاط</span><i>*</i></span><select name="activity" required=""><option value="" disabled="" selected="">اختر نوع النشاط</option><option value="warehouse">مستودع</option><option value="store">محل دهانات ومواد بناء</option><option value="firm">شركة إنشاءات</option><option value="distributor">موزّع / جملة</option><option value="contractor">مقاول</option><option value="engineer">مهندس / مكتب هندسي</option><option value="other">أخرى</option></select><span class="field-error" data-error-for="activity"></span></label>
+                        <label class="field"><span>المنتج المطلوب</span><select name="product"><option value="" selected="">اختر عائلة المنتج (اختياري)</option><option value="adhesives">لواصق السيراميك والغرانيت</option><option value="plaster">الطينة والديكورات</option><option value="waterproof">العوازل</option><option value="grout">الروبة</option></select></label>
+                        <label class="field"><span>تفاصيل الطلب</span><textarea name="message" rows="4" placeholder="الكمية، المواصفات، موعد التوريد..."></textarea></label>
+                        <div class="form-foot">
+                            <p class="form-note muted" id="formNote" role="status" aria-live="polite"></p>
+                            <button class="btn primary" type="submit"><span>إرسال الطلب</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
-    <footer class="footer">© 2026 مؤسسة قطان التجارية · Katanbuild</footer>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand"><img src="https://katanbuild.com/storage/branding/logo-dark.png" alt="Katanbuild — شركة كتان للخدمات الإنشائية" width="288" height="64" /><p class="muted">جودة ألمانية، أداء يدوم، وثقة تُبنى مع الزمن.</p></div>
+            <nav class="footer-nav" aria-label="روابط سريعة">
+                <a href="#products">المنتجات</a><a href="#quality">الجودة</a><a href="#coverage">التغطية</a><a href="#faq">الأسئلة الشائعة</a><a href="#contact">تواصل معنا</a>
+            </nav>
+            <div class="footer-contact"><a href="tel:0933478343">0933478343</a><span class="muted">ريف دمشق — جرمانا</span></div>
+        </div>
+        <div class="container footer-bottom">
+            <p class="muted">© 2026 مؤسسة قطان التجارية · Katanbuild. جميع الحقوق محفوظة.</p>
+            <p class="muted footer-made">صُنع بعناية لمجتمع البناء في سوريا 🇸🇾</p>
+        </div>
+    </footer>
+
+    <!-- ===== WA FLOAT ===== -->
+    <a class="wa-float" href="https://wa.me/963933478343" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
+        <span class="wa-float-ring" aria-hidden="true"></span>
+        <span class="wa-float-btn" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#FFFFFF" d="M16.04 4C9.96 4 5.01 8.95 5.01 15.03c0 1.95.51 3.86 1.48 5.54L4.9 27.4l6.98-1.83a11.06 11.06 0 0 0 4.16.81h.01c6.07 0 11.02-4.95 11.02-11.03C26.07 8.95 21.11 4 16.04 4zm6.45 15.62c-.27.76-1.58 1.46-2.18 1.51-.56.05-1.27.27-4.18-.92-3.5-1.43-5.73-5.01-5.91-5.25-.17-.24-1.41-1.87-1.41-3.57 0-1.7.89-2.54 1.21-2.88.32-.34.69-.43.92-.43.23 0 .46 0 .66.01.21.01.5-.08.78.6.27.67.92 2.32 1 2.49.08.17.13.36.03.59-.11.23-.16.36-.32.56-.16.19-.34.43-.48.58-.16.16-.33.34-.14.66.19.32.84 1.39 1.81 2.25 1.24 1.11 2.29 1.45 2.61 1.61.32.16.51.13.7-.08.19-.21.81-.94 1.02-1.27.21-.32.42-.27.71-.16.29.11 1.84.87 2.16 1.03.32.16.53.24.61.37.08.13.08.76-.19 1.52z"></path>
+            </svg>
+        </span>
+        <span class="wa-float-label">راسلنا على واتساب</span>
+    </a>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ===== SCRIPTS ===== -->
     <script>
+        window.KATAN_LOCALE = 'ar';
+        window.KATAN_LOADER_PHASES = [
+            'نُجهّز مواد البناء…',
+            'نُحضّر العيّنات…',
+            'نفتح المستودع…',
+            'جاهز'
+        ];
+        window.KATAN_I18N = {
+            success: 'تم استلام طلبك بنجاح، سنتواصل معك قريبًا.',
+            errorGeneric: 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى.',
+            errField: 'يرجى تصحيح الحقول المعلّمة باللون الأحمر.'
+        };
+
+        // ===== STARS BACKGROUND =====
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-        class Star {
-            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.4 + 0.5; this.alpha = Math.random(); this.speed = Math.random() * 0.015 + 0.005; this.growing = Math.random() > 0.5; }
-            update() { if(this.growing){this.alpha += this.speed; if(this.alpha >= 0.8) this.growing = false;} else {this.alpha -= this.speed; if(this.alpha <= 0.15) this.growing = true;} }
-            draw() { ctx.fillStyle = `rgba(186,230,253,${this.alpha})`; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        for (let i=0; i<80; i++) stars.push(new Star());
-        function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s=>{s.update();s.draw();}); requestAnimationFrame(animate); }
-        animate();
-        const PRODUCTS = [
-            { cat:'لاصق ديكور', img:'https://katanbuild.com/storage/product-families/01KY79NYHN1GWEMSFAX7ZYP9DR.png', items:['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست'] },
-            { cat:'لاصق مسبح', img:'https://katanbuild.com/storage/product-families/cat-plaster.jpg', items:['آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق'] },
-            { cat:'لاصق غرانيت', img:'https://i.ibb.co/8n73h5xG/laith.png', items:['ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر'] },
-            { cat:'لاصق سيراميك', img:'https://i.ibb.co/hJDtVZWQ/mockup.png', items:['سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي'] },
-            { cat:'لاصق خارجي', img:'https://i.ibb.co/Cs08vYMV/raed-o.png', items:['مارفيل','الترا بوند ذهبي','الترا بوند اورنج'] },
-            { cat:'طينة', img:'https://i.ibb.co/wFTbGVwQ/Paper-Bag-Mockup-Solid.png', items:['طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت'] },
-            { cat:'روبة', img:'https://i.ibb.co/39XZ6n5k/graft.png', items:['الترا جريب','جراوت اصلاح الترا بوند'] },
-            { cat:'عوازل', img:'https://i.ibb.co/m553JtKC/image.png', items:['عازل مركبين','عازل بلاستيكي','عازل حجر شفاف'] }
-        ];
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = PRODUCTS.map((p,i) => `
-            <div class="product-card" onclick="toggleCard(this)">
-                <img src="${p.img}" alt="${p.cat}" loading="lazy" />
-                <div class="title">${p.cat}</div>
-                <div class="product-items-popup"><ul>${p.items.map(item => `<li>${item}</li>`).join('')}</ul></div>
-            </div>
-        `).join('');
-        function toggleCard(el) { el.classList.toggle('open'); }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.4 + 0.5;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.015 + 0.005;
+                this.growing = Math.random() > 0.5;
+            }
+            update() {
+                if (this.growing) {
+                    this.alpha += this.speed;
+                    if (this.alpha >= 0.8) this.growing = false;
+                } else {
+                    this.alpha -= this.speed;
+                    if (this.alpha <= 0.15) this.growing = true;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(186, 230, 253, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) stars.push(new Star());
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => { s.update(); s.draw(); });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        // ===== LOADER =====
+        const loader = document.getElementById('loader');
+        const loaderBar = document.getElementById('loaderBar');
+        const loaderSub = document.getElementById('loaderSub');
+        let progress = 0;
+        let phaseIndex = 0;
+
+        function updateLoader() {
+            progress += Math.random() * 15 + 5;
+            if (progress > 100) progress = 100;
+            loaderBar.style.width = progress + '%';
+
+            if (progress > 30 && phaseIndex < 1) { phaseIndex = 1; loaderSub.textContent = window.KATAN_LOADER_PHASES[1]; }
+            if (progress > 60 && phaseIndex < 2) { phaseIndex = 2; loaderSub.textContent = window.KATAN_LOADER_PHASES[2]; }
+            if (progress > 85 && phaseIndex < 3) { phaseIndex = 3; loaderSub.textContent = window.KATAN_LOADER_PHASES[3]; }
+
+            if (progress < 100) {
+                setTimeout(updateLoader, 200 + Math.random() * 300);
+            } else {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                    // Trigger reveal animations
+                    document.querySelectorAll('.reveal').forEach(el => {
+                        if (el.getBoundingClientRect().top < window.innerHeight) {
+                            el.classList.add('visible');
+                        }
+                    });
+                }, 400);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.overflow = 'hidden';
+            setTimeout(updateLoader, 400);
+
+            // Mobile toggle
+            const mobileToggle = document.getElementById('mobileToggle');
+            const menu = document.getElementById('menu');
+            mobileToggle.addEventListener('click', function() {
+                const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+                this.setAttribute('aria-expanded', expanded);
+                this.classList.toggle('active');
+                menu.classList.toggle('open');
+            });
+
+            // FAQ toggle
+            document.querySelectorAll('.faq-q').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+                    this.setAttribute('aria-expanded', expanded);
+                    this.parentElement.setAttribute('aria-expanded', expanded);
+                });
+            });
+
+            // Scroll progress
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                document.getElementById('scrollProgress').style.width = progress + '%';
+            });
+
+            // Reveal on scroll
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                revealObserver.observe(el);
+            });
+        });
     </script>
+    <script src="https://katanbuild.com/assets/js/main.js"></script>
 </body>
 </html>
