@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KATANBUILD | لوحة المحاسب</title>
+    <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
+    <style>
+        :root { --bg:#030712; --gold:#ffd700; --cyan:#38bdf8; --glass:rgba(15,23,42,0.6); --border:rgba(255,215,0,0.25); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Cairo',sans-serif; background:var(--bg); color:#f1f5f9; min-height:100vh; }
+        .container { max-width:1200px; margin:0 auto; padding:20px; }
+        .header { background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:12px 0; }
+        .header-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+        .logo img { height:48px; filter:drop-shadow(0 0 20px var(--gold)); }
+        .nav { display:flex; gap:24px; flex-wrap:wrap; }
+        .nav a { color:#f1f5f9; text-decoration:none; font-weight:700; transition:0.3s; }
+        .nav a:hover { color:var(--gold); }
+        .login-box { max-width:400px; margin:100px auto; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:30px; text-align:center; }
+        .login-box input { width:100%; padding:10px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; margin:10px 0; font-family:'Cairo'; }
+        .login-box button { background:var(--gold); color:#000; border:none; padding:10px 24px; border-radius:12px; font-weight:700; cursor:pointer; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; margin:20px 0; }
+        .stat-card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:16px; text-align:center; }
+        .stat-card .num { font-family:'Orbitron'; font-size:28px; font-weight:900; color:var(--gold); }
+        .stat-card .label { color:#94a3b8; font-size:13px; }
+        .filters { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+        .filters input, .filters select { padding:8px 12px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; flex:1; min-width:150px; }
+        .filters button { background:var(--gold); color:#000; border:none; padding:8px 20px; border-radius:12px; font-weight:700; cursor:pointer; }
+        .order-item { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; background:rgba(3,7,18,0.5); border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin:6px 0; }
+        .order-item .info { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+        .order-item .badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+        .badge-green { background:#22c55e; color:#000; }
+        .badge-yellow { background:#eab308; color:#000; }
+        .badge-orange { background:#f97316; color:#fff; }
+        .order-item .actions { display:flex; gap:6px; }
+        .order-item .actions button { background:var(--gold); color:#000; border:none; padding:4px 12px; border-radius:6px; cursor:pointer; font-weight:700; }
+        .order-item .actions button.danger { background:#ef4444; color:#fff; }
+        .price-section { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:20px; margin:20px 0; }
+        .price-section table { width:100%; border-collapse:collapse; }
+        .price-section th, .price-section td { padding:10px; border-bottom:1px solid var(--border); text-align:right; }
+        .price-section input { padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; width:80px; }
+        .price-section button { background:var(--gold); color:#000; border:none; padding:4px 12px; border-radius:6px; cursor:pointer; }
+        .hidden { display:none !important; }
+        .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
+
+        /* ===== CUSTOMER PRICES ===== */
+        .customer-price-section { margin:20px 0; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:20px; }
+        .customer-price-section input, .customer-price-section select { padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; margin:4px 0; width:100%; }
+        .customer-price-section .row { display:flex; gap:10px; flex-wrap:wrap; }
+        .customer-price-section .row > * { flex:1; min-width:120px; }
+    </style>
+</head>
+<body>
+    <div id="loginBox">
+        <div class="login-box">
+            <h2 style="font-family:'Orbitron';">🔐 لوحة المحاسب</h2>
+            <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور" />
+            <button onclick="login()">دخول</button>
+            <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <div id="dashboardContent" class="hidden">
+        <header class="header">
+            <div class="container header-inner">
+                <a class="logo" href="/"><img src="https://katanbuild.com/storage/branding/logo-dark.png" /></a>
+                <nav class="nav"><a href="/">الرئيسية</a><a href="/orders.html">طلب</a></nav>
+            </div>
+        </header>
+        <div class="container">
+            <h1 style="font-family:'Orbitron'; margin:20px 0;">لوحة المحاسب</h1>
+
+            <!-- ===== STATS ===== -->
+            <div class="stats" id="stats">
+                <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div>
+                <div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div>
+                <div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div>
+                <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div>
+            </div>
+
+            <!-- ===== FILTERS ===== -->
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="بحث بالاسم..." oninput="renderOrders()" />
+                <select id="statusFilter" onchange="renderOrders()">
+                    <option value="all">الكل</option>
+                    <option value="complete">مكتملة</option>
+                    <option value="paid">مدفوعة</option>
+                    <option value="pending">غير مكتملة</option>
+                </select>
+                <button onclick="renderOrders()">تحديث</button>
+            </div>
+
+            <!-- ===== CUSTOMER PRICES ===== -->
+            <div class="customer-price-section">
+                <h3 style="color:var(--gold);">💲 أسعار وخصومات مخصصة للزبائن الدائمين</h3>
+                <div class="row">
+                    <input type="text" id="custName" placeholder="اسم الزبون" />
+                    <input type="text" id="custPhone" placeholder="رقم الهاتف" />
+                    <input type="text" id="custAddress" placeholder="العنوان" />
+                    <input type="number" id="custDiscount" placeholder="الخصم %" />
+                </div>
+                <div style="margin-top:10px;">
+                    <button class="btn-gold" onclick="addCustomer()">➕ إضافة زبون دائم</button>
+                </div>
+                <div id="customerPriceList" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- ===== ORDERS ===== -->
+            <div id="ordersList"></div>
+
+            <!-- ===== PREPAYMENT ===== -->
+            <div class="customer-price-section">
+                <h3 style="color:var(--gold);">💰 دفع مسبق</h3>
+                <div class="row">
+                    <input type="text" id="prepayName" placeholder="اسم الزبون" />
+                    <input type="number" id="prepayAmount" placeholder="المبلغ المدفوع ($)" />
+                    <button class="btn-gold" onclick="addPrepayment()">تسجيل</button>
+                </div>
+                <div id="prepayList" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- ===== PRICE MANAGEMENT ===== -->
+            <div class="price-section">
+                <h3 style="color:var(--gold);">💰 إدارة أسعار المنتجات</h3>
+                <table id="priceTable"><thead><tr><th>المنتج</th><th>السعر ($)</th><th>تعديل</th></tr></thead><tbody id="priceTableBody"></tbody></table>
+            </div>
+        </div>
+        <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
+    </div>
+
+    <script>
+        // ===== LOGIN =====
+        function login() {
+            const pwd = document.getElementById('passwordInput').value;
+            if (pwd === '1992') {
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('dashboardContent').classList.remove('hidden');
+                loadAll();
+            } else {
+                document.getElementById('loginError').textContent = '❌ كلمة مرور خاطئة';
+            }
+        }
+
+        // ===== LOAD DATA =====
+        function loadAll() { renderOrders(); renderPrices(); renderCustomers(); renderPrepayments(); }
+
+        // ===== ORDERS =====
+        function getOrders() { return JSON.parse(localStorage.getItem('katan_orders') || '[]'); }
+        function renderOrders() {
+            let orders = getOrders();
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filter = document.getElementById('statusFilter').value;
+            if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search));
+            if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+            document.getElementById('statTotal').textContent = orders.length;
+            const debt = orders.filter(o=>o.status==='pending').reduce((s,i)=>s+(i.total-i.paid||0),0);
+            document.getElementById('statDebt').textContent = `$${debt.toFixed(2)}`;
+            document.getElementById('statPaid').textContent = `$${orders.filter(o=>o.status==='paid').reduce((s,i)=>s+i.total,0).toFixed(2)}`;
+            document.getElementById('statPending').textContent = orders.filter(o=>o.status==='pending').length;
+            const list = document.getElementById('ordersList');
+            if (!orders.length) { list.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;">لا توجد طلبات</div>'; return; }
+            list.innerHTML = orders.map(o => `
+                <div class="order-item">
+                    <div class="info">
+                        <span><strong>${o.name}</strong></span>
+                        <span>$${o.total.toFixed(2)}</span>
+                        <span style="color:#94a3b8;font-size:13px;">${o.date}</span>
+                        <span class="badge ${o.status==='complete'?'badge-green':o.status==='paid'?'badge-yellow':'badge-orange'}">${o.status==='complete'?'مكتملة':o.status==='paid'?'مدفوعة':'غير مكتملة'}</span>
+                        ${o.status==='pending' ? `<span style="font-size:13px;color:#f97316;">المتبقي: $${(o.total - (o.paid||0)).toFixed(2)}</span>` : ''}
+                        ${o.isLoyal ? `<span style="background:var(--gold);color:#000;padding:2px 8px;border-radius:4px;font-weight:700;font-size:12px;">⭐ زبون دائم</span>` : ''}
+                    </div>
+                    <div class="actions">
+                        <button onclick="viewOrder('${o.id}')">👁️</button>
+                        <button onclick="markPaid('${o.id}')">✅ دفع</button>
+                        <button class="danger" onclick="deleteOrder('${o.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function viewOrder(id) {
+            const o = getOrders().find(i => i.id == id);
+            if (!o) return;
+            alert(`📄 ${o.name}\n📞 ${o.phone}\n📍 ${o.address}\n📦 ${o.items.map(i=>`${i.name} (${i.qty})`).join(', ')}\n💰 $${o.total.toFixed(2)}\n⭐ ${o.isLoyal ? 'زبون دائم' : 'زبون عادي'}`);
+        }
+        function markPaid(id) {
+            let orders = getOrders();
+            const i = orders.findIndex(o => o.id == id);
+            if (i===-1) return;
+            orders[i].status = 'paid'; orders[i].paid = orders[i].total;
+            localStorage.setItem('katan_orders', JSON.stringify(orders));
+            renderOrders();
+        }
+        function deleteOrder(id) {
+            if (!confirm('حذف؟')) return;
+            let orders = getOrders().filter(o => o.id != id);
+            localStorage.setItem('katan_orders', JSON.stringify(orders));
+            renderOrders();
+        }
+
+        // ===== PRICES =====
+        function renderPrices() {
+            const prices = JSON.parse(localStorage.getItem('katan_prices') || '{}');
+            const allProducts = ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست','آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق','ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر','سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي','مارفيل','الترا بوند ذهبي','الترا بوند اورنج','طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت','الترا جريب','جراوت اصلاح الترا بوند','عازل مركبين','عازل بلاستيكي','عازل حجر شفاف'];
+            const tbody = document.getElementById('priceTableBody');
+            tbody.innerHTML = allProducts.map(p => `
+                <tr><td>${p}</td><td><input type="number" id="price_${p}" value="${prices[p] || 10}" step="0.5" /></td>
+                <td><button onclick="updatePrice('${p}')">حفظ</button></td></tr>
+            `).join('');
+        }
+        function updatePrice(product) {
+            const val = document.getElementById(`price_${product}`).value;
+            const prices = JSON.parse(localStorage.getItem('katan_prices') || '{}');
+            prices[product] = parseFloat(val);
+            localStorage.setItem('katan_prices', JSON.stringify(prices));
+            alert('✅ تم حفظ السعر');
+            renderPrices();
+        }
+
+        // ===== CUSTOMER PRICES =====
+        function getCustomers() { return JSON.parse(localStorage.getItem('katan_customers') || '[]'); }
+        function addCustomer() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const discount = parseFloat(document.getElementById('custDiscount').value) || 0;
+            if (!name || !phone) return alert('أدخل اسم الزبون ورقم الهاتف');
+            let list = getCustomers();
+            // Check if already exists
+            const existing = list.find(c => c.name === name && c.phone === phone);
+            if (existing) {
+                existing.address = address;
+                existing.discount = discount;
+            } else {
+                list.push({ name, phone, address, discount });
+            }
+            localStorage.setItem('katan_customers', JSON.stringify(list));
+            renderCustomers();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custAddress').value = '';
+            document.getElementById('custDiscount').value = '';
+        }
+        function renderCustomers() {
+            const list = getCustomers();
+            const container = document.getElementById('customerPriceList');
+            container.innerHTML = list.map((c, i) => `
+                <div style="display:flex;justify-content:space-between;padding:6px 12px;background:rgba(3,7,18,0.5);border-radius:8px;margin:4px 0;">
+                    <span>${c.name} - ${c.phone} - خصم ${c.discount}%</span>
+                    <button onclick="deleteCustomer(${i})" style="background:#ef4444;border:none;color:#fff;padding:2px 12px;border-radius:6px;cursor:pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+        function deleteCustomer(index) {
+            let list = getCustomers();
+            list.splice(index, 1);
+            localStorage.setItem('katan_customers', JSON.stringify(list));
+            renderCustomers();
+        }
+
+        // ===== PREPAYMENTS =====
+        function getPrepayments() { return JSON.parse(localStorage.getItem('katan_prepayments') || '[]'); }
+        function addPrepayment() {
+            const name = document.getElementById('prepayName').value.trim();
+            const amount = parseFloat(document.getElementById('prepayAmount').value);
+            if (!name || isNaN(amount)) return alert('أدخل الاسم والمبلغ');
+            let list = getPrepayments();
+            list.push({ name, amount, date: new Date().toLocaleString('ar-SY') });
+            localStorage.setItem('katan_prepayments', JSON.stringify(list));
+            renderPrepayments();
+            document.getElementById('prepayName').value = '';
+            document.getElementById('prepayAmount').value = '';
+        }
+        function renderPrepayments() {
+            const list = getPrepayments();
+            const container = document.getElementById('prepayList');
+            container.innerHTML = list.map((p, i) => `
+                <div style="display:flex;justify-content:space-between;padding:6px 12px;background:rgba(3,7,18,0.5);border-radius:8px;margin:4px 0;">
+                    <span>${p.name} - $${p.amount} (${p.date})</span>
+                    <button onclick="deletePrepayment(${i})" style="background:#ef4444;border:none;color:#fff;padding:2px 12px;border-radius:6px;cursor:pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+        function deletePrepayment(index) {
+            let list = getPrepayments();
+            list.splice(index, 1);
+            localStorage.setItem('katan_prepayments', JSON.stringify(list));
+            renderPrepayments();
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrders();
+            renderPrices();
+            renderCustomers();
+            renderPrepayments();
+        });
+    </script>
+</body>
+</html>
