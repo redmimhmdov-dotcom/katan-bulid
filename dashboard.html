@@ -6,6 +6,9 @@
     <title>KATANBUILD | لوحة المحاسب المتطورة</title>
     <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
+    <!-- Leaflet for interactive maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         :root { --bg:#1e1e1e; --surface:#2d2d2d; --border:#3e3e3e; --gold:#ffd700; --cyan:#38bdf8; --text:#f1f5f9; --text-muted:#a0a0a0; }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -30,7 +33,6 @@
         .hidden { display:none !important; }
         .panel { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:16px; margin-bottom:16px; }
         .panel-title { color:var(--gold); font-weight:700; margin-bottom:12px; font-size:16px; }
-        .panel-title-sm { color:var(--cyan); font-weight:600; font-size:14px; margin-bottom:8px; }
         .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
         .stat-card { background:#252526; border:1px solid var(--border); border-radius:6px; padding:12px; text-align:center; }
         .stat-card .num { font-family:'Orbitron'; font-size:24px; font-weight:900; color:var(--gold); }
@@ -48,6 +50,7 @@
         .order-item .actions button { background:var(--gold); color:#000; border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-weight:700; font-size:12px; }
         .order-item .actions button.danger { background:#ef4444; color:#fff; }
         .btn-wa { background:#25D366; color:#fff; border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-weight:700; font-size:12px; }
+        .btn-print { background:#8b5cf6; color:#fff; border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-weight:700; font-size:12px; }
         .input-group { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
         .input-group input, .input-group select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); background:#252526; color:#fff; min-width:80px; }
         .input-group button { padding:8px 16px; border:none; border-radius:6px; font-weight:700; cursor:pointer; background:var(--gold); color:#000; }
@@ -55,18 +58,30 @@
         .modal.open { display:flex; }
         .modal-content { background:var(--surface); border:1px solid var(--gold); border-radius:8px; padding:24px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
         .modal-close { float:left; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
+        #mapContainer { height:300px; width:100%; border-radius:8px; margin:12px 0; border:1px solid var(--border); }
         ::-webkit-scrollbar { width:8px; }
         ::-webkit-scrollbar-track { background:#1e1e1e; }
         ::-webkit-scrollbar-thumb { background:#3e3e3e; border-radius:4px; }
         @media (max-width:768px) { .menu-bar { flex-wrap:wrap; } .stats { grid-template-columns:1fr 1fr; } }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #invoicePrintArea, #invoicePrintArea * { visibility: visible; }
+            #invoicePrintArea { position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 40px; font-family: 'Cairo', sans-serif; }
+            #invoicePrintArea .logo-print { max-width: 200px; margin-bottom: 20px; }
+            #invoicePrintArea .invoice-title { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 20px; }
+            #invoicePrintArea .invoice-details { border: 1px solid #000; padding: 10px; margin-bottom: 20px; }
+            #invoicePrintArea .invoice-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            #invoicePrintArea .invoice-table th, #invoicePrintArea .invoice-table td { border: 1px solid #000; padding: 8px; text-align: right; }
+            #invoicePrintArea .invoice-total { font-size: 18px; font-weight: 700; text-align: left; margin-top: 10px; }
+            #invoicePrintArea .invoice-footer { text-align: center; margin-top: 30px; font-weight: 700; }
+        }
     </style>
 </head>
 <body>
     <div class="app-window" id="app">
-        <div class="title-bar">
-            <span class="title">📊 KATANBUILD ACCOUNTING</span>
-            <div class="controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
-        </div>
+        <div class="title-bar"><span class="title">📊 KATANBUILD ACCOUNTING [وضع 2099]</span><div class="controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div></div>
         <div class="menu-bar" id="menuBar">
             <a class="active" onclick="showView('dashboard', this)">لوحة التحكم</a>
             <a onclick="showView('orders', this)">طلبات الزبائن</a>
@@ -85,43 +100,17 @@
                 <button onclick="login()">دخول</button>
                 <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
             </div>
-
             <div id="appContent" class="hidden">
-                <!-- VIEW: Dashboard -->
                 <div id="view-dashboard" class="view">
                     <div class="panel"><div class="panel-title">📈 إحصائيات عامة</div><div class="stats" id="stats"><div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div><div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div><div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div><div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div></div></div>
                     <div class="panel"><div class="panel-title">📋 جميع الطلبات (آخر 20)</div><div id="ordersListDashboard"></div></div>
                 </div>
-
-                <!-- VIEW: Orders (يدوي) -->
-                <div id="view-orders" class="view hidden">
-                    <div class="panel"><div class="panel-title">📦 طلبات الزبائن (يدوي)</div><div class="filters"><input type="text" id="searchInputOrders" placeholder="بحث..." oninput="renderOrdersList('orders')" /><select id="statusFilterOrders" onchange="renderOrdersList('orders')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('orders')">تحديث</button></div><div id="ordersListOrders"></div></div>
-                </div>
-
-                <!-- VIEW: Online (طلبات الإنترنت) -->
-                <div id="view-online" class="view hidden">
-                    <div class="panel"><div class="panel-title">🌐 طلبـات الإنترنت</div><div class="filters"><input type="text" id="searchInputOnline" placeholder="بحث..." oninput="renderOrdersList('online')" /><select id="statusFilterOnline" onchange="renderOrdersList('online')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('online')">تحديث</button></div><div id="ordersListOnline"></div></div>
-                </div>
-
-                <!-- VIEW: Customers -->
-                <div id="view-customers" class="view hidden">
-                    <div class="panel"><div class="panel-title">⭐ الزبائن الخاصين</div><div class="input-group"><input type="text" id="custName" placeholder="اسم الزبون" /><input type="text" id="custPhone" placeholder="رقم الهاتف" /><input type="text" id="custAddress" placeholder="العنوان" /><input type="text" id="custCode" placeholder="الكود الخاص" /></div><div class="input-group"><select id="custProduct"><option value="">اختر المنتج للخصم</option></select><input type="number" id="custDiscountPrice" placeholder="السعر المخصوم ($)" step="0.5" /><button onclick="addProductDiscount()">➕ إضافة خصم منتج</button></div><div id="tempDiscounts" style="margin:8px 0; display:flex; flex-wrap:wrap; gap:6px;"></div><button onclick="saveCustomer()" style="background:var(--gold);color:#000;border:none;padding:8px 16px;border-radius:4px;font-weight:700;cursor:pointer;">💾 حفظ الزبون الدائم</button><div id="customerList" style="margin-top:12px;"></div></div>
-                </div>
-
-                <!-- VIEW: Reps -->
-                <div id="view-reps" class="view hidden">
-                    <div class="panel"><div class="panel-title">👤 المندوبون</div><div class="input-group"><input type="text" id="repName" placeholder="اسم المندوب" /><button onclick="addRep()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة مندوب</button></div><div id="repList" style="margin-top:12px;"></div></div>
-                </div>
-
-                <!-- VIEW: Prices -->
-                <div id="view-prices" class="view hidden">
-                    <div class="panel"><div class="panel-title">💰 الأسعار</div><div class="input-group"><input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 120px;" /><button onclick="updateExchangeRate()">تحديث سعر الصرف</button></div><table style="width:100%;border-collapse:collapse;font-size:14px;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:right;padding:6px;">المنتج</th><th style="text-align:right;padding:6px;">السعر ($)</th><th style="text-align:right;padding:6px;">تعديل</th></tr></thead><tbody id="priceTableBody"></tbody></table></div>
-                </div>
-
-                <!-- VIEW: Admin -->
-                <div id="view-admin" class="view hidden">
-                    <div class="panel"><div class="panel-title">👤 إدارة المستخدمين</div><div class="input-group"><input type="text" id="newUserUser" placeholder="اسم المستخدم" /><input type="text" id="newUserPass" placeholder="كلمة المرور" /><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label><button onclick="addUser()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة</button></div><div id="userList" style="margin:8px 0;font-size:14px;"></div></div>
-                </div>
+                <div id="view-orders" class="view hidden"><div class="panel"><div class="panel-title">📦 طلبات الزبائن (يدوي)</div><div class="filters"><input type="text" id="searchInputOrders" placeholder="بحث..." oninput="renderOrdersList('orders')" /><select id="statusFilterOrders" onchange="renderOrdersList('orders')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('orders')">تحديث</button></div><div id="ordersListOrders"></div></div></div>
+                <div id="view-online" class="view hidden"><div class="panel"><div class="panel-title">🌐 طلبـات الإنترنت</div><div class="filters"><input type="text" id="searchInputOnline" placeholder="بحث..." oninput="renderOrdersList('online')" /><select id="statusFilterOnline" onchange="renderOrdersList('online')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('online')">تحديث</button></div><div id="ordersListOnline"></div></div></div>
+                <div id="view-customers" class="view hidden"><div class="panel"><div class="panel-title">⭐ الزبائن الخاصين</div><div class="input-group"><input type="text" id="custName" placeholder="اسم الزبون" /><input type="text" id="custPhone" placeholder="رقم الهاتف" /><input type="text" id="custAddress" placeholder="العنوان" /><input type="text" id="custCode" placeholder="الكود الخاص" /></div><div class="input-group"><select id="custProduct"><option value="">اختر المنتج للخصم</option></select><input type="number" id="custDiscountPrice" placeholder="السعر المخصوم ($)" step="0.5" /><button onclick="addProductDiscount()">➕ إضافة خصم منتج</button></div><div id="tempDiscounts" style="margin:8px 0; display:flex; flex-wrap:wrap; gap:6px;"></div><button onclick="saveCustomer()" style="background:var(--gold);color:#000;border:none;padding:8px 16px;border-radius:4px;font-weight:700;cursor:pointer;">💾 حفظ الزبون الدائم</button><div id="customerList" style="margin-top:12px;"></div></div></div>
+                <div id="view-reps" class="view hidden"><div class="panel"><div class="panel-title">👤 المندوبون</div><div class="input-group"><input type="text" id="repName" placeholder="اسم المندوب" /><button onclick="addRep()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة مندوب</button></div><div id="repList" style="margin-top:12px;"></div></div></div>
+                <div id="view-prices" class="view hidden"><div class="panel"><div class="panel-title">💰 الأسعار</div><div class="input-group"><input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 120px;" /><button onclick="updateExchangeRate()">تحديث سعر الصرف</button></div><table style="width:100%;border-collapse:collapse;font-size:14px;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:right;padding:6px;">المنتج</th><th style="text-align:right;padding:6px;">السعر ($)</th><th style="text-align:right;padding:6px;">تعديل</th></tr></thead><tbody id="priceTableBody"></tbody></table></div></div>
+                <div id="view-admin" class="view hidden"><div class="panel"><div class="panel-title">👤 إدارة المستخدمين</div><div class="input-group"><input type="text" id="newUserUser" placeholder="اسم المستخدم" /><input type="text" id="newUserPass" placeholder="كلمة المرور" /><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label><button onclick="addUser()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة</button></div><div id="userList" style="margin:8px 0;font-size:14px;"></div></div></div>
             </div>
         </div>
     </div>
@@ -131,8 +120,12 @@
             <button class="modal-close" onclick="closeModal()">✕</button>
             <h3 style="color:var(--gold);" id="modalTitle">تفاصيل الطلب</h3>
             <div id="modalBody" style="font-size:14px;line-height:1.8;"></div>
+            <div id="mapContainer"></div>
         </div>
     </div>
+
+    <!-- Hidden print area -->
+    <div id="invoicePrintArea" style="display:none;"></div>
 
     <script>
         // ============================================================
@@ -151,7 +144,6 @@
         function getPrices() { return JSON.parse(localStorage.getItem('katan_prices') || '{}'); }
         function savePrices(p) { localStorage.setItem('katan_prices', JSON.stringify(p)); }
         function getExchangeRate() { return parseInt(localStorage.getItem('katan_exchange_rate')) || 13000; }
-
         function sendLogToTelegram(msg) {
             fetch(`https://api.telegram.org/bot8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw/sendMessage`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
@@ -180,7 +172,7 @@
             }
             showView('dashboard', document.querySelector('#menuBar a'));
             loadAll();
-            setInterval(loadAll, 3000); // auto refresh
+            setInterval(loadAll, 3000);
         }
         function logout() { sessionStorage.removeItem('katan_current_user'); location.reload(); }
 
@@ -264,7 +256,7 @@
         }
 
         // ============================================================
-        // 6. CUSTOMERS (Loyal with product discounts + code)
+        // 6. CUSTOMERS
         // ============================================================
         let tempCustomerDiscounts = {};
         function populateProductSelect() {
@@ -333,7 +325,7 @@
         }
 
         // ============================================================
-        // 7. REPS (Advanced)
+        // 7. REPS
         // ============================================================
         function addRep() {
             const name = document.getElementById('repName').value.trim();
@@ -388,11 +380,9 @@
             const reps = getReps();
             const container = document.getElementById('repList');
             if (!reps.length) { container.innerHTML = '<p style="color:var(--text-muted);">لا يوجد مندوبون</p>'; return; }
-            // Build stats
             const allOrders = getOrders();
             const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
             container.innerHTML = reps.map((r, ri) => {
-                // Count orders from clients of this rep in the last 7 days
                 const weekOrders = allOrders.filter(o => r.clients.includes(o.name) && new Date(o.date) > weekAgo);
                 const totalOrders = allOrders.filter(o => r.clients.includes(o.name));
                 return `
@@ -419,7 +409,7 @@
         }
 
         // ============================================================
-        // 8. ORDERS (Split into two views: manual & online)
+        // 8. ORDERS + MAP + PRINT
         // ============================================================
         function renderStats() {
             const o = getOrders();
@@ -428,9 +418,10 @@
             document.getElementById('statPaid').textContent = `$${o.filter(x=>x.status==='paid').reduce((s,i)=>s+i.total,0).toFixed(2)}`;
             document.getElementById('statPending').textContent = o.filter(x=>x.status==='pending').length;
         }
+
         function renderOrdersList(view) {
             let orders = getOrders();
-            if (view === 'orders') { // manual
+            if (view === 'orders') {
                 orders = orders.filter(o => o.source === 'manual');
                 const search = document.getElementById('searchInputOrders').value.toLowerCase();
                 const filter = document.getElementById('statusFilterOrders').value;
@@ -444,19 +435,19 @@
                 if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search));
                 if (filter !== 'all') orders = orders.filter(o => o.status === filter);
                 document.getElementById('ordersListOnline').innerHTML = buildOrdersHTML(orders);
-            } else { // dashboard (show last 20)
+            } else {
                 orders = orders.slice(-20);
                 document.getElementById('ordersListDashboard').innerHTML = buildOrdersHTML(orders);
             }
             renderStats();
         }
+
         function buildOrdersHTML(orders) {
             if (!orders.length) return '<div style="text-align:center;color:var(--text-muted);padding:20px;">لا توجد طلبات</div>';
             const customers = getCustomers();
             const exchange = getExchangeRate();
             const user = getCurrentUser();
             return orders.map(o => {
-                // Check if customer exists and apply discounts
                 const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
                 let originalTotal = 0, finalTotal = 0;
                 const itemsWithPrices = o.items.map(item => {
@@ -471,8 +462,8 @@
                 });
                 const originalSYP = (originalTotal * exchange).toFixed(0);
                 const finalSYP = (finalTotal * exchange).toFixed(0);
-                const customerFound = !!customer;
                 const canDelete = user?.role === 'admin' || user?.role === 'superadmin' || user?.canDelete;
+                const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : '#';
                 return `
                 <div class="order-item">
                     <div class="top">
@@ -480,24 +471,24 @@
                             <strong>${o.name}</strong> <span style="color:var(--text-muted);font-size:13px;">${o.phone}</span>
                             <span style="color:var(--text-muted);font-size:13px;">${o.date}</span>
                             <span class="badge ${o.status==='complete'?'badge-green':o.status==='paid'?'badge-yellow':'badge-orange'}">${o.status}</span>
-                            ${customerFound ? `<span style="background:var(--gold);color:#000;padding:0 8px;border-radius:4px;font-weight:700;font-size:12px;">⭐ زبون دائم</span>` : ''}
-                            ${o.code ? `<span style="color:var(--cyan);font-size:12px;">🔑 ${o.code}</span>` : ''}
+                            ${o.ip ? `<span style="color:var(--cyan);font-size:12px;">🖥️ ${o.ip}</span>` : ''}
+                            ${customer ? `<span style="background:var(--gold);color:#000;padding:0 8px;border-radius:4px;font-weight:700;font-size:12px;">⭐ زبون دائم</span>` : ''}
                             ${o.source === 'online' ? `<span style="background:#38bdf8;color:#000;padding:0 8px;border-radius:4px;font-size:12px;">🌐 أونلاين</span>` : `<span style="background:#ffd700;color:#000;padding:0 8px;border-radius:4px;font-size:12px;">📋 يدوي</span>`}
                         </div>
                         <div class="actions">
                             <button onclick="viewOrder('${o.id}')">عرض</button>
+                            <button onclick="printInvoice('${o.id}')" class="btn-print">🖨️ طباعة</button>
                             ${o.status === 'pending' ? `<button onclick="markPaid('${o.id}')">✅ دفع</button>` : ''}
                             <button onclick="sendWACustomer('${o.id}')" class="btn-wa">📩 واتساب</button>
                             ${canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">حذف</button>` : ''}
                         </div>
                     </div>
-                    <div style="font-size:13px;color:var(--text-muted);">📦 ${itemsWithPrices.map(i => i.name + (customerFound && i.originalPrice !== i.finalPrice ? ` <span style="color:var(--cyan);">($${i.originalPrice}→$${i.finalPrice})</span>` : '')).join(' • ')}</div>
+                    <div style="font-size:13px;color:var(--text-muted);">📦 ${itemsWithPrices.map(i => i.name + (customer && i.originalPrice !== i.finalPrice ? ` <span style="color:var(--cyan);">($${i.originalPrice}→$${i.finalPrice})</span>` : '')).join(' • ')}</div>
                     <div style="font-size:14px;display:flex;gap:12px;flex-wrap:wrap;">
-                        ${customerFound ? `<span style="text-decoration:line-through;color:var(--text-muted);">$${originalTotal.toFixed(2)} (≈${originalSYP} SYP)</span>` : ''}
+                        ${customer ? `<span style="text-decoration:line-through;color:var(--text-muted);">$${originalTotal.toFixed(2)} (≈${originalSYP} SYP)</span>` : ''}
                         <span style="color:var(--gold);font-weight:700;">$${finalTotal.toFixed(2)}</span>
                         <span style="color:var(--cyan);font-size:13px;">≈${finalSYP} SYP</span>
                         ${o.status === 'pending' && o.paid ? `<span style="color:#f97316;">المتبقي: $${(o.total - o.paid).toFixed(2)}</span>` : ''}
-                        ${o.prepaid ? `<span style="color:var(--cyan);">💰 مدفوع مسبقاً: $${o.prepaid}</span>` : ''}
                     </div>
                 </div>
                 `;
@@ -523,6 +514,9 @@
                 return { ...item, originalPrice: price, finalPrice };
             });
             const exchange = getExchangeRate();
+            const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : 'غير متاح';
+            const ipDisplay = o.ip || 'غير متاح';
+
             document.getElementById('modalBody').innerHTML = `
                 <p><strong>الاسم:</strong> ${o.name}</p>
                 <p><strong>الهاتف:</strong> ${o.phone}</p>
@@ -530,6 +524,8 @@
                 <p><strong>الكود:</strong> ${o.code||'غير محدد'}</p>
                 <p><strong>المصدر:</strong> ${o.source === 'online' ? 'أونلاين' : 'يدوي'}</p>
                 <p><strong>التاريخ:</strong> ${o.date}</p>
+                <p><strong>الـ IP:</strong> ${ipDisplay}</p>
+                <p><strong>رابط الموقع:</strong> <a href="${locationLink}" target="_blank">${locationLink}</a></p>
                 <hr style="border-color:var(--border);" />
                 <p><strong>المواد:</strong></p>
                 <ul>${items.map(i => `<li>${i.name} (${i.qty} × $${i.originalPrice})${customer && i.originalPrice !== i.finalPrice ? ` → $${i.finalPrice}` : ''}</li>`).join('')}</ul>
@@ -537,8 +533,93 @@
                 ${customer ? `<p><span style="text-decoration:line-through;color:var(--text-muted);">السعر الأصلي: $${originalTotal.toFixed(2)} (≈${(originalTotal*exchange).toFixed(0)} SYP)</span></p>` : ''}
                 <p><strong>السعر النهائي:</strong> $${finalTotal.toFixed(2)} <span style="color:var(--cyan);font-size:13px;">≈${(finalTotal*exchange).toFixed(0)} SYP</span></p>
             `;
+
+            // Init map
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.innerHTML = '';
+            if (o.location) {
+                const lat = o.location.lat, lng = o.location.lng;
+                const map = L.map(mapContainer).setView([lat, lng], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.marker([lat, lng]).addTo(map).bindPopup(`📍 ${o.name}`).openPopup();
+                setTimeout(() => map.invalidateSize(), 500);
+            } else {
+                mapContainer.innerHTML = '<p style="color:var(--text-muted);text-align:center;">لا توجد بيانات موقع متاحة</p>';
+            }
         }
         function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
+
+        // ===== PRINT INVOICE =====
+        function printInvoice(id) {
+            const orders = getOrders();
+            const o = orders.find(i => i.id == id);
+            if (!o) return alert('الطلب غير موجود');
+            const customers = getCustomers();
+            const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
+            const exchange = getExchangeRate();
+
+            // Build invoice HTML
+            let itemsHTML = o.items.map(item => {
+                let price = item.price || 10;
+                let finalPrice = price;
+                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
+                    finalPrice = customer.productDiscounts[item.name];
+                }
+                return `<tr><td>${item.name}</td><td>${item.qty}</td><td>$${price.toFixed(2)}</td><td>$${finalPrice.toFixed(2)}</td></tr>`;
+            }).join('');
+
+            let totalOriginal = o.items.reduce((s,i) => s + i.qty * (i.price || 10), 0);
+            let totalFinal = 0;
+            o.items.forEach(item => {
+                let price = item.price || 10;
+                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
+                    price = customer.productDiscounts[item.name];
+                }
+                totalFinal += item.qty * price;
+            });
+
+            let discountText = '';
+            if (customer) {
+                discountText = `<p style="color:#333;font-weight:700;">خصم خاص للزبون: ${customer.name}</p>`;
+            }
+
+            const printContent = `
+            <div id="invoicePrintArea" style="display:block; background:#fff; color:#000; padding:40px; font-family:'Cairo', sans-serif; direction:rtl;">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <img src="https://katanbuild.com/storage/branding/logo-dark.png" style="max-width:200px;" alt="Katanbuild" />
+                    <h2 style="font-family:'Orbitron'; margin-top:10px;">فاتورة شراء</h2>
+                </div>
+                <div style="border:1px solid #000; padding:10px; margin-bottom:20px;">
+                    <p><strong>الزبون:</strong> ${o.name}</p>
+                    <p><strong>رقم الهاتف:</strong> ${o.phone}</p>
+                    <p><strong>التاريخ:</strong> ${o.date}</p>
+                </div>
+                ${discountText}
+                <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+                    <thead><tr style="background:#f5f5f5;"><th style="border:1px solid #000; padding:8px;">المنتج</th><th style="border:1px solid #000; padding:8px;">الكمية</th><th style="border:1px solid #000; padding:8px;">السعر الأصلي</th><th style="border:1px solid #000; padding:8px;">السعر النهائي</th></tr></thead>
+                    <tbody>${itemsHTML}</tbody>
+                </table>
+                <div style="text-align:left; margin-top:10px; font-size:18px; font-weight:700;">
+                    ${customer ? `<span style="text-decoration:line-through; color:#999;">الإجمالي الأصلي: $${totalOriginal.toFixed(2)}</span><br>` : ''}
+                    الإجمالي النهائي: $${totalFinal.toFixed(2)} <span style="font-size:14px; font-weight:400; color:#555;">(≈ ${(totalFinal * exchange).toFixed(0)} SYP)</span>
+                </div>
+                <div style="text-align:center; margin-top:30px; font-weight:700; border-top:1px solid #000; padding-top:20px;">
+                    سررنا بالتعامل معكم
+                </div>
+            </div>
+            `;
+
+            // Print
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`
+                <html><head><title>طباعة الفاتورة</title>
+                <style>body { font-family: 'Cairo', sans-serif; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #000; padding: 8px; text-align: right; }</style>
+                </head><body>${printContent}</body></html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
 
         function deleteOrder(id) {
             if (!confirm('حذف الطلب؟')) return;
@@ -582,46 +663,7 @@
         }
 
         // ============================================================
-        // 9. ADD MANUAL ORDER (from dashboard)
-        // ============================================================
-        function addManualOrder() {
-            const name = prompt('اسم الزبون:');
-            if (!name) return;
-            const phone = prompt('رقم الهاتف:');
-            if (!phone) return;
-            const address = prompt('العنوان (اختياري):') || '';
-            const code = prompt('الكود (اختياري):') || '';
-            const items = [];
-            let addMore = true;
-            while (addMore) {
-                const prod = prompt('اسم المنتج:');
-                if (!prod) break;
-                const qty = parseInt(prompt('الكمية:')) || 1;
-                const price = parseFloat(prompt('السعر ($):')) || 10;
-                items.push({ name: prod, qty, price });
-                addMore = confirm('هل تريد إضافة منتج آخر؟');
-            }
-            if (!items.length) return alert('يجب إضافة منتج واحد على الأقل');
-            const order = {
-                id: Date.now(),
-                date: new Date().toLocaleString('ar-SY'),
-                name, phone, address, code,
-                items,
-                total: items.reduce((s,i) => s + i.qty * i.price, 0),
-                source: 'manual',
-                status: 'pending',
-                paid: 0
-            };
-            let orders = getOrders();
-            orders.push(order);
-            saveOrders(orders);
-            sendLogToTelegram(`📝 تم إضافة طلب يدوي للزبون ${name} بقيمة $${order.total.toFixed(2)} بواسطة ${getCurrentUser().username}`);
-            loadAll();
-            alert('✅ تم إضافة الطلب اليدوي بنجاح');
-        }
-
-        // ============================================================
-        // 10. LOAD ALL
+        // 9. LOAD ALL
         // ============================================================
         function loadAll() {
             renderStats();
@@ -632,12 +674,11 @@
             renderReps();
             renderPrices();
             renderUsers();
-            // Update exchange rate input
             document.getElementById('exchangeRateInput').value = getExchangeRate();
         }
 
         // ============================================================
-        // 11. INIT
+        // 10. INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             populateProductSelect();
