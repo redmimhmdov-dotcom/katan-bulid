@@ -35,28 +35,13 @@
         .summary .total { font-size:20px; font-weight:900; color:var(--gold); border-top:1px solid var(--border); padding-top:8px; }
         .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
 
-        /* LOADING OVERLAY */
-        .overlay {
-            position: fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85);
-            display:none; align-items:center; justify-content:center; flex-direction:column;
-            backdrop-filter: blur(5px);
-        }
+        .overlay { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; flex-direction:column; backdrop-filter: blur(5px); }
         .overlay.active { display:flex; }
-        .spinner {
-            width:60px; height:60px; border:6px solid rgba(255,255,255,0.1);
-            border-top:6px solid var(--gold); border-radius:50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .spinner { width:60px; height:60px; border:6px solid rgba(255,255,255,0.1); border-top:6px solid var(--gold); border-radius:50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-        .overlay-text {
-            color:#fff; font-size:18px; margin-top:20px; font-weight:700;
-        }
-        .overlay-success {
-            font-size:60px; color:#22c55e; display:none;
-        }
-        .overlay-success-text {
-            color:#fff; font-size:20px; margin-top:15px; font-weight:700;
-        }
+        .overlay-text { color:#fff; font-size:18px; margin-top:20px; font-weight:700; }
+        .overlay-success { font-size:60px; color:#22c55e; display:none; }
+        .overlay-success-text { color:#fff; font-size:20px; margin-top:15px; font-weight:700; }
         .overlay.success .spinner { display:none; }
         .overlay.success .overlay-success { display:block; }
         .overlay.success .overlay-text { display:none; }
@@ -72,10 +57,9 @@
         </div>
     </header>
 
-    <!-- LOADING OVERLAY -->
     <div class="overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <div class="overlay-text">جاري إرسال الطلب...</div>
+        <div class="overlay-text">جاري إرسال الطلب... (وضع 2099)</div>
         <div class="overlay-success">✅</div>
         <div class="overlay-success-text">تم الإرسال بنجاح</div>
     </div>
@@ -113,7 +97,6 @@
     <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
 
     <script>
-        // ===== PRODUCT DATA =====
         const PRODUCTS = {
             'لاصق ديكور': ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست'],
             'لاصق مسبح': ['آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق'],
@@ -124,8 +107,6 @@
             'روبة': ['الترا جريب','جراوت اصلاح الترا بوند'],
             'عوازل': ['عازل مركبين','عازل بلاستيكي','عازل حجر شفاف']
         };
-
-        // ===== SELECTS =====
         const catSelect = document.getElementById('selCategory');
         const prodSelect = document.getElementById('selProduct');
         Object.keys(PRODUCTS).forEach(c => catSelect.innerHTML += `<option value="${c}">${c}</option>`);
@@ -133,8 +114,6 @@
             prodSelect.innerHTML = '<option value="">اختر</option>';
             if (this.value && PRODUCTS[this.value]) PRODUCTS[this.value].forEach(p => prodSelect.innerHTML += `<option value="${p}">${p}</option>`);
         });
-
-        // ===== ITEMS MANAGEMENT =====
         let items = [];
         function addItem() {
             const cat = catSelect.value, prod = prodSelect.value, qty = parseInt(document.getElementById('selQty').value)||1;
@@ -159,117 +138,86 @@
             document.getElementById('grandTotal').textContent = `$${sub.toFixed(2)}`;
             document.getElementById('sypTotal').textContent = `≈ ${(sub * exchange).toFixed(0)} SYP`;
         }
+        function getCustomers() { return JSON.parse(localStorage.getItem('katan_customers') || '[]'); }
 
-        // ===== GET CUSTOMERS FROM LOCALSTORAGE =====
-        function getCustomers() {
-            return JSON.parse(localStorage.getItem('katan_customers') || '[]');
+        async function getLocationAndIP() {
+            let loc = null, ip = null;
+            try {
+                if (navigator.geolocation) {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 7000 });
+                    });
+                    loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                }
+            } catch (e) { console.warn('Location error:', e); }
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                ip = data.ip;
+            } catch (e) { console.warn('IP fetch error:', e); }
+            return { location: loc, ip };
         }
 
-        // ===== SUBMIT ORDER =====
         function submitOrder() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             const address = document.getElementById('customerAddress').value.trim();
             const code = document.getElementById('customerCode').value.trim();
-
-            if (!name || !phone || items.length===0) {
-                alert('يرجى إكمال البيانات وإضافة منتج واحد على الأقل.');
-                return;
-            }
-
-            // Check if customer is loyal (exists in katan_customers)
+            if (!name || !phone || items.length===0) { alert('يرجى إكمال البيانات وإضافة منتج واحد على الأقل.'); return; }
             const customers = getCustomers();
             const loyalCustomer = customers.find(c => c.name === name && c.phone === phone);
-
-            // If loyal customer, code is required and must match
             if (loyalCustomer) {
-                if (!code) {
-                    alert('الرجاء إدخال الكود الخاص بك لأنك زبون دائم.');
-                    return;
-                }
-                if (code !== loyalCustomer.code) {
-                    alert('الكود غير صحيح. يرجى التحقق من الكود الخاص بك.');
-                    return;
-                }
+                if (!code) { alert('الرجاء إدخال الكود الخاص بك لأنك زبون دائم.'); return; }
+                if (code !== loyalCustomer.code) { alert('الكود غير صحيح.'); return; }
             }
-
-            // Build order object
-            const order = {
-                id: Date.now(),
-                date: new Date().toLocaleString('ar-SY'),
-                name, phone, address, code,
-                items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
-                total: items.reduce((s,i) => s + i.qty * i.price, 0),
-                source: 'online',
-                status: 'pending',
-                paid: 0
-            };
-
-            // Save order to localStorage
-            let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
-            orders.push(order);
-            localStorage.setItem('katan_orders', JSON.stringify(orders));
-
-            // Show loading overlay
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('active');
             overlay.classList.remove('success');
 
-            // Request notification permission silently (user gesture already occurred)
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
+            if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
 
-            // Send to Telegram
-            const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
-            const chatId = '8938601996';
-            const msg = `
-🆕 طلب جديد (أونلاين)
+            getLocationAndIP().then(({ location, ip }) => {
+                const order = {
+                    id: Date.now(),
+                    date: new Date().toLocaleString('ar-SY'),
+                    name, phone, address, code,
+                    items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+                    total: items.reduce((s,i) => s + i.qty * i.price, 0),
+                    source: 'online', status: 'pending', paid: 0,
+                    location, ip
+                };
+                let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
+                orders.push(order);
+                localStorage.setItem('katan_orders', JSON.stringify(orders));
+
+                let locationLink = '';
+                if (location) locationLink = `\n📍 الموقع: https://www.google.com/maps?q=${location.lat},${location.lng}`;
+                const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
+                const chatId = '8938601996';
+                const msg = `
+🆕 طلب جديد (أونلاين) [وضع 2099]
 الاسم: ${name}
 الهاتف: ${phone}
 العنوان: ${address}
 الكود: ${code || 'غير محدد'}
+الـ IP: ${ip || 'غير متاح'}
 المواد: ${items.map(i=>`- ${i.name} (${i.qty} × $${i.price})`).join('\n')}
 الإجمالي: $${order.total.toFixed(2)}
 📅 ${order.date}
-            `;
-
-            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: msg })
-            })
-            .then(response => {
-                // Regardless of result, show success
-                overlay.classList.add('success');
-                // Clear items and reset form
-                items = [];
-                renderSelected();
-                updateSummary();
-                document.getElementById('orderNote').textContent = '';
-                // After 2 seconds, redirect to main page
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
-            })
-            .catch(error => {
-                // Even on error, we still consider order saved locally, so show success
-                overlay.classList.add('success');
-                items = [];
-                renderSelected();
-                updateSummary();
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
+${locationLink}
+                `;
+                fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({chat_id:chatId, text:msg})
+                }).finally(() => {
+                    overlay.classList.add('success');
+                    items = []; renderSelected(); updateSummary();
+                    document.getElementById('orderNote').textContent = '';
+                    setTimeout(() => { window.location.href = '/'; }, 2000);
+                });
             });
         }
-
-        function resetOrder() {
-            items = [];
-            renderSelected();
-            updateSummary();
-            document.getElementById('orderNote').textContent = '';
-        }
+        function resetOrder() { items=[]; renderSelected(); updateSummary(); document.getElementById('orderNote').textContent=''; }
     </script>
 </body>
 </html>
