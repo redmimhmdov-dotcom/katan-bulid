@@ -6,8 +6,6 @@
     <title>KATANBUILD | لوحة المحاسب المتطورة</title>
     <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         :root { --bg:#1e1e1e; --surface:#2d2d2d; --border:#3e3e3e; --gold:#ffd700; --cyan:#38bdf8; --text:#f1f5f9; --text-muted:#a0a0a0; }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -57,12 +55,12 @@
         .modal.open { display:flex; }
         .modal-content { background:var(--surface); border:1px solid var(--gold); border-radius:8px; padding:24px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
         .modal-close { float:left; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
-        #mapContainer { height:300px; width:100%; border-radius:8px; margin:12px 0; border:1px solid var(--border); }
         ::-webkit-scrollbar { width:8px; }
         ::-webkit-scrollbar-track { background:#1e1e1e; }
         ::-webkit-scrollbar-thumb { background:#3e3e3e; border-radius:4px; }
         @media (max-width:768px) { .menu-bar { flex-wrap:wrap; } .stats { grid-template-columns:1fr 1fr; } }
-        /* Print Styles */
+
+        /* ===== PRINT STYLES ===== */
         @media print {
             body * { visibility: hidden; }
             #invoicePrintArea, #invoicePrintArea * { visibility: visible; }
@@ -79,15 +77,14 @@
 </head>
 <body>
     <div class="app-window" id="app">
-        <div class="title-bar"><span class="title">📊 KATANBUILD ACCOUNTING [وضع 2099]</span><div class="controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div></div>
+        <div class="title-bar"><span class="title">📊 KATANBUILD ACCOUNTING</span><div class="controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div></div>
         <div class="menu-bar" id="menuBar">
             <a class="active" onclick="showView('dashboard', this)">لوحة التحكم</a>
             <a onclick="showView('orders', this)">طلبات الزبائن</a>
             <a onclick="showView('online', this)">طلبات الإنترنت</a>
-            <a onclick="showView('customers', this)">الزبائن الخاصين</a>
-            <a onclick="showView('reps', this)">المندوبون</a>
-            <a onclick="showView('prices', this)">الأسعار</a>
-            <a onclick="showView('tracking', this)">📍 تتبع الزبائن</a>
+            <a id="customersMenuItem" onclick="showView('customers', this)">الزبائن الخاصين</a>
+            <a id="repsMenuItem" onclick="showView('reps', this)">المندوبون</a>
+            <a id="pricesMenuItem" onclick="showView('prices', this)">الأسعار</a>
             <a id="adminMenuItem" class="hidden" onclick="showView('admin', this)">المستخدمون</a>
             <a onclick="logout()" style="color:#ef4444;">خروج</a>
         </div>
@@ -100,44 +97,18 @@
                 <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
             </div>
             <div id="appContent" class="hidden">
-                <!-- VIEW: Dashboard -->
-                <div id="view-dashboard" class="view">
-                    <div class="panel"><div class="panel-title">📈 إحصائيات عامة</div><div class="stats" id="stats"><div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div><div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div><div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div><div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div></div></div>
-                    <div class="panel"><div class="panel-title">📋 جميع الطلبات (آخر 20)</div><div id="ordersListDashboard"></div></div>
-                </div>
-                <!-- VIEW: Orders (Manual) -->
+                <div id="view-dashboard" class="view"><div class="panel"><div class="panel-title">📈 إحصائيات عامة</div><div class="stats" id="stats"><div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div><div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div><div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div><div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div></div></div><div class="panel"><div class="panel-title">📋 جميع الطلبات (آخر 20)</div><div id="ordersListDashboard"></div></div></div>
                 <div id="view-orders" class="view hidden"><div class="panel"><div class="panel-title">📦 طلبات الزبائن (يدوي)</div><div class="filters"><input type="text" id="searchInputOrders" placeholder="بحث..." oninput="renderOrdersList('orders')" /><select id="statusFilterOrders" onchange="renderOrdersList('orders')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('orders')">تحديث</button></div><div id="ordersListOrders"></div></div></div>
-                <!-- VIEW: Online Orders -->
                 <div id="view-online" class="view hidden"><div class="panel"><div class="panel-title">🌐 طلبـات الإنترنت</div><div class="filters"><input type="text" id="searchInputOnline" placeholder="بحث..." oninput="renderOrdersList('online')" /><select id="statusFilterOnline" onchange="renderOrdersList('online')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('online')">تحديث</button></div><div id="ordersListOnline"></div></div></div>
-                <!-- VIEW: Customers -->
                 <div id="view-customers" class="view hidden"><div class="panel"><div class="panel-title">⭐ الزبائن الخاصين</div><div class="input-group"><input type="text" id="custName" placeholder="اسم الزبون" /><input type="text" id="custPhone" placeholder="رقم الهاتف" /><input type="text" id="custAddress" placeholder="العنوان" /><input type="text" id="custCode" placeholder="الكود الخاص" /></div><div class="input-group"><select id="custProduct"><option value="">اختر المنتج للخصم</option></select><input type="number" id="custDiscountPrice" placeholder="السعر المخصوم ($)" step="0.5" /><button onclick="addProductDiscount()">➕ إضافة خصم منتج</button></div><div id="tempDiscounts" style="margin:8px 0; display:flex; flex-wrap:wrap; gap:6px;"></div><button onclick="saveCustomer()" style="background:var(--gold);color:#000;border:none;padding:8px 16px;border-radius:4px;font-weight:700;cursor:pointer;">💾 حفظ الزبون الدائم</button><div id="customerList" style="margin-top:12px;"></div></div></div>
-                <!-- VIEW: Reps -->
                 <div id="view-reps" class="view hidden"><div class="panel"><div class="panel-title">👤 المندوبون</div><div class="input-group"><input type="text" id="repName" placeholder="اسم المندوب" /><button onclick="addRep()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة مندوب</button></div><div id="repList" style="margin-top:12px;"></div></div></div>
-                <!-- VIEW: Prices -->
                 <div id="view-prices" class="view hidden"><div class="panel"><div class="panel-title">💰 الأسعار</div><div class="input-group"><input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 120px;" /><button onclick="updateExchangeRate()">تحديث سعر الصرف</button></div><table style="width:100%;border-collapse:collapse;font-size:14px;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:right;padding:6px;">المنتج</th><th style="text-align:right;padding:6px;">السعر ($)</th><th style="text-align:right;padding:6px;">تعديل</th></tr></thead><tbody id="priceTableBody"></tbody></table></div></div>
-                <!-- VIEW: Tracking (IP & Location) -->
-                <div id="view-tracking" class="view hidden">
-                    <div class="panel">
-                        <div class="panel-title">📍 تتبع الزبائن (الموقع والـ IP)</div>
-                        <div id="trackingTableContainer"></div>
-                    </div>
-                </div>
-                <!-- VIEW: Admin -->
                 <div id="view-admin" class="view hidden"><div class="panel"><div class="panel-title">👤 إدارة المستخدمين</div><div class="input-group"><input type="text" id="newUserUser" placeholder="اسم المستخدم" /><input type="text" id="newUserPass" placeholder="كلمة المرور" /><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label><button onclick="addUser()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة</button></div><div id="userList" style="margin:8px 0;font-size:14px;"></div></div></div>
             </div>
         </div>
     </div>
 
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <h3 style="color:var(--gold);" id="modalTitle">تفاصيل الطلب</h3>
-            <div id="modalBody" style="font-size:14px;line-height:1.8;"></div>
-            <div id="mapContainer"></div>
-        </div>
-    </div>
-
-    <!-- Hidden print area -->
+    <div id="orderModal" class="modal"><div class="modal-content"><button class="modal-close" onclick="closeModal()">✕</button><h3 style="color:var(--gold);" id="modalTitle">تفاصيل الطلب</h3><div id="modalBody" style="font-size:14px;line-height:1.8;"></div></div></div>
     <div id="invoicePrintArea" style="display:none;"></div>
 
     <script>
@@ -157,12 +128,6 @@
         function getPrices() { return JSON.parse(localStorage.getItem('katan_prices') || '{}'); }
         function savePrices(p) { localStorage.setItem('katan_prices', JSON.stringify(p)); }
         function getExchangeRate() { return parseInt(localStorage.getItem('katan_exchange_rate')) || 13000; }
-        function sendLogToTelegram(msg) {
-            fetch(`https://api.telegram.org/bot8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({chat_id:'8938601996', text:`📋 سجل التدقيق:\n${msg}`})
-            });
-        }
 
         // ============================================================
         // 2. LOGIN SYSTEM
@@ -180,8 +145,20 @@
             document.getElementById('loginBox').classList.add('hidden');
             document.getElementById('appContent').classList.remove('hidden');
             const user = getCurrentUser();
+            // إظهار/إخفاء الأقسام حسب الصلاحيات
             if (user && (user.role === 'admin' || user.role === 'superadmin')) {
                 document.getElementById('adminMenuItem').classList.remove('hidden');
+            } else {
+                document.getElementById('adminMenuItem').classList.add('hidden');
+            }
+            if (user && (user.role === 'accountant' && !user.canEditPrices)) {
+                document.getElementById('pricesMenuItem').classList.add('hidden');
+                document.getElementById('customersMenuItem').classList.add('hidden');
+                document.getElementById('repsMenuItem').classList.add('hidden');
+            } else {
+                document.getElementById('pricesMenuItem').classList.remove('hidden');
+                document.getElementById('customersMenuItem').classList.remove('hidden');
+                document.getElementById('repsMenuItem').classList.remove('hidden');
             }
             showView('dashboard', document.querySelector('#menuBar a'));
             loadAll();
@@ -207,30 +184,25 @@
             if (viewId === 'orders') renderOrdersList('orders');
             if (viewId === 'online') renderOrdersList('online');
             if (viewId === 'dashboard') renderOrdersList('dashboard');
-            if (viewId === 'tracking') renderTracking();
         }
 
         // ============================================================
         // 4. ADMIN – USERS
         // ============================================================
         function addUser() {
-            const u = document.getElementById('newUserUser').value.trim();
-            const p = document.getElementById('newUserPass').value.trim();
-            const del = document.getElementById('newUserDelete').checked;
-            const price = document.getElementById('newUserPrices').checked;
+            const u = document.getElementById('newUserUser').value.trim(), p = document.getElementById('newUserPass').value.trim();
+            const del = document.getElementById('newUserDelete').checked, price = document.getElementById('newUserPrices').checked;
             if (!u || !p) return alert('أدخل البيانات');
             let users = getUsers();
             if (users.find(x => x.username === u)) return alert('اسم المستخدم موجود');
             users.push({ username:u, password:p, role:'accountant', canDelete:del, canEditPrices:price });
             saveUsers(users); renderUsers();
-            document.getElementById('newUserUser').value = '';
-            document.getElementById('newUserPass').value = '';
+            document.getElementById('newUserUser').value = ''; document.getElementById('newUserPass').value = '';
         }
         function deleteUser(i) {
             if (!confirm('حذف هذا المستخدم؟')) return;
             let users = getUsers();
-            users.splice(i,1);
-            saveUsers(users); renderUsers();
+            users.splice(i,1); saveUsers(users); renderUsers();
         }
         function renderUsers() {
             const users = getUsers();
@@ -248,6 +220,11 @@
         // 5. PRICES & EXCHANGE RATE
         // ============================================================
         function renderPrices() {
+            const user = getCurrentUser();
+            if (user && user.role === 'accountant' && !user.canEditPrices) {
+                document.getElementById('view-prices').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:30px;">🔒 ليس لديك صلاحية لتعديل الأسعار.</p>';
+                return;
+            }
             const prices = getPrices();
             const allProducts = ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست','آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق','ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر','سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي','مارفيل','الترا بوند ذهبي','الترا بوند اورنج','طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت','الترا جريب','جراوت اصلاح الترا بوند','عازل مركبين','عازل بلاستيكي','عازل حجر شفاف'];
             const tbody = document.getElementById('priceTableBody');
@@ -279,13 +256,11 @@
             sel.innerHTML = '<option value="">اختر المنتج للخصم</option>' + allProducts.map(p => `<option value="${p}">${p}</option>`).join('');
         }
         function addProductDiscount() {
-            const product = document.getElementById('custProduct').value;
-            const price = parseFloat(document.getElementById('custDiscountPrice').value);
+            const product = document.getElementById('custProduct').value, price = parseFloat(document.getElementById('custDiscountPrice').value);
             if (!product || isNaN(price)) return alert('اختر منتج وأدخل سعراً مخصوماً');
             tempCustomerDiscounts[product] = price;
             renderTempDiscounts();
-            document.getElementById('custProduct').value = '';
-            document.getElementById('custDiscountPrice').value = '';
+            document.getElementById('custProduct').value = ''; document.getElementById('custDiscountPrice').value = '';
         }
         function removeTempDiscount(product) { delete tempCustomerDiscounts[product]; renderTempDiscounts(); }
         function renderTempDiscounts() {
@@ -295,29 +270,17 @@
             ).join('');
         }
         function saveCustomer() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const address = document.getElementById('custAddress').value.trim();
-            const code = document.getElementById('custCode').value.trim();
+            const name = document.getElementById('custName').value.trim(), phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim(), code = document.getElementById('custCode').value.trim();
             if (!name || !phone) return alert('أدخل اسم الزبون ورقم الهاتف');
             if (Object.keys(tempCustomerDiscounts).length === 0) return alert('أضف خصماً لمنتج واحد على الأقل');
             let customers = getCustomers();
             const existing = customers.find(c => c.name === name && c.phone === phone);
-            if (existing) {
-                existing.address = address;
-                existing.code = code;
-                existing.productDiscounts = { ...tempCustomerDiscounts };
-            } else {
-                customers.push({ name, phone, address, code, productDiscounts: { ...tempCustomerDiscounts } });
-            }
+            if (existing) { existing.address = address; existing.code = code; existing.productDiscounts = { ...tempCustomerDiscounts }; }
+            else { customers.push({ name, phone, address, code, productDiscounts: { ...tempCustomerDiscounts } }); }
             saveCustomers(customers);
-            tempCustomerDiscounts = {};
-            renderTempDiscounts();
-            renderCustomers();
-            document.getElementById('custName').value = '';
-            document.getElementById('custPhone').value = '';
-            document.getElementById('custAddress').value = '';
-            document.getElementById('custCode').value = '';
+            tempCustomerDiscounts = {}; renderTempDiscounts(); renderCustomers();
+            document.getElementById('custName').value = ''; document.getElementById('custPhone').value = ''; document.getElementById('custAddress').value = ''; document.getElementById('custCode').value = '';
             alert('✅ تم حفظ الزبون الدائم وخصوماته');
         }
         function renderCustomers() {
@@ -331,12 +294,7 @@
                 </div>`
             ).join('');
         }
-        function deleteCustomer(index) {
-            let customers = getCustomers();
-            customers.splice(index, 1);
-            saveCustomers(customers);
-            renderCustomers();
-        }
+        function deleteCustomer(index) { let customers = getCustomers(); customers.splice(index,1); saveCustomers(customers); renderCustomers(); }
 
         // ============================================================
         // 7. REPS
@@ -346,139 +304,25 @@
             if (!name) return alert('أدخل اسم المندوب');
             let reps = getReps();
             if (reps.find(r => r.name === name)) return alert('المندوب موجود مسبقاً');
-            reps.push({ name, clients: [] });
-            saveReps(reps);
-            renderReps();
+            reps.push({ name, clients: [] }); saveReps(reps); renderReps();
             document.getElementById('repName').value = '';
-        }
-        function deleteRep(index) {
-            if (!confirm('حذف المندوب؟')) return;
-            let reps = getReps();
-            reps.splice(index, 1);
-            saveReps(reps);
-            renderReps();
-        }
-        function editRep(index) {
-            const newName = prompt('تعديل اسم المندوب:', getReps()[index].name);
-            if (newName && newName.trim()) {
-                let reps = getReps();
-                reps[index].name = newName.trim();
-                saveReps(reps);
-                renderReps();
-            }
-        }
-        function addClientToRep(index) {
-            const client = prompt('أدخل اسم العميل (الزبون):');
-            if (client && client.trim()) {
-                let reps = getReps();
-                if (!reps[index].clients.includes(client.trim())) {
-                    reps[index].clients.push(client.trim());
-                    saveReps(reps);
-                    renderReps();
-                } else {
-                    alert('العميل موجود مسبقاً لهذا المندوب');
-                }
-            }
-        }
-        function removeClientFromRep(repIndex, clientIndex) {
-            let reps = getReps();
-            reps[repIndex].clients.splice(clientIndex, 1);
-            if (reps[repIndex].clients.length === 0) {
-                reps.splice(repIndex, 1);
-            } else {
-                saveReps(reps);
-            }
-            renderReps();
         }
         function renderReps() {
             const reps = getReps();
             const container = document.getElementById('repList');
             if (!reps.length) { container.innerHTML = '<p style="color:var(--text-muted);">لا يوجد مندوبون</p>'; return; }
             const allOrders = getOrders();
-            const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
-            container.innerHTML = reps.map((r, ri) => {
-                const weekOrders = allOrders.filter(o => r.clients.includes(o.name) && new Date(o.date) > weekAgo);
-                const totalOrders = allOrders.filter(o => r.clients.includes(o.name));
-                return `
-                <div style="background:#252526;border:1px solid var(--border);border-radius:4px;padding:8px;margin:4px 0;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                        <strong style="color:var(--gold);">${r.name}</strong>
-                        <div style="display:flex;gap:6px;">
-                            <button onclick="editRep(${ri})" style="background:var(--cyan);color:#000;border:none;padding:2px 8px;border-radius:4px;cursor:pointer;">✏️</button>
-                            <button onclick="addClientToRep(${ri})" style="background:var(--gold);color:#000;border:none;padding:2px 8px;border-radius:4px;cursor:pointer;">➕ عميل</button>
-                            <button onclick="deleteRep(${ri})" style="background:#ef4444;color:#fff;border:none;padding:2px 8px;border-radius:4px;cursor:pointer;">🗑️</button>
-                        </div>
-                    </div>
-                    <div style="font-size:13px;color:var(--text-muted);margin:4px 0;">
-                        العملاء: ${r.clients.map((c, ci) => 
-                            `<span style="background:#252526;border:1px solid var(--border);padding:2px 8px;border-radius:4px;margin:2px;">${c} <button onclick="removeClientFromRep(${ri},${ci})" style="background:#ef4444;border:none;color:#fff;border-radius:4px;padding:0 6px;cursor:pointer;">✕</button></span>`
-                        ).join(' ')}
-                    </div>
-                    <div style="font-size:12px;color:var(--cyan);">
-                        طلبات الأسبوع: ${weekOrders.length} | إجمالي الطلبات: ${totalOrders.length}
-                    </div>
-                </div>
-                `;
-            }).join('');
+            container.innerHTML = reps.map(r =>
+                `<div style="background:#252526;border:1px solid var(--border);border-radius:4px;padding:8px;margin:4px 0;">
+                    <strong style="color:var(--gold);">${r.name}</strong>
+                    <div style="font-size:13px;color:var(--text-muted);">العملاء: ${r.clients.join(', ')}</div>
+                    <div style="font-size:12px;color:var(--cyan);">الطلبات المرتبطة: ${allOrders.filter(o => r.clients.includes(o.name)).length}</div>
+                </div>`
+            ).join('');
         }
 
         // ============================================================
-        // 8. TRACKING (IP & LOCATION)
-        // ============================================================
-        function renderTracking() {
-            const orders = getOrders().filter(o => o.location || o.ip);
-            const container = document.getElementById('trackingTableContainer');
-            if (!orders.length) {
-                container.innerHTML = '<p style="color:var(--text-muted);">لا توجد بيانات تتبع متاحة.</p>';
-                return;
-            }
-            let html = `<table style="width:100%; border-collapse:collapse; font-size:14px;">
-                <thead><tr style="border-bottom:1px solid var(--border);">
-                    <th style="padding:6px; text-align:right;">الاسم</th>
-                    <th style="padding:6px; text-align:right;">الهاتف</th>
-                    <th style="padding:6px; text-align:right;">IP</th>
-                    <th style="padding:6px; text-align:right;">الموقع</th>
-                    <th style="padding:6px; text-align:right;">خريطة</th>
-                </tr></thead><tbody>`;
-            orders.forEach(o => {
-                const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : '#';
-                const mapBtn = o.location ? 
-                    `<button onclick="showMap(${o.location.lat}, ${o.location.lng}, '${o.name}')" style="background:var(--cyan);color:#000;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">🗺️ عرض الخريطة</button>` :
-                    'لا يوجد';
-                html += `<tr style="border-bottom:1px solid var(--border);">
-                    <td style="padding:6px;">${o.name}</td>
-                    <td style="padding:6px;">${o.phone}</td>
-                    <td style="padding:6px;">${o.ip || 'غير متاح'}</td>
-                    <td style="padding:6px;">${o.location ? `${o.location.lat}, ${o.location.lng}` : 'غير متاح'}</td>
-                    <td style="padding:6px;">${mapBtn}</td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        function showMap(lat, lng, name) {
-            const modal = document.getElementById('orderModal');
-            const body = document.getElementById('modalBody');
-            modal.classList.add('open');
-            document.getElementById('modalTitle').textContent = `موقع ${name}`;
-            body.innerHTML = `
-                <div id="mapContainer" style="height:400px; width:100%; border-radius:8px; border:1px solid var(--border);"></div>
-                <p style="margin-top:10px; font-size:14px; color:var(--text-muted);">الإحداثيات: ${lat}, ${lng}</p>
-                <p><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--cyan);">فتح في خرائط Google</a></p>
-            `;
-            // Initialize map after DOM update
-            setTimeout(() => {
-                const mapContainer = document.getElementById('mapContainer');
-                const map = L.map(mapContainer).setView([lat, lng], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                L.marker([lat, lng]).addTo(map).bindPopup(`📍 ${name}`).openPopup();
-                setTimeout(() => map.invalidateSize(), 500);
-            }, 200);
-        }
-
-        // ============================================================
-        // 9. ORDERS + PRINT
+        // 8. ORDERS
         // ============================================================
         function renderStats() {
             const o = getOrders();
@@ -487,35 +331,34 @@
             document.getElementById('statPaid').textContent = `$${o.filter(x=>x.status==='paid').reduce((s,i)=>s+i.total,0).toFixed(2)}`;
             document.getElementById('statPending').textContent = o.filter(x=>x.status==='pending').length;
         }
-
         function renderOrdersList(view) {
             let orders = getOrders();
+            const user = getCurrentUser();
             if (view === 'orders') {
                 orders = orders.filter(o => o.source === 'manual');
                 const search = document.getElementById('searchInputOrders').value.toLowerCase();
                 const filter = document.getElementById('statusFilterOrders').value;
                 if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search));
                 if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-                document.getElementById('ordersListOrders').innerHTML = buildOrdersHTML(orders);
+                document.getElementById('ordersListOrders').innerHTML = buildOrdersHTML(orders, user);
             } else if (view === 'online') {
                 orders = orders.filter(o => o.source === 'online');
                 const search = document.getElementById('searchInputOnline').value.toLowerCase();
                 const filter = document.getElementById('statusFilterOnline').value;
                 if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search));
                 if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-                document.getElementById('ordersListOnline').innerHTML = buildOrdersHTML(orders);
+                document.getElementById('ordersListOnline').innerHTML = buildOrdersHTML(orders, user);
             } else {
                 orders = orders.slice(-20);
-                document.getElementById('ordersListDashboard').innerHTML = buildOrdersHTML(orders);
+                document.getElementById('ordersListDashboard').innerHTML = buildOrdersHTML(orders, user);
             }
             renderStats();
         }
-
-        function buildOrdersHTML(orders) {
+        function buildOrdersHTML(orders, user) {
             if (!orders.length) return '<div style="text-align:center;color:var(--text-muted);padding:20px;">لا توجد طلبات</div>';
             const customers = getCustomers();
             const exchange = getExchangeRate();
-            const user = getCurrentUser();
+            const canDelete = user?.role === 'admin' || user?.role === 'superadmin' || user?.canDelete;
             return orders.map(o => {
                 const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
                 let originalTotal = 0, finalTotal = 0;
@@ -531,7 +374,6 @@
                 });
                 const originalSYP = (originalTotal * exchange).toFixed(0);
                 const finalSYP = (finalTotal * exchange).toFixed(0);
-                const canDelete = user?.role === 'admin' || user?.role === 'superadmin' || user?.canDelete;
                 return `
                 <div class="order-item">
                     <div class="top">
@@ -562,7 +404,6 @@
                 `;
             }).join('');
         }
-
         function viewOrder(id) {
             const o = getOrders().find(i => i.id == id);
             if (!o) return;
@@ -582,119 +423,24 @@
                 return { ...item, originalPrice: price, finalPrice };
             });
             const exchange = getExchangeRate();
-            const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : 'غير متاح';
-            const ipDisplay = o.ip || 'غير متاح';
-
             document.getElementById('modalBody').innerHTML = `
-                <p><strong>الاسم:</strong> ${o.name}</p>
-                <p><strong>الهاتف:</strong> ${o.phone}</p>
-                <p><strong>العنوان:</strong> ${o.address||'غير محدد'}</p>
-                <p><strong>الكود:</strong> ${o.code||'غير محدد'}</p>
-                <p><strong>المصدر:</strong> ${o.source === 'online' ? 'أونلاين' : 'يدوي'}</p>
-                <p><strong>التاريخ:</strong> ${o.date}</p>
-                <p><strong>الـ IP:</strong> ${ipDisplay}</p>
-                <p><strong>رابط الموقع:</strong> <a href="${locationLink}" target="_blank">${locationLink}</a></p>
+                <p><strong>الاسم:</strong> ${o.name}</p><p><strong>الهاتف:</strong> ${o.phone}</p>
+                <p><strong>العنوان:</strong> ${o.address||'غير محدد'}</p><p><strong>الكود:</strong> ${o.code||'غير محدد'}</p>
+                <p><strong>المصدر:</strong> ${o.source === 'online' ? 'أونلاين' : 'يدوي'}</p><p><strong>التاريخ:</strong> ${o.date}</p>
                 <hr style="border-color:var(--border);" />
-                <p><strong>المواد:</strong></p>
-                <ul>${items.map(i => `<li>${i.name} (${i.qty} × $${i.originalPrice})${customer && i.originalPrice !== i.finalPrice ? ` → $${i.finalPrice}` : ''}</li>`).join('')}</ul>
+                <p><strong>المواد:</strong></p><ul>${items.map(i => `<li>${i.name} (${i.qty} × $${i.originalPrice})${customer && i.originalPrice !== i.finalPrice ? ` → $${i.finalPrice}` : ''}</li>`).join('')}</ul>
                 <hr style="border-color:var(--border);" />
                 ${customer ? `<p><span style="text-decoration:line-through;color:var(--text-muted);">السعر الأصلي: $${originalTotal.toFixed(2)} (≈${(originalTotal*exchange).toFixed(0)} SYP)</span></p>` : ''}
                 <p><strong>السعر النهائي:</strong> $${finalTotal.toFixed(2)} <span style="color:var(--cyan);font-size:13px;">≈${(finalTotal*exchange).toFixed(0)} SYP</span></p>
             `;
-
-            // Init map
-            const mapContainer = document.getElementById('mapContainer');
-            mapContainer.innerHTML = '';
-            if (o.location) {
-                const lat = o.location.lat, lng = o.location.lng;
-                const map = L.map(mapContainer).setView([lat, lng], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                L.marker([lat, lng]).addTo(map).bindPopup(`📍 ${o.name}`).openPopup();
-                setTimeout(() => map.invalidateSize(), 500);
-            } else {
-                mapContainer.innerHTML = '<p style="color:var(--text-muted);text-align:center;">لا توجد بيانات موقع متاحة</p>';
-            }
         }
         function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
-
-        // ===== PRINT INVOICE =====
-        function printInvoice(id) {
-            const orders = getOrders();
-            const o = orders.find(i => i.id == id);
-            if (!o) return alert('الطلب غير موجود');
-            const customers = getCustomers();
-            const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
-            const exchange = getExchangeRate();
-
-            let itemsHTML = o.items.map(item => {
-                let price = item.price || 10;
-                let finalPrice = price;
-                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
-                    finalPrice = customer.productDiscounts[item.name];
-                }
-                return `<tr><td>${item.name}</td><td>${item.qty}</td><td>$${price.toFixed(2)}</td><td>$${finalPrice.toFixed(2)}</td></tr>`;
-            }).join('');
-
-            let totalOriginal = o.items.reduce((s,i) => s + i.qty * (i.price || 10), 0);
-            let totalFinal = 0;
-            o.items.forEach(item => {
-                let price = item.price || 10;
-                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
-                    price = customer.productDiscounts[item.name];
-                }
-                totalFinal += item.qty * price;
-            });
-
-            let discountText = '';
-            if (customer) {
-                discountText = `<p style="color:#333;font-weight:700;">خصم خاص للزبون: ${customer.name}</p>`;
-            }
-
-            const printContent = `
-            <div id="invoicePrintArea" style="display:block; background:#fff; color:#000; padding:40px; font-family:'Cairo', sans-serif; direction:rtl;">
-                <div style="text-align:center; margin-bottom:20px;">
-                    <img src="https://katanbuild.com/storage/branding/logo-dark.png" style="max-width:200px;" alt="Katanbuild" />
-                    <h2 style="font-family:'Orbitron'; margin-top:10px;">فاتورة شراء</h2>
-                </div>
-                <div style="border:1px solid #000; padding:10px; margin-bottom:20px;">
-                    <p><strong>الزبون:</strong> ${o.name}</p>
-                    <p><strong>رقم الهاتف:</strong> ${o.phone}</p>
-                    <p><strong>التاريخ:</strong> ${o.date}</p>
-                </div>
-                ${discountText}
-                <table style="width:100%; border-collapse:collapse; margin:20px 0;">
-                    <thead><tr style="background:#f5f5f5;"><th style="border:1px solid #000; padding:8px;">المنتج</th><th style="border:1px solid #000; padding:8px;">الكمية</th><th style="border:1px solid #000; padding:8px;">السعر الأصلي</th><th style="border:1px solid #000; padding:8px;">السعر النهائي</th></tr></thead>
-                    <tbody>${itemsHTML}</tbody>
-                </table>
-                <div style="text-align:left; margin-top:10px; font-size:18px; font-weight:700;">
-                    ${customer ? `<span style="text-decoration:line-through; color:#999;">الإجمالي الأصلي: $${totalOriginal.toFixed(2)}</span><br>` : ''}
-                    الإجمالي النهائي: $${totalFinal.toFixed(2)} <span style="font-size:14px; font-weight:400; color:#555;">(≈ ${(totalFinal * exchange).toFixed(0)} SYP)</span>
-                </div>
-                <div style="text-align:center; margin-top:30px; font-weight:700; border-top:1px solid #000; padding-top:20px;">
-                    سررنا بالتعامل معكم
-                </div>
-            </div>
-            `;
-
-            const printWindow = window.open('', '_blank', 'width=800,height=600');
-            printWindow.document.write(`
-                <html><head><title>طباعة الفاتورة</title>
-                <style>body { font-family: 'Cairo', sans-serif; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #000; padding: 8px; text-align: right; }</style>
-                </head><body>${printContent}</body></html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-        }
-
         function deleteOrder(id) {
             if (!confirm('حذف الطلب؟')) return;
             let orders = getOrders();
             const o = orders.find(i => i.id == id);
             orders = orders.filter(i => i.id != id);
-            saveOrders(orders);
-            sendLogToTelegram(`❌ تم حذف فاتورة ${o.name} بقيمة $${o.total} بواسطة ${getCurrentUser().username}`);
-            loadAll();
+            saveOrders(orders); loadAll();
         }
         function markPaid(id) {
             let orders = getOrders();
@@ -705,9 +451,7 @@
             orders[i].paid = (orders[i].paid || 0) + parseFloat(amount);
             if (orders[i].paid >= orders[i].total) orders[i].status = 'complete';
             else orders[i].status = 'paid';
-            saveOrders(orders);
-            sendLogToTelegram(`💳 تم دفع مبلغ $${amount} للزبون ${orders[i].name} بواسطة ${getCurrentUser().username}`);
-            loadAll();
+            saveOrders(orders); loadAll();
         }
         function sendWACustomer(id) {
             const o = getOrders().find(i => i.id == id);
@@ -723,29 +467,67 @@
                 finalTotal += item.qty * price;
                 return `- ${item.name} (${item.qty} × $${price})`;
             }).join('\n');
-            const exchange = getExchangeRate();
-            const msg = `السلام عليكم السيد ${o.name}، لقد تلقينا طلبكم:\n${details}\nالمبلغ: $${finalTotal.toFixed(2)} (≈${(finalTotal*exchange).toFixed(0)} SYP)`;
+            const msg = `السلام عليكم السيد ${o.name}، لقد تلقينا طلبكم:\n${details}\nالمبلغ: $${finalTotal.toFixed(2)}`;
             window.open(`https://wa.me/${o.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+        function printInvoice(id) {
+            const orders = getOrders();
+            const o = orders.find(i => i.id == id);
+            if (!o) return alert('الطلب غير موجود');
+            const customers = getCustomers();
+            const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
+            let itemsHTML = o.items.map(item => {
+                let price = item.price || 10, finalPrice = price;
+                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) finalPrice = customer.productDiscounts[item.name];
+                return `<tr><td>${item.name}</td><td>${item.qty}</td><td>$${price.toFixed(2)}</td><td>$${finalPrice.toFixed(2)}</td></tr>`;
+            }).join('');
+            let totalOriginal = o.items.reduce((s,i) => s + i.qty * (i.price || 10), 0);
+            let totalFinal = 0;
+            o.items.forEach(item => {
+                let price = item.price || 10;
+                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) price = customer.productDiscounts[item.name];
+                totalFinal += item.qty * price;
+            });
+            const printContent = `
+            <div id="invoicePrintArea" style="display:block; background:#fff; color:#000; padding:40px; font-family:'Cairo', sans-serif; direction:rtl;">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <img src="https://katanbuild.com/storage/branding/logo-dark.png" style="max-width:200px;" alt="Katanbuild" />
+                    <h2 style="font-family:'Orbitron'; margin-top:10px;">فاتورة شراء</h2>
+                </div>
+                <div style="border:1px solid #000; padding:10px; margin-bottom:20px;">
+                    <p><strong>الزبون:</strong> ${o.name}</p>
+                    <p><strong>رقم الهاتف:</strong> ${o.phone}</p>
+                    <p><strong>التاريخ:</strong> ${o.date}</p>
+                </div>
+                <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+                    <thead><tr style="background:#f5f5f5;"><th style="border:1px solid #000; padding:8px;">المنتج</th><th style="border:1px solid #000; padding:8px;">الكمية</th><th style="border:1px solid #000; padding:8px;">السعر الأصلي</th><th style="border:1px solid #000; padding:8px;">السعر النهائي</th></tr></thead>
+                    <tbody>${itemsHTML}</tbody>
+                </table>
+                <div style="text-align:left; margin-top:10px; font-size:18px; font-weight:700;">
+                    ${customer ? `<span style="text-decoration:line-through; color:#999;">الإجمالي الأصلي: $${totalOriginal.toFixed(2)}</span><br>` : ''}
+                    الإجمالي النهائي: $${totalFinal.toFixed(2)}
+                </div>
+                <div style="text-align:center; margin-top:30px; font-weight:700; border-top:1px solid #000; padding-top:20px;">
+                    سررنا بالتعامل معكم
+                </div>
+            </div>
+            `;
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`<html><head><title>طباعة الفاتورة</title><style>body{font-family:'Cairo',sans-serif;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #000;padding:8px;text-align:right;}</style></head><body>${printContent}</body></html>`);
+            printWindow.document.close(); printWindow.focus(); printWindow.print();
         }
 
         // ============================================================
-        // 10. LOAD ALL
+        // 9. LOAD ALL
         // ============================================================
         function loadAll() {
-            renderStats();
-            renderOrdersList('dashboard');
-            renderOrdersList('orders');
-            renderOrdersList('online');
-            renderCustomers();
-            renderReps();
-            renderPrices();
-            renderUsers();
-            renderTracking();
+            renderStats(); renderOrdersList('dashboard'); renderOrdersList('orders'); renderOrdersList('online');
+            renderCustomers(); renderReps(); renderPrices(); renderUsers();
             document.getElementById('exchangeRateInput').value = getExchangeRate();
         }
 
         // ============================================================
-        // 11. INIT
+        // 10. INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             populateProductSelect();
