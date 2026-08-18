@@ -17,12 +17,13 @@
         .nav { display:flex; gap:24px; }
         .nav a { color:#f1f5f9; text-decoration:none; font-weight:700; transition:0.3s; }
         .nav a:hover { color:var(--gold); }
-        .card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:24px; margin:20px 0; }
+        .card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:24px; margin:20px 0; transition: transform 0.3s ease; }
+        .card:hover { transform: perspective(500px) rotateX(3deg) scale(1.02); border-color:var(--gold); box-shadow:0 0 30px rgba(255,215,0,0.1); }
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
         .field { display:flex; flex-direction:column; gap:4px; }
         .field label { font-weight:600; }
-        .field input, .field select, .field textarea { padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; font-family:'Cairo'; }
-        .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:var(--gold); }
+        .field input, .field select, .field textarea { padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; font-family:'Cairo'; transition:0.3s; }
+        .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 15px rgba(255,215,0,0.2); }
         .selected-products { display:flex; flex-direction:column; gap:6px; margin:12px 0; }
         .selected-item { display:flex; justify-content:space-between; padding:8px 14px; background:rgba(3,7,18,0.5); border-radius:10px; border:1px solid var(--border); }
         .btn-gold { background:var(--gold); color:#000; padding:10px 24px; border-radius:12px; font-weight:800; border:none; cursor:pointer; transition:0.3s; box-shadow:0 0 20px rgba(255,215,0,0.2); }
@@ -32,7 +33,6 @@
         .summary { background:rgba(3,7,18,0.5); padding:16px; border-radius:12px; margin:12px 0; }
         .summary .line { display:flex; justify-content:space-between; padding:4px 0; }
         .summary .total { font-size:20px; font-weight:900; color:var(--gold); border-top:1px solid var(--border); padding-top:8px; }
-        .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
         .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
     </style>
 </head>
@@ -44,13 +44,16 @@
         </div>
     </header>
     <div class="container">
-        <h1 style="font-family:'Orbitron'; text-align:center; margin:20px 0;">طلب شراء</h1>
+        <h1 style="font-family:'Orbitron'; text-align:center; margin:20px 0; text-shadow:0 0 10px rgba(255,215,0,0.2);">طلب شراء</h1>
         <div class="card">
             <div class="form-row">
-                <div class="field"><label>اسم الزبون</label><input type="text" id="customerName" placeholder="محمد أحمد" /></div>
-                <div class="field"><label>رقم الهاتف</label><input type="tel" id="customerPhone" placeholder="09xxxxxxxx" /></div>
+                <div class="field"><label>اسم الزبون *</label><input type="text" id="customerName" placeholder="محمد أحمد" /></div>
+                <div class="field"><label>رقم الهاتف *</label><input type="tel" id="customerPhone" placeholder="09xxxxxxxx" /></div>
             </div>
-            <div class="field"><label>العنوان</label><input type="text" id="customerAddress" placeholder="دمشق - جرمانا" /></div>
+            <div class="form-row">
+                <div class="field"><label>المنطقة</label><input type="text" id="customerAddress" placeholder="دمشق - جرمانا" /></div>
+                <div class="field"><label>الكود الخاص (اختياري)</label><input type="text" id="customerCode" placeholder="أدخل الكود إذا كنت زبوناً دائماً" /></div>
+            </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap; margin:12px 0;">
                 <div class="field" style="flex:1;"><label>القسم</label><select id="selCategory"><option value="">اختر</option></select></div>
                 <div class="field" style="flex:1;"><label>المنتج</label><select id="selProduct"><option value="">اختر</option></select></div>
@@ -71,6 +74,7 @@
         </div>
     </div>
     <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
+
     <script>
         const PRODUCTS = {
             'لاصق ديكور': ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست'],
@@ -108,7 +112,7 @@
         }
         function updateSummary() {
             const sub = items.reduce((s,i) => s + i.qty * i.price, 0);
-            const exchange = 13000;
+            const exchange = parseInt(localStorage.getItem('katan_exchange_rate')) || 13000;
             document.getElementById('subTotal').textContent = `$${sub.toFixed(2)}`;
             document.getElementById('grandTotal').textContent = `$${sub.toFixed(2)}`;
             document.getElementById('sypTotal').textContent = `≈ ${(sub * exchange).toFixed(0)} SYP`;
@@ -117,24 +121,31 @@
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             const address = document.getElementById('customerAddress').value.trim();
+            const code = document.getElementById('customerCode').value.trim();
             if (!name || !phone || items.length===0) return alert('املأ البيانات وأضف منتجات');
-            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, items, total: items.reduce((s,i)=>s+i.qty*i.price,0) };
+            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, code, items, total: items.reduce((s,i)=>s+i.qty*i.price,0) };
             let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
             orders.push(order);
             localStorage.setItem('katan_orders', JSON.stringify(orders));
-            // Send to Telegram
+            // ===== Send to Telegram =====
             const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
             const chatId = '8938601996';
-            const msg = `🆕 طلب جديد\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\nالمواد: ${items.map(i=>`- ${i.name} (${i.qty} × $${i.price})`).join('\n')}\nالإجمالي: $${order.total.toFixed(2)}`;
+            const msg = `
+🆕 طلب جديد
+الاسم: ${name}
+الهاتف: ${phone}
+العنوان: ${address}
+الكود: ${code || 'غير محدد'}
+المواد: ${items.map(i=>`- ${i.name} (${i.qty} × $${i.price})`).join('\n')}
+الإجمالي: $${order.total.toFixed(2)}
+📅 ${order.date}
+            `;
             fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({chat_id:chatId, text:msg})
             });
-            document.getElementById('orderNote').textContent = '✅ تم تأكيد الطلب!';
+            document.getElementById('orderNote').textContent = '✅ تم إرسال الطلب! سيتم التواصل معك قريباً.';
             items = []; renderSelected(); updateSummary();
-            // WhatsApp auto-message
-            const waMsg = `السلام عليكم السيد ${name} لقد تلقينا طلبكم بالمواد التالية:\n${items.map(i=>`- ${i.name} (${i.qty})`).join('\n')}\nالمبلغ الكامل: $${order.total.toFixed(2)} (≈ ${(order.total*13000).toFixed(0)} SYP)\nسيتم تجهيز طلبكم خلال ساعات، تفضل بزيارتنا لاستكمال الإجراءات.`;
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(waMsg)}`, '_blank');
         }
         function resetOrder() { items=[]; renderSelected(); updateSummary(); document.getElementById('orderNote').textContent=''; }
     </script>
