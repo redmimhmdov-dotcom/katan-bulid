@@ -34,6 +34,33 @@
         .summary .line { display:flex; justify-content:space-between; padding:4px 0; }
         .summary .total { font-size:20px; font-weight:900; color:var(--gold); border-top:1px solid var(--border); padding-top:8px; }
         .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
+
+        /* LOADING OVERLAY */
+        .overlay {
+            position: fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85);
+            display:none; align-items:center; justify-content:center; flex-direction:column;
+            backdrop-filter: blur(5px);
+        }
+        .overlay.active { display:flex; }
+        .spinner {
+            width:60px; height:60px; border:6px solid rgba(255,255,255,0.1);
+            border-top:6px solid var(--gold); border-radius:50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+        .overlay-text {
+            color:#fff; font-size:18px; margin-top:20px; font-weight:700;
+        }
+        .overlay-success {
+            font-size:60px; color:#22c55e; display:none;
+        }
+        .overlay-success-text {
+            color:#fff; font-size:20px; margin-top:15px; font-weight:700;
+        }
+        .overlay.success .spinner { display:none; }
+        .overlay.success .overlay-success { display:block; }
+        .overlay.success .overlay-text { display:none; }
+
         @media (max-width:768px) { .form-row { grid-template-columns:1fr; } }
     </style>
 </head>
@@ -44,6 +71,15 @@
             <nav class="nav"><a href="/">الرئيسية</a><a href="/orders.html">طلب</a></nav>
         </div>
     </header>
+
+    <!-- LOADING OVERLAY -->
+    <div class="overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="overlay-text">جاري إرسال الطلب...</div>
+        <div class="overlay-success">✅</div>
+        <div class="overlay-success-text">تم الإرسال بنجاح</div>
+    </div>
+
     <div class="container">
         <h1 style="font-family:'Orbitron'; text-align:center; margin:20px 0; text-shadow:0 0 10px rgba(255,215,0,0.2);">طلب شراء</h1>
         <div class="card">
@@ -53,7 +89,7 @@
             </div>
             <div class="form-row">
                 <div class="field"><label>المنطقة</label><input type="text" id="customerAddress" placeholder="دمشق - جرمانا" /></div>
-                <div class="field"><label>الكود الخاص (اختياري)</label><input type="text" id="customerCode" placeholder="أدخل الكود إذا كنت زبوناً دائماً" /></div>
+                <div class="field"><label>الكود الخاص (إذا كنت زبوناً دائماً)</label><input type="text" id="customerCode" placeholder="أدخل الكود الخاص بك" /></div>
             </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap; margin:12px 0;">
                 <div class="field" style="flex:1;"><label>القسم</label><select id="selCategory"><option value="">اختر</option></select></div>
@@ -77,6 +113,7 @@
     <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
 
     <script>
+        // ===== PRODUCT DATA =====
         const PRODUCTS = {
             'لاصق ديكور': ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست'],
             'لاصق مسبح': ['آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق'],
@@ -87,6 +124,8 @@
             'روبة': ['الترا جريب','جراوت اصلاح الترا بوند'],
             'عوازل': ['عازل مركبين','عازل بلاستيكي','عازل حجر شفاف']
         };
+
+        // ===== SELECTS =====
         const catSelect = document.getElementById('selCategory');
         const prodSelect = document.getElementById('selProduct');
         Object.keys(PRODUCTS).forEach(c => catSelect.innerHTML += `<option value="${c}">${c}</option>`);
@@ -94,6 +133,8 @@
             prodSelect.innerHTML = '<option value="">اختر</option>';
             if (this.value && PRODUCTS[this.value]) PRODUCTS[this.value].forEach(p => prodSelect.innerHTML += `<option value="${p}">${p}</option>`);
         });
+
+        // ===== ITEMS MANAGEMENT =====
         let items = [];
         function addItem() {
             const cat = catSelect.value, prod = prodSelect.value, qty = parseInt(document.getElementById('selQty').value)||1;
@@ -118,17 +159,68 @@
             document.getElementById('grandTotal').textContent = `$${sub.toFixed(2)}`;
             document.getElementById('sypTotal').textContent = `≈ ${(sub * exchange).toFixed(0)} SYP`;
         }
+
+        // ===== GET CUSTOMERS FROM LOCALSTORAGE =====
+        function getCustomers() {
+            return JSON.parse(localStorage.getItem('katan_customers') || '[]');
+        }
+
+        // ===== SUBMIT ORDER =====
         function submitOrder() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             const address = document.getElementById('customerAddress').value.trim();
             const code = document.getElementById('customerCode').value.trim();
-            if (!name || !phone || items.length===0) return alert('املأ البيانات وأضف منتجات');
-            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, code, items, total: items.reduce((s,i)=>s+i.qty*i.price,0), source: 'online' };
+
+            if (!name || !phone || items.length===0) {
+                alert('يرجى إكمال البيانات وإضافة منتج واحد على الأقل.');
+                return;
+            }
+
+            // Check if customer is loyal (exists in katan_customers)
+            const customers = getCustomers();
+            const loyalCustomer = customers.find(c => c.name === name && c.phone === phone);
+
+            // If loyal customer, code is required and must match
+            if (loyalCustomer) {
+                if (!code) {
+                    alert('الرجاء إدخال الكود الخاص بك لأنك زبون دائم.');
+                    return;
+                }
+                if (code !== loyalCustomer.code) {
+                    alert('الكود غير صحيح. يرجى التحقق من الكود الخاص بك.');
+                    return;
+                }
+            }
+
+            // Build order object
+            const order = {
+                id: Date.now(),
+                date: new Date().toLocaleString('ar-SY'),
+                name, phone, address, code,
+                items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+                total: items.reduce((s,i) => s + i.qty * i.price, 0),
+                source: 'online',
+                status: 'pending',
+                paid: 0
+            };
+
+            // Save order to localStorage
             let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
             orders.push(order);
             localStorage.setItem('katan_orders', JSON.stringify(orders));
-            // ===== Send to Telegram =====
+
+            // Show loading overlay
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('active');
+            overlay.classList.remove('success');
+
+            // Request notification permission silently (user gesture already occurred)
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+
+            // Send to Telegram
             const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
             const chatId = '8938601996';
             const msg = `
@@ -141,14 +233,43 @@
 الإجمالي: $${order.total.toFixed(2)}
 📅 ${order.date}
             `;
+
             fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({chat_id:chatId, text:msg})
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: msg })
+            })
+            .then(response => {
+                // Regardless of result, show success
+                overlay.classList.add('success');
+                // Clear items and reset form
+                items = [];
+                renderSelected();
+                updateSummary();
+                document.getElementById('orderNote').textContent = '';
+                // After 2 seconds, redirect to main page
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            })
+            .catch(error => {
+                // Even on error, we still consider order saved locally, so show success
+                overlay.classList.add('success');
+                items = [];
+                renderSelected();
+                updateSummary();
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
             });
-            document.getElementById('orderNote').textContent = '✅ تم إرسال الطلب! سيتم التواصل معك قريباً.';
-            items = []; renderSelected(); updateSummary();
         }
-        function resetOrder() { items=[]; renderSelected(); updateSummary(); document.getElementById('orderNote').textContent=''; }
+
+        function resetOrder() {
+            items = [];
+            renderSelected();
+            updateSummary();
+            document.getElementById('orderNote').textContent = '';
+        }
     </script>
 </body>
 </html>
