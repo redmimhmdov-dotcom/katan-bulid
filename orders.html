@@ -34,6 +34,7 @@
         .summary .line { display:flex; justify-content:space-between; padding:4px 0; }
         .summary .total { font-size:20px; font-weight:900; color:var(--gold); border-top:1px solid var(--border); padding-top:8px; }
         .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
+        @media (max-width:768px) { .form-row { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -123,7 +124,7 @@
             const address = document.getElementById('customerAddress').value.trim();
             const code = document.getElementById('customerCode').value.trim();
             if (!name || !phone || items.length===0) return alert('املأ البيانات وأضف منتجات');
-            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, code, items, total: items.reduce((s,i)=>s+i.qty*i.price,0) };
+            const order = { id: Date.now(), date: new Date().toLocaleString('ar-SY'), name, phone, address, code, items, total: items.reduce((s,i)=>s+i.qty*i.price,0), source: 'online' };
             let orders = JSON.parse(localStorage.getItem('katan_orders') || '[]');
             orders.push(order);
             localStorage.setItem('katan_orders', JSON.stringify(orders));
@@ -131,7 +132,7 @@
             const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
             const chatId = '8938601996';
             const msg = `
-🆕 طلب جديد
+🆕 طلب جديد (أونلاين)
 الاسم: ${name}
 الهاتف: ${phone}
 العنوان: ${address}
