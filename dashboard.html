@@ -3,492 +3,339 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KATANBUILD | لوحة المحاسب المتطورة</title>
+    <title>KATANBUILD | لوحة المحاسب</title>
     <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
     <style>
-        :root { --bg:#030712; --gold:#ffd700; --cyan:#38bdf8; --glass:rgba(15,23,42,0.6); --border:rgba(255,215,0,0.25); }
+        /* ===== EXE STYLE ===== */
+        :root { --bg:#1e1e1e; --surface:#2d2d2d; --border:#3e3e3e; --gold:#ffd700; --cyan:#38bdf8; --text:#f1f5f9; --text-muted:#a0a0a0; }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Cairo',sans-serif; background:var(--bg); color:#f1f5f9; min-height:100vh; overflow-x:hidden; }
-        .container { max-width:1200px; margin:0 auto; padding:20px; }
-        .header { background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:12px 0; }
-        .header-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
-        .logo img { height:48px; filter:drop-shadow(0 0 20px var(--gold)); }
-        .nav { display:flex; gap:24px; flex-wrap:wrap; }
-        .nav a { color:#f1f5f9; text-decoration:none; font-weight:700; transition:0.3s; }
-        .nav a:hover { color:var(--gold); }
-        .login-box { max-width:400px; margin:100px auto; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:30px; text-align:center; transition: transform 0.3s ease; }
-        .login-box:hover { transform: perspective(500px) rotateX(3deg) scale(1.02); }
-        .login-box input { width:100%; padding:10px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; margin:10px 0; font-family:'Cairo'; }
-        .login-box button { background:var(--gold); color:#000; border:none; padding:10px 24px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
-        .login-box button:hover { box-shadow:0 0 20px rgba(255,215,0,0.4); }
+        body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; height:100vh; display:flex; flex-direction:column; }
+        
+        /* ===== WINDOW FRAME ===== */
+        .app-window { display:flex; flex-direction:column; height:100vh; max-width:1400px; margin:0 auto; width:100%; background:var(--surface); border:1px solid var(--border); box-shadow:0 10px 40px rgba(0,0,0,0.8); }
+        
+        /* ===== TITLE BAR ===== */
+        .title-bar { background:#252526; padding:8px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); user-select:none; }
+        .title-bar .title { font-weight:700; color:var(--gold); font-family:'Orbitron'; font-size:16px; }
+        .title-bar .controls { display:flex; gap:6px; }
+        .title-bar .controls span { width:14px; height:14px; border-radius:50%; display:inline-block; }
+        .title-bar .controls .red { background:#ff5f56; }
+        .title-bar .controls .yellow { background:#ffbd2e; }
+        .title-bar .controls .green { background:#27c93f; }
+        
+        /* ===== MENU BAR ===== */
+        .menu-bar { background:#2d2d2d; padding:4px 16px; border-bottom:1px solid var(--border); display:flex; gap:20px; }
+        .menu-bar a { color:var(--text-muted); text-decoration:none; font-size:14px; font-weight:600; cursor:pointer; padding:4px 8px; transition:0.2s; }
+        .menu-bar a:hover { color:var(--gold); background:rgba(255,215,0,0.1); border-radius:4px; }
+        
+        /* ===== CONTENT AREA ===== */
+        .content-area { flex:1; padding:20px; overflow-y:auto; background:#1e1e1e; }
+        
+        /* ===== LOGIN ===== */
+        .login-box { max-width:400px; margin:100px auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:30px; text-align:center; }
+        .login-box input { width:100%; padding:10px; border-radius:6px; border:1px solid var(--border); background:#252526; color:#fff; margin:8px 0; font-family:'Cairo'; }
+        .login-box button { background:var(--gold); color:#000; border:none; padding:10px 24px; border-radius:6px; font-weight:700; cursor:pointer; transition:0.2s; }
+        .login-box button:hover { background:#e6c200; }
+        
+        /* ===== COMPONENTS ===== */
         .hidden { display:none !important; }
-        /* NEON & 3D EFFECTS */
-        .neon-text { text-shadow: 0 0 10px var(--gold), 0 0 20px var(--gold), 0 0 40px var(--gold); }
-        .card-3d { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:16px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card-3d:hover { transform: perspective(500px) rotateX(3deg) scale(1.01); border-color:var(--gold); box-shadow:0 0 30px rgba(255,215,0,0.1); }
-        .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; margin:20px 0; }
-        .stat-card { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:16px; text-align:center; transition:0.3s; }
-        .stat-card:hover { transform: perspective(500px) rotateX(3deg) scale(1.02); border-color:var(--gold); }
-        .stat-card .num { font-family:'Orbitron'; font-size:28px; font-weight:900; color:var(--gold); text-shadow:0 0 10px rgba(255,215,0,0.2); }
-        .stat-card .label { color:#94a3b8; font-size:13px; }
-        .filters { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
-        .filters input, .filters select { padding:8px 12px; border-radius:12px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; flex:1; min-width:150px; }
-        .filters button { background:var(--gold); color:#000; border:none; padding:8px 20px; border-radius:12px; font-weight:700; cursor:pointer; }
-        .order-item { display:flex; flex-direction:column; gap:8px; background:rgba(3,7,18,0.5); border:1px solid var(--border); border-radius:12px; padding:16px; margin:8px 0; transition:0.3s; }
-        .order-item:hover { border-color:var(--gold); box-shadow:0 0 20px rgba(255,215,0,0.05); }
+        .panel { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:16px; margin-bottom:16px; }
+        .panel-title { color:var(--gold); font-weight:700; margin-bottom:12px; font-size:16px; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
+        .stat-card { background:#252526; border:1px solid var(--border); border-radius:6px; padding:12px; text-align:center; }
+        .stat-card .num { font-family:'Orbitron'; font-size:24px; font-weight:900; color:var(--gold); }
+        .stat-card .label { color:var(--text-muted); font-size:13px; }
+        
+        .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+        .filters input, .filters select { padding:8px 12px; border-radius:6px; border:1px solid var(--border); background:#252526; color:#fff; flex:1; min-width:120px; }
+        .filters button { background:var(--gold); color:#000; border:none; padding:8px 16px; border-radius:6px; font-weight:700; cursor:pointer; }
+        
+        .order-item { background:#252526; border:1px solid var(--border); border-radius:6px; padding:12px 16px; margin:8px 0; }
         .order-item .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
-        .order-item .badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+        .order-item .badge { padding:2px 10px; border-radius:12px; font-size:12px; font-weight:700; }
         .badge-green { background:#22c55e; color:#000; }
         .badge-yellow { background:#eab308; color:#000; }
         .badge-orange { background:#f97316; color:#fff; }
-        .order-item .actions { display:flex; gap:6px; flex-wrap:wrap; }
-        .order-item .actions button { background:var(--gold); color:#000; border:none; padding:4px 12px; border-radius:6px; cursor:pointer; font-weight:700; }
+        .order-item .actions { display:flex; gap:6px; }
+        .order-item .actions button { background:var(--gold); color:#000; border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-weight:700; font-size:12px; }
         .order-item .actions button.danger { background:#ef4444; color:#fff; }
-        .order-item .items-list { display:flex; flex-wrap:wrap; gap:6px; font-size:13px; color:#94a3b8; }
-        .order-item .price-details { display:flex; gap:12px; flex-wrap:wrap; font-size:14px; }
-        .order-item .price-details .original { text-decoration:line-through; color:#94a3b8; }
-        .order-item .price-details .final { color:var(--gold); font-weight:700; }
-        .order-item .price-details .syp { color:var(--cyan); font-size:13px; }
-        .btn-wa { background:#25D366; color:#fff; padding:4px 12px; border-radius:6px; border:none; cursor:pointer; font-weight:700; }
-        .btn-wa:hover { background:#1da851; }
-        .customer-price-section { margin:20px 0; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:20px; }
-        .customer-price-section input, .customer-price-section select { padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; margin:4px 0; width:100%; }
-        .customer-price-section .row { display:flex; gap:10px; flex-wrap:wrap; }
-        .customer-price-section .row > * { flex:1; min-width:120px; }
-        .customer-price-section .discount-row { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; align-items:center; }
-        .customer-price-section .discount-row select, .customer-price-section .discount-row input { flex:1; min-width:100px; }
-        .footer { padding:20px 0; border-top:1px solid var(--border); text-align:center; color:#94a3b8; }
-
-        .rep-section { margin:20px 0; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:16px; padding:20px; }
-        .rep-card { background:rgba(3,7,18,0.5); border:1px solid var(--border); border-radius:12px; padding:12px; margin:8px 0; }
-        .rep-stats { display:flex; gap:12px; flex-wrap:wrap; }
-        .progress-bar { width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden; margin-top:4px; }
-        .progress-fill { height:100%; background:linear-gradient(90deg, var(--cyan), var(--gold)); transition:width 0.5s ease; }
-        .modal { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; }
+        .btn-wa { background:#25D366; color:#fff; border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-weight:700; font-size:12px; }
+        
+        .input-group { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+        .input-group input, .input-group select { flex:1; padding:8px; border-radius:6px; border:1px solid var(--border); background:#252526; color:#fff; min-width:80px; }
+        .input-group button { padding:8px 16px; border:none; border-radius:6px; font-weight:700; cursor:pointer; background:var(--gold); color:#000; }
+        
+        .modal { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.8); display:none; align-items:center; justify-content:center; }
         .modal.open { display:flex; }
-        .modal-content { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--gold); border-radius:16px; padding:30px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
-        .modal-close { float:left; background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer; }
+        .modal-content { background:var(--surface); border:1px solid var(--gold); border-radius:8px; padding:24px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
+        .modal-close { float:left; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
+        
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width:8px; }
+        ::-webkit-scrollbar-track { background:#1e1e1e; }
+        ::-webkit-scrollbar-thumb { background:#3e3e3e; border-radius:4px; }
+        
+        @media (max-width:768px) { .menu-bar { flex-wrap:wrap; } .stats { grid-template-columns:1fr 1fr; } }
     </style>
 </head>
 <body>
-    <div id="loginBox">
-        <div class="login-box">
-            <h2 style="font-family:'Orbitron';">🔐 لوحة المحاسب</h2>
-            <input type="text" id="usernameInput" placeholder="اسم المستخدم" />
-            <input type="password" id="passwordInput" placeholder="كلمة المرور" />
-            <button onclick="login()">دخول</button>
-            <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
+    <div class="app-window" id="app">
+        <!-- TITLE BAR -->
+        <div class="title-bar">
+            <span class="title">📊 KATANBUILD ACCOUNTING</span>
+            <div class="controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+        </div>
+        
+        <!-- MENU BAR -->
+        <div class="menu-bar" id="menuBar">
+            <a onclick="showView('dashboard')">لوحة التحكم</a>
+            <a onclick="showView('orders')">الطلبات</a>
+            <a onclick="showView('reps')">المندوبون</a>
+            <a onclick="showView('settings')">الإعدادات</a>
+            <a onclick="logout()" style="color:#ef4444;">خروج</a>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+            <!-- LOGIN -->
+            <div id="loginBox" class="login-box">
+                <h2 style="font-family:'Orbitron'; color:var(--gold); margin-bottom:16px;">🔐 الدخول</h2>
+                <input type="text" id="usernameInput" placeholder="اسم المستخدم" />
+                <input type="password" id="passwordInput" placeholder="كلمة المرور" />
+                <button onclick="login()">دخول</button>
+                <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
+            </div>
+
+            <!-- DASHBOARD CONTENT (hidden until login) -->
+            <div id="appContent" class="hidden">
+                <!-- Admin Panel (visible only to 1992) -->
+                <div id="adminPanel" class="hidden panel">
+                    <div class="panel-title">⚙️ لوحة تحكم المسؤول</div>
+                    <div class="input-group">
+                        <input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 100px;" />
+                        <button onclick="updateExchangeRate()">تحديث سعر الصرف</button>
+                    </div>
+                    <hr style="border-color:var(--border); margin:12px 0;" />
+                    <div class="panel-title" style="font-size:14px; color:var(--cyan);">👤 إدارة المستخدمين</div>
+                    <div class="input-group">
+                        <input type="text" id="newUserUser" placeholder="اسم المستخدم" />
+                        <input type="text" id="newUserPass" placeholder="كلمة المرور" />
+                        <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label>
+                        <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label>
+                        <button onclick="addUser()">➕ إضافة</button>
+                    </div>
+                    <div id="userList" style="margin:8px 0; font-size:14px;"></div>
+                    <hr style="border-color:var(--border); margin:12px 0;" />
+                    <div class="panel-title" style="font-size:14px; color:var(--cyan);">📊 إدارة المندوبين</div>
+                    <div class="input-group">
+                        <input type="text" id="repName" placeholder="اسم المندوب" />
+                        <input type="text" id="repClient" placeholder="اسم العميل (الزبون)" />
+                        <button onclick="addRepClient()">➕ إضافة عميل لمندوب</button>
+                    </div>
+                    <div id="repList" style="margin:8px 0; font-size:14px;"></div>
+                </div>
+
+                <!-- STATS -->
+                <div class="stats" id="stats">
+                    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div>
+                    <div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div>
+                    <div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div>
+                    <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div>
+                </div>
+
+                <!-- FILTERS & ORDERS -->
+                <div class="panel">
+                    <div class="filters">
+                        <input type="text" id="searchInput" placeholder="بحث بالاسم..." oninput="renderOrders()" />
+                        <select id="statusFilter" onchange="renderOrders()"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select>
+                        <button onclick="renderOrders()">تحديث</button>
+                    </div>
+                    <div id="ordersList"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="dashboardContent" class="hidden">
-        <header class="header">
-            <div class="container header-inner">
-                <a class="logo" href="/"><img src="https://katanbuild.com/storage/branding/logo-dark.png" /></a>
-                <nav class="nav"><a href="/">الرئيسية</a><a href="/orders.html">طلب</a><button onclick="logout()" style="background:transparent;border:none;color:#f1f5f9;cursor:pointer;font-weight:700;">خروج</button></nav>
-            </div>
-        </header>
-        <div class="container">
-            <h1 style="font-family:'Orbitron'; margin:20px 0; text-shadow:0 0 10px rgba(255,215,0,0.2);">لوحة المحاسب</h1>
-            <div id="adminPanel" class="hidden card-3d" style="margin-bottom:20px; padding:20px;">
-                <h3 style="color:var(--gold);">⚙️ لوحة تحكم المسؤول (1992)</h3>
-                <div style="margin:10px 0;">
-                    <label>سعر الصرف (1$ = SYP):</label>
-                    <input type="number" id="exchangeRateInput" value="13000" style="padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:rgba(3,7,18,0.6); color:#fff; width:100px;" />
-                    <button onclick="updateExchangeRate()" class="btn-gold" style="padding:6px 12px;">تحديث</button>
-                </div>
-                <hr style="border-color:var(--border); margin:15px 0;" />
-                <h4 style="color:var(--cyan);">👤 إدارة المستخدمين</h4>
-                <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
-                    <input type="text" id="newUserUser" placeholder="اسم المستخدم" style="flex:1; min-width:100px;" />
-                    <input type="text" id="newUserPass" placeholder="كلمة المرور" style="flex:1; min-width:100px;" />
-                    <label style="display:flex; align-items:center; gap:4px; color:#94a3b8; font-size:13px;">
-                        <input type="checkbox" id="newUserDelete" /> حذف
-                    </label>
-                    <label style="display:flex; align-items:center; gap:4px; color:#94a3b8; font-size:13px;">
-                        <input type="checkbox" id="newUserPrices" /> تعديل أسعار
-                    </label>
-                    <button onclick="addUser()" class="btn-gold" style="padding:6px 12px;">➕ إضافة</button>
-                </div>
-                <div id="userList" style="margin-top:10px;"></div>
-                <hr style="border-color:var(--border); margin:15px 0;" />
-                <h4 style="color:var(--cyan);">📊 إدارة المندوبين</h4>
-                <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
-                    <input type="text" id="repName" placeholder="اسم المندوب" style="flex:1; min-width:100px;" />
-                    <input type="text" id="repClient" placeholder="اسم العميل (الزبون)" style="flex:1; min-width:100px;" />
-                    <button onclick="addRepClient()" class="btn-gold" style="padding:6px 12px;">➕ إضافة عميل لمندوب</button>
-                </div>
-                <div id="repList" style="margin-top:10px;"></div>
-            </div>
-
-            <!-- STATS -->
-            <div class="stats" id="stats">
-                <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div>
-                <div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div>
-                <div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div>
-                <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div>
-            </div>
-
-            <!-- FILTERS -->
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="بحث بالاسم..." oninput="renderOrders()" />
-                <select id="statusFilter" onchange="renderOrders()">
-                    <option value="all">الكل</option>
-                    <option value="complete">مكتملة</option>
-                    <option value="paid">مدفوعة</option>
-                    <option value="pending">غير مكتملة</option>
-                </select>
-                <button onclick="renderOrders()">تحديث</button>
-            </div>
-
-            <!-- ORDERS -->
-            <div id="ordersList"></div>
-
-            <!-- MODAL -->
-            <div id="orderModal" class="modal">
-                <div class="modal-content">
-                    <button class="modal-close" onclick="closeModal()">✕</button>
-                    <h3 style="color:var(--gold);" id="modalTitle">تفاصيل الطلب</h3>
-                    <div id="modalBody"></div>
-                </div>
-            </div>
+    <!-- MODAL -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3 style="color:var(--gold);" id="modalTitle">تفاصيل الطلب</h3>
+            <div id="modalBody" style="font-size:14px; line-height:1.8;"></div>
         </div>
-        <footer class="footer">© 2026 مؤسسة قطان التجارية</footer>
     </div>
 
     <script>
-        // ===== LOGIN SYSTEM =====
+        // ===== CORE FUNCTIONS =====
         function getUsers() { return JSON.parse(localStorage.getItem('katan_users') || '[]'); }
         function saveUsers(users) { localStorage.setItem('katan_users', JSON.stringify(users)); }
         function getCurrentUser() { return JSON.parse(sessionStorage.getItem('katan_current_user')); }
         function setCurrentUser(u) { sessionStorage.setItem('katan_current_user', JSON.stringify(u)); }
+        function getOrders() { return JSON.parse(localStorage.getItem('katan_orders') || '[]'); }
+        function getCustomers() { return JSON.parse(localStorage.getItem('katan_customers') || '[]'); }
+        function getReps() { return JSON.parse(localStorage.getItem('katan_reps') || '[]'); }
+        function saveReps(reps) { localStorage.setItem('katan_reps', JSON.stringify(reps)); }
+        function sendLogToTelegram(msg) { fetch(`https://api.telegram.org/bot8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:'8938601996', text:`📋 سجل التدقيق:\n${msg}`}) }); }
 
+        // ===== LOGIN =====
         function login() {
             const u = document.getElementById('usernameInput').value.trim();
             const p = document.getElementById('passwordInput').value.trim();
-            if (u === '1992' && p === '1992') {
-                setCurrentUser({ username: '1992', role: 'admin' });
-                showDashboard();
-                return;
-            }
+            if (u === '1992' && p === '1992') { setCurrentUser({ username: '1992', role: 'admin' }); showApp(); return; }
             const users = getUsers();
             const found = users.find(user => user.username === u && user.password === p);
-            if (found) {
-                setCurrentUser(found);
-                showDashboard();
-            } else {
-                document.getElementById('loginError').textContent = '❌ اسم مستخدم أو كلمة مرور خاطئة';
-            }
+            if (found) { setCurrentUser(found); showApp(); } else { document.getElementById('loginError').textContent = '❌ بيانات خاطئة'; }
         }
-
-        function showDashboard() {
+        function showApp() {
             document.getElementById('loginBox').classList.add('hidden');
-            document.getElementById('dashboardContent').classList.remove('hidden');
+            document.getElementById('appContent').classList.remove('hidden');
             const user = getCurrentUser();
-            if (user && user.role === 'admin') {
-                document.getElementById('adminPanel').classList.remove('hidden');
-                renderUsers();
-                renderReps();
-                loadExchangeRate();
-            } else {
-                document.getElementById('adminPanel').classList.add('hidden');
-            }
+            if (user && user.role === 'admin') document.getElementById('adminPanel').classList.remove('hidden');
             loadAll();
-            // Auto-refresh every 5 seconds
             setInterval(loadAll, 5000);
         }
+        function logout() { sessionStorage.removeItem('katan_current_user'); location.reload(); }
 
-        function logout() {
-            sessionStorage.removeItem('katan_current_user');
-            location.reload();
-        }
-
-        // ===== ADMIN FUNCTIONS =====
+        // ===== ADMIN =====
         function addUser() {
-            const username = document.getElementById('newUserUser').value.trim();
-            const password = document.getElementById('newUserPass').value.trim();
-            const canDelete = document.getElementById('newUserDelete').checked;
-            const canEditPrices = document.getElementById('newUserPrices').checked;
-            if (!username || !password) return alert('أدخل اسم المستخدم وكلمة المرور');
+            const u = document.getElementById('newUserUser').value.trim(), p = document.getElementById('newUserPass').value.trim();
+            const del = document.getElementById('newUserDelete').checked, price = document.getElementById('newUserPrices').checked;
+            if (!u || !p) return alert('أدخل البيانات');
             let users = getUsers();
-            if (users.find(u => u.username === username)) return alert('اسم المستخدم موجود مسبقاً');
-            users.push({ username, password, role: 'accountant', canDelete, canEditPrices });
-            saveUsers(users);
-            renderUsers();
-            document.getElementById('newUserUser').value = '';
-            document.getElementById('newUserPass').value = '';
-            document.getElementById('newUserDelete').checked = false;
-            document.getElementById('newUserPrices').checked = false;
-        }
-        function deleteUser(index) {
-            if (!confirm('حذف هذا المستخدم؟')) return;
-            let users = getUsers();
-            users.splice(index, 1);
-            saveUsers(users);
-            renderUsers();
+            if (users.find(x => x.username === u)) return alert('اسم المستخدم موجود');
+            users.push({ username: u, password: p, role: 'accountant', canDelete: del, canEditPrices: price });
+            saveUsers(users); renderUsers();
+            document.getElementById('newUserUser').value = ''; document.getElementById('newUserPass').value = '';
         }
         function renderUsers() {
             const users = getUsers();
-            const container = document.getElementById('userList');
-            container.innerHTML = users.map((u, i) => `
-                <div style="display:flex;justify-content:space-between;padding:6px 12px;background:rgba(3,7,18,0.5);border-radius:8px;margin:4px 0;">
-                    <span>${u.username} - ${u.canDelete ? 'حذف ✅' : 'حذف ❌'} - ${u.canEditPrices ? 'أسعار ✅' : 'أسعار ❌'}</span>
-                    <button onclick="deleteUser(${i})" style="background:#ef4444;border:none;color:#fff;padding:2px 12px;border-radius:6px;cursor:pointer;">✕</button>
-                </div>
-            `).join('');
+            document.getElementById('userList').innerHTML = users.map((u, i) =>
+                `<div style="display:flex;justify-content:space-between;padding:4px 8px;background:#252526;border-radius:4px;margin:4px 0;">
+                    <span>${u.username} - ${u.canDelete?'حذف ✅':'حذف ❌'} - ${u.canEditPrices?'أسعار ✅':'أسعار ❌'}</span>
+                    <button onclick="deleteUser(${i})" style="background:#ef4444;border:none;color:#fff;padding:0 8px;border-radius:4px;cursor:pointer;">✕</button>
+                </div>`
+            ).join('');
         }
+        function deleteUser(i) { let users = getUsers(); users.splice(i,1); saveUsers(users); renderUsers(); }
 
-        // ===== EXCHANGE RATE =====
-        function loadExchangeRate() {
-            const rate = localStorage.getItem('katan_exchange_rate') || '13000';
-            document.getElementById('exchangeRateInput').value = rate;
-        }
-        function updateExchangeRate() {
-            const val = document.getElementById('exchangeRateInput').value;
-            localStorage.setItem('katan_exchange_rate', val);
-            alert('✅ تم تحديث سعر الصرف');
-            loadAll();
-        }
-
-        // ===== REPS MANAGEMENT =====
-        function getReps() { return JSON.parse(localStorage.getItem('katan_reps') || '[]'); }
-        function saveReps(reps) { localStorage.setItem('katan_reps', JSON.stringify(reps)); }
+        // ===== REPS =====
         function addRepClient() {
-            const repName = document.getElementById('repName').value.trim();
-            const clientName = document.getElementById('repClient').value.trim();
-            if (!repName || !clientName) return alert('أدخل اسم المندوب واسم العميل');
+            const r = document.getElementById('repName').value.trim(), c = document.getElementById('repClient').value.trim();
+            if (!r || !c) return alert('أدخل الاسمين');
             let reps = getReps();
-            let rep = reps.find(r => r.name === repName);
-            if (!rep) { rep = { name: repName, clients: [] }; reps.push(rep); }
-            if (!rep.clients.includes(clientName)) rep.clients.push(clientName);
-            saveReps(reps);
-            renderReps();
-            document.getElementById('repName').value = '';
-            document.getElementById('repClient').value = '';
-        }
-        function removeRepClient(repIndex, clientIndex) {
-            let reps = getReps();
-            reps[repIndex].clients.splice(clientIndex, 1);
-            if (reps[repIndex].clients.length === 0) reps.splice(repIndex, 1);
-            saveReps(reps);
-            renderReps();
+            let rep = reps.find(x => x.name === r);
+            if (!rep) { rep = { name: r, clients: [] }; reps.push(rep); }
+            if (!rep.clients.includes(c)) rep.clients.push(c);
+            saveReps(reps); renderReps();
+            document.getElementById('repName').value = ''; document.getElementById('repClient').value = '';
         }
         function renderReps() {
             const reps = getReps();
             const container = document.getElementById('repList');
-            if (reps.length === 0) { container.innerHTML = '<p style="color:#94a3b8;">لا يوجد مندوبون</p>'; return; }
-            container.innerHTML = reps.map((r, ri) => `
-                <div class="rep-card">
+            if (!reps.length) { container.innerHTML = '<p style="color:var(--text-muted);">لا يوجد مندوبون</p>'; return; }
+            container.innerHTML = reps.map(r =>
+                `<div style="background:#252526;border:1px solid var(--border);border-radius:4px;padding:8px;margin:4px 0;">
                     <strong style="color:var(--gold);">${r.name}</strong>
-                    <div style="font-size:13px; color:#94a3b8; margin:4px 0;">العملاء: ${r.clients.join(', ')}</div>
-                    <div style="font-size:12px; color:var(--cyan);">تقييم الأسبوع: ${calculateRepRating(r)}</div>
-                    <div class="progress-bar"><div class="progress-fill" style="width:${calculateRepProgress(r)}%;"></div></div>
-                </div>
-            `).join('');
-        }
-        function calculateRepRating(rep) {
-            const orders = getOrders();
-            const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
-            const count = orders.filter(o => rep.clients.includes(o.name) && new Date(o.date) > weekAgo).length;
-            return `${count} طلب هذا الأسبوع`;
-        }
-        function calculateRepProgress(rep) {
-            const orders = getOrders();
-            const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
-            const count = orders.filter(o => rep.clients.includes(o.name) && new Date(o.date) > weekAgo).length;
-            const goal = 5; // الهدف الأسبوعي
-            return Math.min((count / goal) * 100, 100);
+                    <div style="font-size:13px;color:var(--text-muted);">العملاء: ${r.clients.join(', ')}</div>
+                    <div style="font-size:12px;color:var(--cyan);">تقييم الأسبوع: ${r.clients.filter(c => getOrders().filter(o => o.name === c && new Date(o.date) > new Date(Date.now()-7*24*60*60*1000)).length).length} طلبات</div>
+                </div>`
+            ).join('');
         }
 
-        // ===== ORDERS & LOGIC =====
-        function getOrders() { return JSON.parse(localStorage.getItem('katan_orders') || '[]'); }
-        function getCustomers() { return JSON.parse(localStorage.getItem('katan_customers') || '[]'); }
-        function sendLogToTelegram(message) {
-            const token = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
-            const chatId = '8938601996';
-            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: `📋 سجل التدقيق:\n${message}` })
-            });
-        }
-
-        function loadAll() {
-            renderOrders();
-            renderStats();
-            renderReps();
-            renderPrices();
-            renderCustomers();
-            renderPrepayments();
-        }
-
+        // ===== ORDERS =====
+        function loadAll() { renderOrders(); renderStats(); renderReps(); renderUsers(); }
         function renderStats() {
-            const orders = getOrders();
-            document.getElementById('statTotal').textContent = orders.length;
-            const debt = orders.filter(o=>o.status==='pending').reduce((s,i)=>s+(i.total-i.paid||0),0);
-            document.getElementById('statDebt').textContent = `$${debt.toFixed(2)}`;
-            document.getElementById('statPaid').textContent = `$${orders.filter(o=>o.status==='paid').reduce((s,i)=>s+i.total,0).toFixed(2)}`;
-            document.getElementById('statPending').textContent = orders.filter(o=>o.status==='pending').length;
+            const o = getOrders();
+            document.getElementById('statTotal').textContent = o.length;
+            document.getElementById('statDebt').textContent = `$${o.filter(x=>x.status==='pending').reduce((s,i)=>s+(i.total-i.paid||0),0).toFixed(2)}`;
+            document.getElementById('statPaid').textContent = `$${o.filter(x=>x.status==='paid').reduce((s,i)=>s+i.total,0).toFixed(2)}`;
+            document.getElementById('statPending').textContent = o.filter(x=>x.status==='pending').length;
         }
-
         function renderOrders() {
             let orders = getOrders();
             const search = document.getElementById('searchInput').value.toLowerCase();
             const filter = document.getElementById('statusFilter').value;
             if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search));
             if (filter !== 'all') orders = orders.filter(o => o.status === filter);
-
             const customers = getCustomers();
-            const exchange = parseInt(localStorage.getItem('katan_exchange_rate')) || 13000;
-            const user = getCurrentUser();
-            const canDelete = user.role === 'admin' || user.canDelete;
-
             const list = document.getElementById('ordersList');
-            if (!orders.length) { list.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;">لا توجد طلبات</div>'; return; }
-
-            list.innerHTML = orders.map(o => {
-                const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
-                let originalTotal = 0, finalTotal = 0;
-                const itemDetails = o.items.map(item => {
-                    let price = item.price || 10;
-                    originalTotal += item.qty * price;
-                    let finalPrice = price;
-                    if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
-                        finalPrice = customer.productDiscounts[item.name];
-                    }
-                    finalTotal += item.qty * finalPrice;
-                    return `${item.name} (${item.qty}×)${customer && customer.productDiscounts[item.name] ? ` <span style="color:var(--cyan);">($${price} → $${finalPrice})</span>` : ''}`;
-                }).join(' • ');
-
-                const finalTotalSYP = (finalTotal * exchange).toFixed(0);
-                const originalTotalSYP = (originalTotal * exchange).toFixed(0);
-
-                // Rep highlighting
-                const reps = getReps();
-                let repMatch = reps.find(r => r.clients.includes(o.name));
-                let repBadge = repMatch ? `<span style="background:var(--gold);color:#000;padding:2px 8px;border-radius:4px;font-weight:700;font-size:12px;">👤 ${repMatch.name}</span>` : '';
-
-                return `
-                    <div class="order-item">
-                        <div class="top">
-                            <div>
-                                <strong>${o.name}</strong> 
-                                <span style="color:#94a3b8;font-size:13px;">${o.phone}</span>
-                                ${o.address ? `<span style="color:#94a3b8;font-size:13px;">📍 ${o.address}</span>` : ''}
-                                ${o.code ? `<span style="color:var(--cyan);font-size:13px;">🔑 ${o.code}</span>` : ''}
-                                <span style="color:#94a3b8;font-size:13px;">${o.date}</span>
-                                <span class="badge ${o.status==='complete'?'badge-green':o.status==='paid'?'badge-yellow':'badge-orange'}">${o.status==='complete'?'مكتملة':o.status==='paid'?'مدفوعة':'غير مكتملة'}</span>
-                                ${customer ? `<span style="background:var(--gold);color:#000;padding:2px 8px;border-radius:4px;font-weight:700;font-size:12px;">⭐ زبون دائم</span>` : ''}
-                                ${repBadge}
-                            </div>
-                            <div class="actions">
-                                <button onclick="viewOrder('${o.id}')">👁️ عرض</button>
-                                ${o.status === 'pending' ? `<button onclick="markPaid('${o.id}')">✅ دفع</button>` : ''}
-                                <button onclick="sendWACustomer('${o.id}')" class="btn-wa">📩 تأكيد واتساب</button>
-                                ${canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">🗑️</button>` : ''}
-                            </div>
+            if (!orders.length) { list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">لا توجد طلبات</div>'; return; }
+            list.innerHTML = orders.map(o => `
+                <div class="order-item">
+                    <div class="top">
+                        <div>
+                            <strong>${o.name}</strong> <span style="color:var(--text-muted);font-size:13px;">${o.phone}</span>
+                            <span style="color:var(--text-muted);font-size:13px;">${o.date}</span>
+                            <span class="badge ${o.status==='complete'?'badge-green':o.status==='paid'?'badge-yellow':'badge-orange'}">${o.status}</span>
+                            ${customers.find(c=>c.name===o.name&&c.phone===o.phone) ? '<span style="background:var(--gold);color:#000;padding:0 8px;border-radius:4px;font-weight:700;font-size:12px;">⭐ زبون دائم</span>' : ''}
                         </div>
-                        <div class="items-list">📦 ${itemDetails}</div>
-                        <div class="price-details">
-                            ${customer && Object.keys(customer.productDiscounts).length > 0 ? `<span class="original">$${originalTotal.toFixed(2)} (≈ ${originalTotalSYP} SYP)</span>` : ''}
-                            <span class="final">$${finalTotal.toFixed(2)}</span>
-                            <span class="syp">≈ ${finalTotalSYP} SYP</span>
-                            ${o.status === 'pending' && o.paid ? `<span style="color:#f97316;">المتبقي: $${(o.total - o.paid).toFixed(2)}</span>` : ''}
-                            ${o.prepaid ? `<span style="color:var(--cyan);">💰 مدفوع مسبقاً: $${o.prepaid}</span>` : ''}
-                            ${o.withdrawn ? `<span style="color:#94a3b8;">📦 مسحوب: ${o.withdrawn}</span>` : ''}
+                        <div class="actions">
+                            <button onclick="viewOrder('${o.id}')">عرض</button>
+                            <button onclick="sendWACustomer('${o.id}')" class="btn-wa">واتساب</button>
+                            ${getCurrentUser()?.role === 'admin' || getCurrentUser()?.canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">حذف</button>` : ''}
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
-
-        function viewOrder(id) {
-            const orders = getOrders();
-            const o = orders.find(i => i.id == id);
-            if (!o) return;
-            const modal = document.getElementById('orderModal');
-            const body = document.getElementById('modalBody');
-            modal.classList.add('open');
-            document.getElementById('modalTitle').textContent = `تفاصيل طلب ${o.name}`;
-            body.innerHTML = `
-                <div style="font-size:14px; line-height:1.8;">
-                    <p><strong>الاسم:</strong> ${o.name}</p>
-                    <p><strong>الهاتف:</strong> ${o.phone}</p>
-                    <p><strong>العنوان:</strong> ${o.address || 'غير محدد'}</p>
-                    <p><strong>الكود:</strong> ${o.code || 'غير محدد'}</p>
-                    <p><strong>التاريخ:</strong> ${o.date}</p>
-                    <p><strong>الحالة:</strong> ${o.status}</p>
-                    <hr style="border-color:var(--border);" />
-                    <p><strong>المواد:</strong></p>
-                    <ul>${o.items.map(i => `<li>${i.name} (${i.qty} × $${i.price})</li>`).join('')}</ul>
-                    <hr style="border-color:var(--border);" />
-                    <p><strong>الإجمالي:</strong> $${o.total.toFixed(2)}</p>
-                    ${o.paid ? `<p><strong>مدفوع:</strong> $${o.paid}</p>` : ''}
-                    ${o.prepaid ? `<p><strong>مدفوع مسبقاً:</strong> $${o.prepaid}</p>` : ''}
-                    ${o.withdrawn ? `<p><strong>مسحوب:</strong> ${o.withdrawn}</p>` : ''}
+                    <div style="font-size:13px;color:var(--text-muted);">📦 ${o.items.map(i=>i.name).join(' • ')}</div>
+                    <div style="font-size:14px;color:var(--gold);font-weight:700;">$${o.total.toFixed(2)}</div>
                 </div>
+            `).join('');
+        }
+        function viewOrder(id) {
+            const o = getOrders().find(i => i.id == id);
+            if (!o) return;
+            document.getElementById('orderModal').classList.add('open');
+            document.getElementById('modalTitle').textContent = `تفاصيل ${o.name}`;
+            document.getElementById('modalBody').innerHTML = `
+                <p><strong>الاسم:</strong> ${o.name}</p><p><strong>الهاتف:</strong> ${o.phone}</p>
+                <p><strong>العنوان:</strong> ${o.address||'غير محدد'}</p><p><strong>التاريخ:</strong> ${o.date}</p>
+                <hr style="border-color:var(--border);" />
+                <p><strong>المواد:</strong></p><ul>${o.items.map(i=>`<li>${i.name} (${i.qty} × $${i.price})</li>`).join('')}</ul>
+                <hr style="border-color:var(--border);" />
+                <p><strong>الإجمالي:</strong> $${o.total.toFixed(2)}</p>
             `;
         }
         function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
-
-        function markPaid(id) {
-            let orders = getOrders();
-            const i = orders.findIndex(o => o.id == id);
-            if (i===-1) return;
-            const amount = prompt('أدخل المبلغ المدفوع ($):', orders[i].total - orders[i].paid || 0);
-            if (amount === null) return;
-            const withdrawn = prompt('أدخل الكمية المسحوبة (اختياري):', '');
-            orders[i].paid = (orders[i].paid || 0) + parseFloat(amount);
-            if (withdrawn) orders[i].withdrawn = withdrawn;
-            if (orders[i].paid >= orders[i].total) orders[i].status = 'complete';
-            else orders[i].status = 'paid';
-            localStorage.setItem('katan_orders', JSON.stringify(orders));
-            sendLogToTelegram(`💳 تم دفع مبلغ $${amount} للزبون ${orders[i].name} بواسطة ${getCurrentUser().username}`);
-            loadAll();
-        }
-
         function deleteOrder(id) {
-            if (!confirm('حذف الطلب نهائياً؟')) return;
+            if (!confirm('حذف الطلب؟')) return;
             let orders = getOrders();
             const o = orders.find(i => i.id == id);
-            orders = orders.filter(o => o.id != id);
+            orders = orders.filter(i => i.id != id);
             localStorage.setItem('katan_orders', JSON.stringify(orders));
-            sendLogToTelegram(`❌ تم حذف فاتورة الزبون ${o.name} بقيمة $${o.total} بواسطة ${getCurrentUser().username}\nالمواد: ${o.items.map(i=>i.name).join(', ')}`);
+            sendLogToTelegram(`❌ تم حذف فاتورة ${o.name} بقيمة $${o.total} بواسطة ${getCurrentUser().username}`);
             loadAll();
         }
-
         function sendWACustomer(id) {
-            const orders = getOrders();
-            const o = orders.find(i => i.id == id);
+            const o = getOrders().find(i => i.id == id);
             if (!o) return alert('الطلب غير موجود');
             const customer = getCustomers().find(c => c.name === o.name && c.phone === o.phone);
             let finalTotal = 0;
             const details = o.items.map(item => {
                 let price = item.price || 10;
-                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) {
-                    price = customer.productDiscounts[item.name];
-                }
+                if (customer && customer.productDiscounts && customer.productDiscounts[item.name]) price = customer.productDiscounts[item.name];
                 finalTotal += item.qty * price;
                 return `- ${item.name} (${item.qty} × $${price})`;
             }).join('\n');
-            const exchange = parseInt(localStorage.getItem('katan_exchange_rate')) || 13000;
-            const totalSYP = (finalTotal * exchange).toFixed(0);
-            const msg = `السلام عليكم السيد ${o.name}، لقد تلقينا طلبكم بالمواد التالية:\n${details}\nالمبلغ الكامل: $${finalTotal.toFixed(2)} (≈ ${totalSYP} SYP)\nسيتم تجهيز طلبكم خلال ساعات، تفضل بزيارتنا لاستكمال الإجراءات.`;
+            const msg = `السلام عليكم السيد ${o.name}، لقد تلقينا طلبكم:\n${details}\nالمبلغ: $${finalTotal.toFixed(2)}`;
             window.open(`https://wa.me/${o.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // ===== PLACEHOLDERS FOR OTHER FUNCTIONS =====
-        function renderPrices() {} // (تم حذفها للاختصار، ولكنها موجودة في الكود السابق)
-        function renderCustomers() {}
-        function renderPrepayments() {}
-        function addPrepayment() {}
-        function deletePrepayment() {}
-        function updatePrice() {}
+        // ===== EXCHANGE =====
+        function updateExchangeRate() {
+            localStorage.setItem('katan_exchange_rate', document.getElementById('exchangeRateInput').value);
+            alert('✅ تم تحديث سعر الصرف');
+        }
+
+        // ===== MENU NAVIGATION =====
+        function showView(view) {
+            // Simple toggle for demonstration; all data is in one view in this EXE style
+            document.querySelectorAll('.menu-bar a').forEach(a => a.style.color = '');
+            event.target.style.color = 'var(--gold)';
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if already logged in
             const user = getCurrentUser();
-            if (user) showDashboard();
+            if (user) showApp();
         });
     </script>
 </body>
