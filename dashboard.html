@@ -6,7 +6,6 @@
     <title>KATANBUILD | لوحة المحاسب المتطورة</title>
     <link rel="icon" type="image/png" href="https://katanbuild.com/storage/branding/logo-dark.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet" />
-    <!-- Leaflet for interactive maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -63,7 +62,6 @@
         ::-webkit-scrollbar-track { background:#1e1e1e; }
         ::-webkit-scrollbar-thumb { background:#3e3e3e; border-radius:4px; }
         @media (max-width:768px) { .menu-bar { flex-wrap:wrap; } .stats { grid-template-columns:1fr 1fr; } }
-
         /* Print Styles */
         @media print {
             body * { visibility: hidden; }
@@ -89,6 +87,7 @@
             <a onclick="showView('customers', this)">الزبائن الخاصين</a>
             <a onclick="showView('reps', this)">المندوبون</a>
             <a onclick="showView('prices', this)">الأسعار</a>
+            <a onclick="showView('tracking', this)">📍 تتبع الزبائن</a>
             <a id="adminMenuItem" class="hidden" onclick="showView('admin', this)">المستخدمون</a>
             <a onclick="logout()" style="color:#ef4444;">خروج</a>
         </div>
@@ -101,15 +100,29 @@
                 <div id="loginError" style="color:#ef4444;margin-top:10px;"></div>
             </div>
             <div id="appContent" class="hidden">
+                <!-- VIEW: Dashboard -->
                 <div id="view-dashboard" class="view">
                     <div class="panel"><div class="panel-title">📈 إحصائيات عامة</div><div class="stats" id="stats"><div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div><div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div><div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div><div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div></div></div>
                     <div class="panel"><div class="panel-title">📋 جميع الطلبات (آخر 20)</div><div id="ordersListDashboard"></div></div>
                 </div>
+                <!-- VIEW: Orders (Manual) -->
                 <div id="view-orders" class="view hidden"><div class="panel"><div class="panel-title">📦 طلبات الزبائن (يدوي)</div><div class="filters"><input type="text" id="searchInputOrders" placeholder="بحث..." oninput="renderOrdersList('orders')" /><select id="statusFilterOrders" onchange="renderOrdersList('orders')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('orders')">تحديث</button></div><div id="ordersListOrders"></div></div></div>
+                <!-- VIEW: Online Orders -->
                 <div id="view-online" class="view hidden"><div class="panel"><div class="panel-title">🌐 طلبـات الإنترنت</div><div class="filters"><input type="text" id="searchInputOnline" placeholder="بحث..." oninput="renderOrdersList('online')" /><select id="statusFilterOnline" onchange="renderOrdersList('online')"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select><button onclick="renderOrdersList('online')">تحديث</button></div><div id="ordersListOnline"></div></div></div>
+                <!-- VIEW: Customers -->
                 <div id="view-customers" class="view hidden"><div class="panel"><div class="panel-title">⭐ الزبائن الخاصين</div><div class="input-group"><input type="text" id="custName" placeholder="اسم الزبون" /><input type="text" id="custPhone" placeholder="رقم الهاتف" /><input type="text" id="custAddress" placeholder="العنوان" /><input type="text" id="custCode" placeholder="الكود الخاص" /></div><div class="input-group"><select id="custProduct"><option value="">اختر المنتج للخصم</option></select><input type="number" id="custDiscountPrice" placeholder="السعر المخصوم ($)" step="0.5" /><button onclick="addProductDiscount()">➕ إضافة خصم منتج</button></div><div id="tempDiscounts" style="margin:8px 0; display:flex; flex-wrap:wrap; gap:6px;"></div><button onclick="saveCustomer()" style="background:var(--gold);color:#000;border:none;padding:8px 16px;border-radius:4px;font-weight:700;cursor:pointer;">💾 حفظ الزبون الدائم</button><div id="customerList" style="margin-top:12px;"></div></div></div>
+                <!-- VIEW: Reps -->
                 <div id="view-reps" class="view hidden"><div class="panel"><div class="panel-title">👤 المندوبون</div><div class="input-group"><input type="text" id="repName" placeholder="اسم المندوب" /><button onclick="addRep()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة مندوب</button></div><div id="repList" style="margin-top:12px;"></div></div></div>
+                <!-- VIEW: Prices -->
                 <div id="view-prices" class="view hidden"><div class="panel"><div class="panel-title">💰 الأسعار</div><div class="input-group"><input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 120px;" /><button onclick="updateExchangeRate()">تحديث سعر الصرف</button></div><table style="width:100%;border-collapse:collapse;font-size:14px;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:right;padding:6px;">المنتج</th><th style="text-align:right;padding:6px;">السعر ($)</th><th style="text-align:right;padding:6px;">تعديل</th></tr></thead><tbody id="priceTableBody"></tbody></table></div></div>
+                <!-- VIEW: Tracking (IP & Location) -->
+                <div id="view-tracking" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">📍 تتبع الزبائن (الموقع والـ IP)</div>
+                        <div id="trackingTableContainer"></div>
+                    </div>
+                </div>
+                <!-- VIEW: Admin -->
                 <div id="view-admin" class="view hidden"><div class="panel"><div class="panel-title">👤 إدارة المستخدمين</div><div class="input-group"><input type="text" id="newUserUser" placeholder="اسم المستخدم" /><input type="text" id="newUserPass" placeholder="كلمة المرور" /><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label><label style="display:flex;align-items:center;gap:4px;color:var(--text-muted);font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label><button onclick="addUser()" style="background:var(--gold);color:#000;border:none;padding:6px 12px;border-radius:4px;font-weight:700;cursor:pointer;">➕ إضافة</button></div><div id="userList" style="margin:8px 0;font-size:14px;"></div></div></div>
             </div>
         </div>
@@ -194,6 +207,7 @@
             if (viewId === 'orders') renderOrdersList('orders');
             if (viewId === 'online') renderOrdersList('online');
             if (viewId === 'dashboard') renderOrdersList('dashboard');
+            if (viewId === 'tracking') renderTracking();
         }
 
         // ============================================================
@@ -409,7 +423,62 @@
         }
 
         // ============================================================
-        // 8. ORDERS + MAP + PRINT
+        // 8. TRACKING (IP & LOCATION)
+        // ============================================================
+        function renderTracking() {
+            const orders = getOrders().filter(o => o.location || o.ip);
+            const container = document.getElementById('trackingTableContainer');
+            if (!orders.length) {
+                container.innerHTML = '<p style="color:var(--text-muted);">لا توجد بيانات تتبع متاحة.</p>';
+                return;
+            }
+            let html = `<table style="width:100%; border-collapse:collapse; font-size:14px;">
+                <thead><tr style="border-bottom:1px solid var(--border);">
+                    <th style="padding:6px; text-align:right;">الاسم</th>
+                    <th style="padding:6px; text-align:right;">الهاتف</th>
+                    <th style="padding:6px; text-align:right;">IP</th>
+                    <th style="padding:6px; text-align:right;">الموقع</th>
+                    <th style="padding:6px; text-align:right;">خريطة</th>
+                </tr></thead><tbody>`;
+            orders.forEach(o => {
+                const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : '#';
+                const mapBtn = o.location ? 
+                    `<button onclick="showMap(${o.location.lat}, ${o.location.lng}, '${o.name}')" style="background:var(--cyan);color:#000;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">🗺️ عرض الخريطة</button>` :
+                    'لا يوجد';
+                html += `<tr style="border-bottom:1px solid var(--border);">
+                    <td style="padding:6px;">${o.name}</td>
+                    <td style="padding:6px;">${o.phone}</td>
+                    <td style="padding:6px;">${o.ip || 'غير متاح'}</td>
+                    <td style="padding:6px;">${o.location ? `${o.location.lat}, ${o.location.lng}` : 'غير متاح'}</td>
+                    <td style="padding:6px;">${mapBtn}</td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function showMap(lat, lng, name) {
+            const modal = document.getElementById('orderModal');
+            const body = document.getElementById('modalBody');
+            modal.classList.add('open');
+            document.getElementById('modalTitle').textContent = `موقع ${name}`;
+            body.innerHTML = `
+                <div id="mapContainer" style="height:400px; width:100%; border-radius:8px; border:1px solid var(--border);"></div>
+                <p style="margin-top:10px; font-size:14px; color:var(--text-muted);">الإحداثيات: ${lat}, ${lng}</p>
+                <p><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--cyan);">فتح في خرائط Google</a></p>
+            `;
+            // Initialize map after DOM update
+            setTimeout(() => {
+                const mapContainer = document.getElementById('mapContainer');
+                const map = L.map(mapContainer).setView([lat, lng], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.marker([lat, lng]).addTo(map).bindPopup(`📍 ${name}`).openPopup();
+                setTimeout(() => map.invalidateSize(), 500);
+            }, 200);
+        }
+
+        // ============================================================
+        // 9. ORDERS + PRINT
         // ============================================================
         function renderStats() {
             const o = getOrders();
@@ -463,7 +532,6 @@
                 const originalSYP = (originalTotal * exchange).toFixed(0);
                 const finalSYP = (finalTotal * exchange).toFixed(0);
                 const canDelete = user?.role === 'admin' || user?.role === 'superadmin' || user?.canDelete;
-                const locationLink = o.location ? `https://www.google.com/maps?q=${o.location.lat},${o.location.lng}` : '#';
                 return `
                 <div class="order-item">
                     <div class="top">
@@ -558,7 +626,6 @@
             const customer = customers.find(c => c.name === o.name && c.phone === o.phone);
             const exchange = getExchangeRate();
 
-            // Build invoice HTML
             let itemsHTML = o.items.map(item => {
                 let price = item.price || 10;
                 let finalPrice = price;
@@ -609,7 +676,6 @@
             </div>
             `;
 
-            // Print
             const printWindow = window.open('', '_blank', 'width=800,height=600');
             printWindow.document.write(`
                 <html><head><title>طباعة الفاتورة</title>
@@ -663,7 +729,7 @@
         }
 
         // ============================================================
-        // 9. LOAD ALL
+        // 10. LOAD ALL
         // ============================================================
         function loadAll() {
             renderStats();
@@ -674,11 +740,12 @@
             renderReps();
             renderPrices();
             renderUsers();
+            renderTracking();
             document.getElementById('exchangeRateInput').value = getExchangeRate();
         }
 
         // ============================================================
-        // 10. INIT
+        // 11. INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             populateProductSelect();
