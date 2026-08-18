@@ -25,9 +25,10 @@
         .title-bar .controls .green { background:#27c93f; }
         
         /* ===== MENU BAR ===== */
-        .menu-bar { background:#2d2d2d; padding:4px 16px; border-bottom:1px solid var(--border); display:flex; gap:20px; }
+        .menu-bar { background:#2d2d2d; padding:4px 16px; border-bottom:1px solid var(--border); display:flex; gap:20px; flex-wrap:wrap; }
         .menu-bar a { color:var(--text-muted); text-decoration:none; font-size:14px; font-weight:600; cursor:pointer; padding:4px 8px; transition:0.2s; }
         .menu-bar a:hover { color:var(--gold); background:rgba(255,215,0,0.1); border-radius:4px; }
+        .menu-bar a.active { color:var(--gold); background:rgba(255,215,0,0.15); }
         
         /* ===== CONTENT AREA ===== */
         .content-area { flex:1; padding:20px; overflow-y:auto; background:#1e1e1e; }
@@ -42,6 +43,8 @@
         .hidden { display:none !important; }
         .panel { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:16px; margin-bottom:16px; }
         .panel-title { color:var(--gold); font-weight:700; margin-bottom:12px; font-size:16px; }
+        .panel-title-sm { color:var(--cyan); font-weight:600; font-size:14px; margin-bottom:8px; }
+        
         .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
         .stat-card { background:#252526; border:1px solid var(--border); border-radius:6px; padding:12px; text-align:center; }
         .stat-card .num { font-family:'Orbitron'; font-size:24px; font-weight:900; color:var(--gold); }
@@ -89,10 +92,12 @@
         
         <!-- MENU BAR -->
         <div class="menu-bar" id="menuBar">
-            <a onclick="showView('dashboard')">لوحة التحكم</a>
-            <a onclick="showView('orders')">الطلبات</a>
-            <a onclick="showView('reps')">المندوبون</a>
-            <a onclick="showView('settings')">الإعدادات</a>
+            <a class="active" onclick="showView('dashboard', this)">لوحة التحكم</a>
+            <a onclick="showView('orders', this)">الطلبات</a>
+            <a onclick="showView('customers', this)">الزبائن الخاصين</a>
+            <a onclick="showView('reps', this)">المندوبون</a>
+            <a onclick="showView('prices', this)">الأسعار</a>
+            <a id="adminMenuItem" class="hidden" onclick="showView('admin', this)">المستخدمون</a>
             <a onclick="logout()" style="color:#ef4444;">خروج</a>
         </div>
 
@@ -109,50 +114,99 @@
 
             <!-- DASHBOARD CONTENT (hidden until login) -->
             <div id="appContent" class="hidden">
-                <!-- Admin Panel (visible only to 1992) -->
-                <div id="adminPanel" class="hidden panel">
-                    <div class="panel-title">⚙️ لوحة تحكم المسؤول</div>
-                    <div class="input-group">
-                        <input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 100px;" />
-                        <button onclick="updateExchangeRate()">تحديث سعر الصرف</button>
+                <!-- VIEW: Dashboard (Stats & Orders) -->
+                <div id="view-dashboard" class="view">
+                    <div class="panel">
+                        <div class="panel-title">📈 إحصائيات عامة</div>
+                        <div class="stats" id="stats">
+                            <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div>
+                            <div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div>
+                            <div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div>
+                            <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div>
+                        </div>
                     </div>
-                    <hr style="border-color:var(--border); margin:12px 0;" />
-                    <div class="panel-title" style="font-size:14px; color:var(--cyan);">👤 إدارة المستخدمين</div>
-                    <div class="input-group">
-                        <input type="text" id="newUserUser" placeholder="اسم المستخدم" />
-                        <input type="text" id="newUserPass" placeholder="كلمة المرور" />
-                        <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label>
-                        <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label>
-                        <button onclick="addUser()">➕ إضافة</button>
+                    <div class="panel">
+                        <div class="panel-title">📋 قائمة الطلبات</div>
+                        <div class="filters">
+                            <input type="text" id="searchInput" placeholder="بحث بالاسم..." oninput="renderOrders()" />
+                            <select id="statusFilter" onchange="renderOrders()"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select>
+                            <button onclick="renderOrders()">تحديث</button>
+                        </div>
+                        <div id="ordersList"></div>
                     </div>
-                    <div id="userList" style="margin:8px 0; font-size:14px;"></div>
-                    <hr style="border-color:var(--border); margin:12px 0;" />
-                    <div class="panel-title" style="font-size:14px; color:var(--cyan);">📊 إدارة المندوبين</div>
-                    <div class="input-group">
-                        <input type="text" id="repName" placeholder="اسم المندوب" />
-                        <input type="text" id="repClient" placeholder="اسم العميل (الزبون)" />
-                        <button onclick="addRepClient()">➕ إضافة عميل لمندوب</button>
-                    </div>
-                    <div id="repList" style="margin:8px 0; font-size:14px;"></div>
                 </div>
 
-                <!-- STATS -->
-                <div class="stats" id="stats">
-                    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي الطلبات</div></div>
-                    <div class="stat-card"><div class="num" id="statDebt">0</div><div class="label">الديون</div></div>
-                    <div class="stat-card"><div class="num" id="statPaid">0</div><div class="label">مدفوع مسبقاً</div></div>
-                    <div class="stat-card"><div class="num" id="statPending">0</div><div class="label">غير مكتملة</div></div>
+                <!-- VIEW: Orders (same as dashboard list, but full details) -->
+                <div id="view-orders" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">📦 جميع الطلبات</div>
+                        <div id="ordersListFull"></div>
+                    </div>
                 </div>
 
-                <!-- FILTERS & ORDERS -->
-                <div class="panel">
-                    <div class="filters">
-                        <input type="text" id="searchInput" placeholder="بحث بالاسم..." oninput="renderOrders()" />
-                        <select id="statusFilter" onchange="renderOrders()"><option value="all">الكل</option><option value="complete">مكتملة</option><option value="paid">مدفوعة</option><option value="pending">غير مكتملة</option></select>
-                        <button onclick="renderOrders()">تحديث</button>
+                <!-- VIEW: Customers (Loyal Customers with product discounts) -->
+                <div id="view-customers" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">⭐ الزبائن الخاصين</div>
+                        <div class="input-group">
+                            <input type="text" id="custName" placeholder="اسم الزبون" />
+                            <input type="text" id="custPhone" placeholder="رقم الهاتف" />
+                            <input type="text" id="custAddress" placeholder="العنوان" />
+                        </div>
+                        <div class="input-group">
+                            <select id="custProduct"><option value="">اختر المنتج للخصم</option></select>
+                            <input type="number" id="custDiscountPrice" placeholder="السعر المخصوم ($)" step="0.5" />
+                            <button onclick="addProductDiscount()">➕ إضافة خصم منتج</button>
+                        </div>
+                        <div id="tempDiscounts" style="margin:8px 0; display:flex; flex-wrap:wrap; gap:6px;"></div>
+                        <button onclick="saveCustomer()" class="btn-gold" style="padding:8px 16px; background:var(--gold); color:#000; border:none; border-radius:4px; font-weight:700; cursor:pointer;">💾 حفظ الزبون الدائم</button>
+                        <div id="customerList" style="margin-top:12px;"></div>
                     </div>
-                    <div id="ordersList"></div>
                 </div>
+
+                <!-- VIEW: Reps -->
+                <div id="view-reps" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">👤 المندوبون وتقييمهم</div>
+                        <div class="input-group">
+                            <input type="text" id="repName" placeholder="اسم المندوب" />
+                            <input type="text" id="repClient" placeholder="اسم العميل (الزبون)" />
+                            <button onclick="addRepClient()">➕ إضافة عميل لمندوب</button>
+                        </div>
+                        <div id="repList" style="margin-top:12px;"></div>
+                    </div>
+                </div>
+
+                <!-- VIEW: Prices (Global product prices) -->
+                <div id="view-prices" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">💰 أسعار المنتجات الافتراضية</div>
+                        <div class="input-group" style="margin-bottom:12px;">
+                            <input type="number" id="exchangeRateInput" value="13000" style="flex:0 0 120px;" />
+                            <button onclick="updateExchangeRate()">تحديث سعر الصرف</button>
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                            <thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:right;padding:6px;">المنتج</th><th style="text-align:right;padding:6px;">السعر ($)</th><th style="text-align:right;padding:6px;">تعديل</th></tr></thead>
+                            <tbody id="priceTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- VIEW: Admin (Users management – only for 1992 and 1990) -->
+                <div id="view-admin" class="view hidden">
+                    <div class="panel">
+                        <div class="panel-title">👤 إدارة المستخدمين</div>
+                        <div class="input-group">
+                            <input type="text" id="newUserUser" placeholder="اسم المستخدم" />
+                            <input type="text" id="newUserPass" placeholder="كلمة المرور" />
+                            <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserDelete" /> حذف</label>
+                            <label style="display:flex; align-items:center; gap:4px; color:var(--text-muted); font-size:13px;"><input type="checkbox" id="newUserPrices" /> تعديل أسعار</label>
+                            <button onclick="addUser()">➕ إضافة</button>
+                        </div>
+                        <div id="userList" style="margin:8px 0; font-size:14px;"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -174,8 +228,11 @@
         function setCurrentUser(u) { sessionStorage.setItem('katan_current_user', JSON.stringify(u)); }
         function getOrders() { return JSON.parse(localStorage.getItem('katan_orders') || '[]'); }
         function getCustomers() { return JSON.parse(localStorage.getItem('katan_customers') || '[]'); }
+        function saveCustomers(customers) { localStorage.setItem('katan_customers', JSON.stringify(customers)); }
         function getReps() { return JSON.parse(localStorage.getItem('katan_reps') || '[]'); }
         function saveReps(reps) { localStorage.setItem('katan_reps', JSON.stringify(reps)); }
+        function getPrices() { return JSON.parse(localStorage.getItem('katan_prices') || '{}'); }
+        function savePrices(prices) { localStorage.setItem('katan_prices', JSON.stringify(prices)); }
         function sendLogToTelegram(msg) { fetch(`https://api.telegram.org/bot8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:'8938601996', text:`📋 سجل التدقيق:\n${msg}`}) }); }
 
         // ===== LOGIN =====
@@ -183,6 +240,7 @@
             const u = document.getElementById('usernameInput').value.trim();
             const p = document.getElementById('passwordInput').value.trim();
             if (u === '1992' && p === '1992') { setCurrentUser({ username: '1992', role: 'admin' }); showApp(); return; }
+            if (u === '1990' && p === '1990') { setCurrentUser({ username: '1990', role: 'superadmin' }); showApp(); return; }
             const users = getUsers();
             const found = users.find(user => user.username === u && user.password === p);
             if (found) { setCurrentUser(found); showApp(); } else { document.getElementById('loginError').textContent = '❌ بيانات خاطئة'; }
@@ -191,11 +249,37 @@
             document.getElementById('loginBox').classList.add('hidden');
             document.getElementById('appContent').classList.remove('hidden');
             const user = getCurrentUser();
-            if (user && user.role === 'admin') document.getElementById('adminPanel').classList.remove('hidden');
+            // Show admin menu only for 1992 or 1990
+            if (user && (user.role === 'admin' || user.role === 'superadmin')) {
+                document.getElementById('adminMenuItem').classList.remove('hidden');
+            }
+            // Default view
+            showView('dashboard', document.querySelector('#menuBar a'));
             loadAll();
             setInterval(loadAll, 5000);
         }
         function logout() { sessionStorage.removeItem('katan_current_user'); location.reload(); }
+
+        // ===== NAVIGATION =====
+        function showView(viewId, element) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+            // Show selected view
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.remove('hidden');
+            // Update menu active state
+            if (element) {
+                document.querySelectorAll('#menuBar a').forEach(a => a.classList.remove('active'));
+                element.classList.add('active');
+            }
+            // Load data based on view
+            if (viewId === 'customers') renderCustomers();
+            if (viewId === 'reps') renderReps();
+            if (viewId === 'prices') renderPrices();
+            if (viewId === 'admin') renderUsers();
+            if (viewId === 'orders') renderOrdersFull();
+            if (viewId === 'dashboard') renderOrders();
+        }
 
         // ===== ADMIN =====
         function addUser() {
@@ -208,16 +292,90 @@
             saveUsers(users); renderUsers();
             document.getElementById('newUserUser').value = ''; document.getElementById('newUserPass').value = '';
         }
+        function deleteUser(i) {
+            if (!confirm('حذف هذا المستخدم؟')) return;
+            let users = getUsers();
+            users.splice(i,1);
+            saveUsers(users); renderUsers();
+        }
         function renderUsers() {
             const users = getUsers();
-            document.getElementById('userList').innerHTML = users.map((u, i) =>
+            const container = document.getElementById('userList');
+            if (!users.length) { container.innerHTML = '<p style="color:var(--text-muted);">لا يوجد مستخدمون</p>'; return; }
+            container.innerHTML = users.map((u, i) =>
                 `<div style="display:flex;justify-content:space-between;padding:4px 8px;background:#252526;border-radius:4px;margin:4px 0;">
                     <span>${u.username} - ${u.canDelete?'حذف ✅':'حذف ❌'} - ${u.canEditPrices?'أسعار ✅':'أسعار ❌'}</span>
                     <button onclick="deleteUser(${i})" style="background:#ef4444;border:none;color:#fff;padding:0 8px;border-radius:4px;cursor:pointer;">✕</button>
                 </div>`
             ).join('');
         }
-        function deleteUser(i) { let users = getUsers(); users.splice(i,1); saveUsers(users); renderUsers(); }
+
+        // ===== CUSTOMERS =====
+        let tempCustomerDiscounts = {};
+        function populateProductSelect() {
+            const sel = document.getElementById('custProduct');
+            const allProducts = ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست','آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق','ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر','سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي','مارفيل','الترا بوند ذهبي','الترا بوند اورنج','طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت','الترا جريب','جراوت اصلاح الترا بوند','عازل مركبين','عازل بلاستيكي','عازل حجر شفاف'];
+            sel.innerHTML = '<option value="">اختر المنتج للخصم</option>' + allProducts.map(p => `<option value="${p}">${p}</option>`).join('');
+        }
+        function addProductDiscount() {
+            const product = document.getElementById('custProduct').value;
+            const price = parseFloat(document.getElementById('custDiscountPrice').value);
+            if (!product || isNaN(price)) return alert('اختر منتج وأدخل سعراً مخصوماً');
+            tempCustomerDiscounts[product] = price;
+            renderTempDiscounts();
+            document.getElementById('custProduct').value = '';
+            document.getElementById('custDiscountPrice').value = '';
+        }
+        function removeTempDiscount(product) {
+            delete tempCustomerDiscounts[product];
+            renderTempDiscounts();
+        }
+        function renderTempDiscounts() {
+            const container = document.getElementById('tempDiscounts');
+            container.innerHTML = Object.keys(tempCustomerDiscounts).map(p =>
+                `<span style="background:#252526;border:1px solid var(--border);padding:4px 10px;border-radius:4px;">${p}: $${tempCustomerDiscounts[p]} <button onclick="removeTempDiscount('${p}')" style="background:#ef4444;border:none;color:#fff;border-radius:4px;padding:0 6px;cursor:pointer;">✕</button></span>`
+            ).join('');
+        }
+        function saveCustomer() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            if (!name || !phone) return alert('أدخل اسم الزبون ورقم الهاتف');
+            if (Object.keys(tempCustomerDiscounts).length === 0) return alert('أضف خصماً لمنتج واحد على الأقل');
+            let customers = getCustomers();
+            const existing = customers.find(c => c.name === name && c.phone === phone);
+            if (existing) {
+                existing.address = address;
+                existing.productDiscounts = { ...tempCustomerDiscounts };
+            } else {
+                customers.push({ name, phone, address, productDiscounts: { ...tempCustomerDiscounts } });
+            }
+            saveCustomers(customers);
+            tempCustomerDiscounts = {};
+            renderTempDiscounts();
+            renderCustomers();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custAddress').value = '';
+            alert('✅ تم حفظ الزبون الدائم وخصوماته');
+        }
+        function renderCustomers() {
+            const list = getCustomers();
+            const container = document.getElementById('customerList');
+            if (!list.length) { container.innerHTML = '<p style="color:var(--text-muted);">لا يوجد زبائن خاصون</p>'; return; }
+            container.innerHTML = list.map((c, i) =>
+                `<div style="display:flex;justify-content:space-between;padding:8px 12px;background:#252526;border-radius:4px;margin:4px 0;flex-wrap:wrap;gap:8px;">
+                    <div><strong>${c.name}</strong> - ${c.phone} - ${c.address || ''}<br><span style="font-size:12px;color:var(--cyan);">خصومات: ${Object.keys(c.productDiscounts).map(p=>`${p} ($${c.productDiscounts[p]})`).join(', ')}</span></div>
+                    <button onclick="deleteCustomer(${i})" style="background:#ef4444;border:none;color:#fff;padding:2px 12px;border-radius:4px;cursor:pointer;">✕</button>
+                </div>`
+            ).join('');
+        }
+        function deleteCustomer(index) {
+            let customers = getCustomers();
+            customers.splice(index, 1);
+            saveCustomers(customers);
+            renderCustomers();
+        }
 
         // ===== REPS =====
         function addRepClient() {
@@ -243,8 +401,39 @@
             ).join('');
         }
 
+        // ===== PRICES =====
+        function renderPrices() {
+            const prices = getPrices();
+            const allProducts = ['كارو فيكس','كلايتور','بروسيل احمر','القرع ديكور فيكس','لازورد','فورريفر فيكس','ايفرست','آن ازرق','الباسل','عباس','اونكس','الترا غريب اكسترا','اكوا فيكس بلس','بروسيل مسابح','الترا بوند ازرق','ليث ازرق','الترا جريب','كلوبال فيكس','توب فيكس','ناولو','سلامات فكس','سبان فيكس','شربجي','نجار فيكس','الترا بوند اخضر','بروسيل اخضر','سيتي فيكس','كرافت الترافيكس','لايت فيكس','بريمير فيكس','موسيك فيكس','سيرا فيكس','منستر فيكس 100','فيكسو','الترا بوند احمر','بروسيل رمادي','مارفيل','الترا بوند ذهبي','الترا بوند اورنج','طينة سولايد ميكس اسمنتية 50كغ','طينة اسمنتية سولايد ميكس 18كغ','الترا بوند طينة بلاستيكية','الترا بوند طينة اكرليكية','طينة غرانيت','الترا جريب','جراوت اصلاح الترا بوند','عازل مركبين','عازل بلاستيكي','عازل حجر شفاف'];
+            const tbody = document.getElementById('priceTableBody');
+            tbody.innerHTML = allProducts.map(p =>
+                `<tr><td>${p}</td><td><input type="number" id="price_${p}" value="${prices[p] || 10}" step="0.5" style="width:80px;background:#252526;border:1px solid var(--border);color:#fff;padding:4px;border-radius:4px;" /></td>
+                <td><button onclick="updatePrice('${p}')" style="background:var(--gold);color:#000;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;">حفظ</button></td></tr>`
+            ).join('');
+        }
+        function updatePrice(product) {
+            const val = document.getElementById(`price_${product}`).value;
+            const prices = getPrices();
+            prices[product] = parseFloat(val);
+            savePrices(prices);
+            alert('✅ تم حفظ السعر');
+            renderPrices();
+        }
+        function updateExchangeRate() {
+            localStorage.setItem('katan_exchange_rate', document.getElementById('exchangeRateInput').value);
+            alert('✅ تم تحديث سعر الصرف');
+        }
+
         // ===== ORDERS =====
-        function loadAll() { renderOrders(); renderStats(); renderReps(); renderUsers(); }
+        function loadAll() {
+            renderOrders();
+            renderStats();
+            // Also refresh other views if visible
+            if (!document.getElementById('view-customers').classList.contains('hidden')) renderCustomers();
+            if (!document.getElementById('view-reps').classList.contains('hidden')) renderReps();
+            if (!document.getElementById('view-prices').classList.contains('hidden')) renderPrices();
+            if (!document.getElementById('view-admin').classList.contains('hidden')) renderUsers();
+        }
         function renderStats() {
             const o = getOrders();
             document.getElementById('statTotal').textContent = o.length;
@@ -272,8 +461,35 @@
                         </div>
                         <div class="actions">
                             <button onclick="viewOrder('${o.id}')">عرض</button>
-                            <button onclick="sendWACustomer('${o.id}')" class="btn-wa">واتساب</button>
-                            ${getCurrentUser()?.role === 'admin' || getCurrentUser()?.canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">حذف</button>` : ''}
+                            ${o.status === 'pending' ? `<button onclick="markPaid('${o.id}')">✅ دفع</button>` : ''}
+                            <button onclick="sendWACustomer('${o.id}')" class="btn-wa">📩 تأكيد واتساب</button>
+                            ${getCurrentUser()?.role === 'admin' || getCurrentUser()?.role === 'superadmin' || getCurrentUser()?.canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">حذف</button>` : ''}
+                        </div>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-muted);">📦 ${o.items.map(i=>i.name).join(' • ')}</div>
+                    <div style="font-size:14px;color:var(--gold);font-weight:700;">$${o.total.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+        function renderOrdersFull() {
+            // Same as renderOrders but for the "Orders" view
+            const list = document.getElementById('ordersListFull');
+            // Reuse same logic but with full details if needed
+            let orders = getOrders();
+            const filter = document.getElementById('statusFilter')?.value || 'all';
+            if (filter !== 'all') orders = orders.filter(o => o.status === filter);
+            if (!orders.length) { list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">لا توجد طلبات</div>'; return; }
+            list.innerHTML = orders.map(o => `
+                <div class="order-item">
+                    <div class="top">
+                        <div>
+                            <strong>${o.name}</strong> <span style="color:var(--text-muted);font-size:13px;">${o.phone}</span>
+                            <span style="color:var(--text-muted);font-size:13px;">${o.date}</span>
+                            <span class="badge ${o.status==='complete'?'badge-green':o.status==='paid'?'badge-yellow':'badge-orange'}">${o.status}</span>
+                        </div>
+                        <div class="actions">
+                            <button onclick="viewOrder('${o.id}')">عرض</button>
+                            ${getCurrentUser()?.role === 'admin' || getCurrentUser()?.role === 'superadmin' || getCurrentUser()?.canDelete ? `<button class="danger" onclick="deleteOrder('${o.id}')">حذف</button>` : ''}
                         </div>
                     </div>
                     <div style="font-size:13px;color:var(--text-muted);">📦 ${o.items.map(i=>i.name).join(' • ')}</div>
@@ -305,6 +521,19 @@
             sendLogToTelegram(`❌ تم حذف فاتورة ${o.name} بقيمة $${o.total} بواسطة ${getCurrentUser().username}`);
             loadAll();
         }
+        function markPaid(id) {
+            let orders = getOrders();
+            const i = orders.findIndex(o => o.id == id);
+            if (i===-1) return;
+            const amount = prompt('أدخل المبلغ المدفوع ($):', orders[i].total - orders[i].paid || 0);
+            if (amount === null) return;
+            orders[i].paid = (orders[i].paid || 0) + parseFloat(amount);
+            if (orders[i].paid >= orders[i].total) orders[i].status = 'complete';
+            else orders[i].status = 'paid';
+            localStorage.setItem('katan_orders', JSON.stringify(orders));
+            sendLogToTelegram(`💳 تم دفع مبلغ $${amount} للزبون ${orders[i].name} بواسطة ${getCurrentUser().username}`);
+            loadAll();
+        }
         function sendWACustomer(id) {
             const o = getOrders().find(i => i.id == id);
             if (!o) return alert('الطلب غير موجود');
@@ -320,20 +549,9 @@
             window.open(`https://wa.me/${o.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // ===== EXCHANGE =====
-        function updateExchangeRate() {
-            localStorage.setItem('katan_exchange_rate', document.getElementById('exchangeRateInput').value);
-            alert('✅ تم تحديث سعر الصرف');
-        }
-
-        // ===== MENU NAVIGATION =====
-        function showView(view) {
-            // Simple toggle for demonstration; all data is in one view in this EXE style
-            document.querySelectorAll('.menu-bar a').forEach(a => a.style.color = '');
-            event.target.style.color = 'var(--gold)';
-        }
-
+        // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
+            populateProductSelect();
             const user = getCurrentUser();
             if (user) showApp();
         });
