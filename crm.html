@@ -15,9 +15,86 @@
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #0b132b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.1);
+        }
+
+        .login-box h2 {
+            color: #ffd700;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-family: 'Cairo';
+        }
+
+        .login-box .field {
+            margin-bottom: 15px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            background: rgba(3, 7, 18, 0.6);
+            color: #fff;
+            font-family: 'Cairo';
+            font-size: 16px;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .login-box .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo';
+            font-size: 16px;
+            background: #ffd700;
+            color: #000;
+            transition: 0.3s;
+        }
+
+        .login-box .btn:hover {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .login-error {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-screen.hidden {
+            display: none;
         }
 
         /* ===== HEADER ===== */
@@ -35,16 +112,9 @@
             gap: 10px;
         }
 
-        .header h1 {
-            font-size: 24px;
-            color: #ffd700;
-        }
+        .header h1 { font-size: 24px; color: #ffd700; }
 
-        .header-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .header-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
             padding: 8px 20px;
@@ -68,13 +138,7 @@
         .btn-outline:hover { border-color: #ffd700; }
 
         /* ===== TABS ===== */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab {
             padding: 10px 24px;
             border-radius: 12px;
@@ -86,16 +150,8 @@
             font-family: 'Cairo';
             transition: 0.3s;
         }
-
-        .tab.active {
-            background: #ffd700;
-            color: #000;
-            border-color: #ffd700;
-        }
-
-        .tab:hover:not(.active) {
-            border-color: #ffd700;
-        }
+        .tab.active { background: #ffd700; color: #000; border-color: #ffd700; }
+        .tab:hover:not(.active) { border-color: #ffd700; }
 
         .page { display: none; }
         .page.active { display: block; }
@@ -110,12 +166,7 @@
             margin-bottom: 20px;
         }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
+        .card-title { font-size: 18px; font-weight: 800; color: #ffd700; margin-bottom: 15px; }
 
         /* ===== FORMS ===== */
         .form-row {
@@ -125,18 +176,8 @@
             margin-bottom: 15px;
         }
 
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .field label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #94a3b8;
-        }
-
+        .field { display: flex; flex-direction: column; gap: 4px; }
+        .field label { font-size: 13px; font-weight: 600; color: #94a3b8; }
         .field input, .field select {
             padding: 10px 14px;
             border-radius: 10px;
@@ -146,26 +187,12 @@
             font-family: 'Cairo';
             font-size: 14px;
         }
-
-        .field input:focus, .field select:focus {
-            outline: none;
-            border-color: #ffd700;
-        }
-
-        .field input::placeholder {
-            color: #64748b;
-        }
+        .field input:focus, .field select:focus { outline: none; border-color: #ffd700; }
+        .field input::placeholder { color: #64748b; }
 
         /* ===== TABLE ===== */
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
         th {
             background: rgba(3, 7, 18, 0.6);
             color: #ffd700;
@@ -174,28 +201,15 @@
             font-size: 14px;
             border-bottom: 2px solid rgba(255,215,0,0.2);
         }
-
         td {
             padding: 10px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             font-size: 14px;
         }
+        tr:hover td { background: rgba(255,255,255,0.03); }
 
-        tr:hover td {
-            background: rgba(255,255,255,0.03);
-        }
-
-        .actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .actions .btn {
-            padding: 4px 12px;
-            font-size: 12px;
-            border-radius: 6px;
-        }
+        .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .actions .btn { padding: 4px 12px; font-size: 12px; border-radius: 6px; }
 
         /* ===== PROFIT HINT ===== */
         .profit-hint {
@@ -206,24 +220,9 @@
             font-size: 16px;
             text-align: center;
         }
-
-        .profit-hint.positive {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid #22c55e;
-            color: #22c55e;
-        }
-
-        .profit-hint.negative {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid #ef4444;
-            color: #ef4444;
-        }
-
-        .profit-hint.neutral {
-            background: rgba(255, 215, 0, 0.2);
-            border: 1px solid #ffd700;
-            color: #ffd700;
-        }
+        .profit-hint.positive { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #22c55e; }
+        .profit-hint.negative { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; }
+        .profit-hint.neutral { background: rgba(255, 215, 0, 0.2); border: 1px solid #ffd700; color: #ffd700; }
 
         /* ===== SUMMARY ===== */
         .summary-grid {
@@ -232,7 +231,6 @@
             gap: 15px;
             margin-bottom: 20px;
         }
-
         .summary-item {
             background: rgba(3, 7, 18, 0.4);
             padding: 16px;
@@ -240,17 +238,8 @@
             text-align: center;
             border: 1px solid rgba(255,215,0,0.1);
         }
-
-        .summary-item .num {
-            font-size: 28px;
-            font-weight: 900;
-            color: #ffd700;
-        }
-
-        .summary-item .label {
-            font-size: 13px;
-            color: #94a3b8;
-        }
+        .summary-item .num { font-size: 28px; font-weight: 900; color: #ffd700; }
+        .summary-item .label { font-size: 13px; color: #94a3b8; }
 
         /* ===== LOGS ===== */
         .log-item {
@@ -259,11 +248,7 @@
             font-size: 13px;
             color: #94a3b8;
         }
-
-        .log-item .time {
-            color: #64748b;
-            font-size: 11px;
-        }
+        .log-item .time { color: #64748b; font-size: 11px; }
 
         /* ===== MODAL ===== */
         .modal-overlay {
@@ -276,11 +261,7 @@
             align-items: center;
             justify-content: center;
         }
-
-        .modal-overlay.open {
-            display: flex;
-        }
-
+        .modal-overlay.open { display: flex; }
         .modal {
             background: rgba(11, 19, 43, 0.95);
             border: 1px solid #ffd700;
@@ -291,12 +272,7 @@
             box-shadow: 0 0 40px rgba(255,215,0,0.3);
             position: relative;
         }
-
-        .modal h2 {
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-
+        .modal h2 { color: #ffd700; margin-bottom: 15px; }
         .modal-close {
             position: absolute;
             top: 15px;
@@ -316,18 +292,33 @@
             .tabs { flex-direction: column; }
             .tab { width: 100%; text-align: center; }
         }
-
         @media (max-width: 480px) {
             body { padding: 10px; }
             .summary-grid { grid-template-columns: 1fr; }
+            .login-box { padding: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h2>🔐 دخول النظام</h2>
+            <div class="field">
+                <input type="text" id="loginUsername" placeholder="اسم المستخدم" />
+            </div>
+            <div class="field">
+                <input type="password" id="loginPassword" placeholder="كلمة المرور" />
+            </div>
+            <button class="btn" onclick="login()">دخول</button>
+            <div class="login-error" id="loginError">❌ اسم مستخدم أو كلمة مرور خاطئة.</div>
+        </div>
+    </div>
 
-        <!-- ===== HEADER ===== -->
+    <!-- ===== MAIN APP ===== -->
+    <div class="container" id="appContainer" style="display:none;">
+
         <header class="header">
             <h1>📊 نظام الفواتير والمحاسبة - Katanbuild</h1>
             <div class="header-actions">
@@ -335,14 +326,15 @@
                 <button class="btn btn-outline" onclick="toggleRole()">🔄 تبديل الصلاحية</button>
                 <button class="btn btn-blue" onclick="exportData()">📥 تصدير</button>
                 <button class="btn btn-red" onclick="clearAllData()">🗑️ مسح الكل</button>
+                <button class="btn btn-outline" onclick="logout()" style="border-color:#ef4444; color:#ef4444;">🚪 خروج</button>
             </div>
         </header>
 
-        <!-- ===== TABS ===== -->
         <div class="tabs">
             <button class="tab active" data-page="pageInvoices">📄 الفواتير</button>
             <button class="tab" data-page="pageAccounting">📊 لوحة المحاسبة</button>
             <button class="tab" data-page="pageLogs">📋 سجل الحركات</button>
+            <button class="tab" id="tabUsers" data-page="pageUsers" style="display:none;">👥 إدارة المستخدمين</button>
         </div>
 
         <!-- ===== PAGE: INVOICES ===== -->
@@ -448,6 +440,31 @@
             </div>
         </div>
 
+        <!-- ===== PAGE: USERS (للمدير فقط) ===== -->
+        <div id="pageUsers" class="page">
+            <div class="card">
+                <div class="card-title">👥 إدارة المستخدمين</div>
+                <div class="form-row">
+                    <div class="field">
+                        <label>اسم المستخدم الجديد</label>
+                        <input type="text" id="newUsername" placeholder="أدخل اسم المستخدم" />
+                    </div>
+                    <div class="field">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="newPassword" placeholder="أدخل كلمة المرور" />
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn btn-gold" onclick="addUser()">➕ إضافة مستخدم</button>
+                    <button class="btn btn-outline" onclick="clearUserFields()">🔄 مسح الحقول</button>
+                </div>
+                <div style="margin-top:15px;">
+                    <h4 style="color:#ffd700;">📋 قائمة المستخدمين</h4>
+                    <div id="usersList"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ===== MODAL: كلمة المرور ===== -->
@@ -473,12 +490,196 @@
         // 1. إعدادات التخزين والصلاحيات
         // ============================================================
         const ADMIN_PASSWORD = '1992';
-        let currentRole = 'user'; // 'user' أو 'admin'
-        let pendingAction = null; // لتخزين الإجراء الذي يحتاج كلمة مرور
+        let currentUser = null; // { username, role, permissions }
+        let pendingAction = null;
         let pendingActionData = null;
 
         // ============================================================
-        // 2. تحميل البيانات من localStorage
+        // 2. إدارة المستخدمين
+        // ============================================================
+        function getUsers() {
+            const data = localStorage.getItem('katan_users');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('katan_users', JSON.stringify(users));
+        }
+
+        function addUser() {
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+
+            if (!username || !password) {
+                alert('⚠️ الرجاء إدخال اسم المستخدم وكلمة المرور.');
+                return;
+            }
+
+            const users = getUsers();
+            if (users.find(u => u.username === username)) {
+                alert('❌ اسم المستخدم موجود مسبقاً.');
+                return;
+            }
+
+            users.push({
+                username: username,
+                password: password,
+                role: 'user',
+                permissions: {
+                    canAdd: true,
+                    canEdit: false,
+                    canDelete: false,
+                    canExport: false,
+                    canClear: false
+                }
+            });
+
+            saveUsers(users);
+            renderUsers();
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            addLog(`إضافة مستخدم جديد: ${username}`);
+            alert('✅ تم إضافة المستخدم بنجاح.');
+        }
+
+        function deleteUser(username) {
+            if (!confirm(`🗑️ هل أنت متأكد من حذف المستخدم "${username}"؟`)) return;
+            const users = getUsers();
+            const filtered = users.filter(u => u.username !== username);
+            saveUsers(filtered);
+            renderUsers();
+            addLog(`حذف مستخدم: ${username}`);
+        }
+
+        function renderUsers() {
+            const container = document.getElementById('usersList');
+            const users = getUsers();
+
+            if (users.length === 0) {
+                container.innerHTML = '<p style="color:#94a3b8;">لا يوجد مستخدمون مسجلون.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم المستخدم</th>
+                            <th>الدور</th>
+                            <th>الصلاحيات</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(u => `
+                            <tr>
+                                <td><strong>${u.username}</strong></td>
+                                <td>${u.role === 'admin' ? '👑 مدير' : '👤 مستخدم'}</td>
+                                <td>
+                                    ${u.permissions.canAdd ? '➕ إضافة ' : ''}
+                                    ${u.permissions.canEdit ? '✏️ تعديل ' : ''}
+                                    ${u.permissions.canDelete ? '🗑️ حذف ' : ''}
+                                    ${u.permissions.canExport ? '📥 تصدير ' : ''}
+                                    ${u.permissions.canClear ? '🗑️ مسح الكل' : ''}
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        ${u.username !== 'admin' ? `
+                                            <button class="btn btn-red" onclick="deleteUser('${u.username}')">🗑️ حذف</button>
+                                        ` : ''}
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function clearUserFields() {
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+        }
+
+        // ============================================================
+        // 3. نظام الدخول
+        // ============================================================
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username || !password) {
+                document.getElementById('loginError').style.display = 'block';
+                return;
+            }
+
+            // المدير الافتراضي
+            if (username === 'admin' && password === ADMIN_PASSWORD) {
+                currentUser = {
+                    username: 'admin',
+                    role: 'admin',
+                    permissions: {
+                        canAdd: true,
+                        canEdit: true,
+                        canDelete: true,
+                        canExport: true,
+                        canClear: true
+                    }
+                };
+                enterApp();
+                return;
+            }
+
+            // المستخدمون العاديون
+            const users = getUsers();
+            const found = users.find(u => u.username === username && u.password === password);
+
+            if (found) {
+                currentUser = found;
+                enterApp();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function enterApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('appContainer').style.display = 'block';
+            updateUserDisplay();
+            loadData();
+            renderAll();
+
+            // إظهار تبويب المستخدمين للمدير فقط
+            if (currentUser.role === 'admin') {
+                document.getElementById('tabUsers').style.display = 'inline-block';
+                renderUsers();
+            } else {
+                document.getElementById('tabUsers').style.display = 'none';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        function updateUserDisplay() {
+            const display = document.getElementById('userRoleDisplay');
+            if (currentUser.role === 'admin') {
+                display.innerHTML = `👑 مدير (${currentUser.username})`;
+                display.style.color = '#ffd700';
+            } else {
+                display.innerHTML = `👤 مستخدم (${currentUser.username})`;
+                display.style.color = '#38bdf8';
+            }
+        }
+
+        // ============================================================
+        // 4. تحميل البيانات
         // ============================================================
         let invoices = [];
         let logs = [];
@@ -493,111 +694,25 @@
             if (storedLogs) {
                 try { logs = JSON.parse(storedLogs); } catch(e) { logs = []; }
             }
-
-            const storedRole = localStorage.getItem('katan_role');
-            if (storedRole) {
-                currentRole = storedRole;
-            }
-            updateRoleDisplay();
         }
 
         function saveData() {
             localStorage.setItem('katan_invoices', JSON.stringify(invoices));
             localStorage.setItem('katan_logs', JSON.stringify(logs));
-            localStorage.setItem('katan_role', currentRole);
         }
 
         // ============================================================
-        // 3. دوال الصلاحيات
-        // ============================================================
-        function updateRoleDisplay() {
-            const display = document.getElementById('userRoleDisplay');
-            if (currentRole === 'admin') {
-                display.innerHTML = '👑 مدير (صلاحيات كاملة)';
-                display.style.color = '#ffd700';
-            } else {
-                display.innerHTML = '👤 مستخدم (إضافة فقط)';
-                display.style.color = '#38bdf8';
-            }
-        }
-
-        function toggleRole() {
-            if (currentRole === 'admin') {
-                currentRole = 'user';
-                saveData();
-                updateRoleDisplay();
-                addLog('تبديل الصلاحية إلى مستخدم');
-                renderAll();
-                alert('✅ تم التبديل إلى وضع المستخدم (إضافة فقط).');
-            } else {
-                // طلب كلمة مرور للتبديل إلى مدير
-                pendingAction = 'switchToAdmin';
-                openPasswordModal();
-            }
-        }
-
-        function verifyPassword() {
-            const input = document.getElementById('passwordInput');
-            const error = document.getElementById('passwordError');
-            if (input.value === ADMIN_PASSWORD) {
-                error.style.display = 'none';
-                closePasswordModal();
-
-                if (pendingAction === 'switchToAdmin') {
-                    currentRole = 'admin';
-                    saveData();
-                    updateRoleDisplay();
-                    addLog('تبديل الصلاحية إلى مدير');
-                    renderAll();
-                    alert('✅ تم التبديل إلى وضع المدير (صلاحيات كاملة).');
-                } else if (pendingAction === 'deleteInvoice') {
-                    const id = parseInt(pendingActionData);
-                    doDeleteInvoice(id);
-                } else if (pendingAction === 'editInvoice') {
-                    const id = parseInt(pendingActionData);
-                    doEditInvoice(id);
-                } else if (pendingAction === 'clearAll') {
-                    doClearAllData();
-                } else if (pendingAction === 'export') {
-                    doExportData();
-                }
-
-                pendingAction = null;
-                pendingActionData = null;
-                input.value = '';
-            } else {
-                error.style.display = 'block';
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        function openPasswordModal() {
-            document.getElementById('passwordModal').classList.add('open');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').style.display = 'none';
-            document.getElementById('passwordInput').focus();
-        }
-
-        function closePasswordModal() {
-            document.getElementById('passwordModal').classList.remove('open');
-            pendingAction = null;
-            pendingActionData = null;
-        }
-
-        // ============================================================
-        // 4. دوال الفواتير
+        // 5. دوال الفواتير
         // ============================================================
         function addInvoice(invNumber, invOut, invIn) {
             const id = invoices.length > 0 ? Math.max(...invoices.map(i => i.id)) + 1 : 1;
-            const newInvoice = {
+            invoices.push({
                 id: id,
                 number: invNumber,
                 out: parseFloat(invOut),
                 in: parseFloat(invIn),
                 date: new Date().toISOString()
-            };
-            invoices.push(newInvoice);
+            });
             saveData();
             addLog(`إضافة فاتورة: ${invNumber} | صادر: ${invOut} | وارد: ${invIn}`);
             renderAll();
@@ -607,8 +722,6 @@
         function doEditInvoice(id) {
             const invoice = invoices.find(i => i.id === id);
             if (!invoice) return;
-
-            // ملء النموذج
             document.getElementById('editId').value = invoice.id;
             document.getElementById('invNumber').value = invoice.number;
             document.getElementById('invOut').value = invoice.out;
@@ -631,10 +744,8 @@
             }
 
             if (id) {
-                // تعديل
                 const existing = invoices.find(i => i.id === parseInt(id));
                 if (existing) {
-                    const oldData = { ...existing };
                     existing.number = number;
                     existing.out = out;
                     existing.in = inn;
@@ -645,24 +756,16 @@
                     resetForm();
                 }
             } else {
-                // إضافة
                 addInvoice(number, out, inn);
                 resetForm();
             }
         }
 
         function deleteInvoice(id) {
-            if (currentRole === 'admin') {
-                doDeleteInvoice(id);
-            } else {
-                // طلب كلمة مرور
-                pendingAction = 'deleteInvoice';
-                pendingActionData = id;
-                openPasswordModal();
+            if (!currentUser.permissions.canDelete) {
+                alert('❌ ليس لديك صلاحية حذف الفواتير.');
+                return;
             }
-        }
-
-        function doDeleteInvoice(id) {
             if (!confirm('🗑️ هل أنت متأكد من حذف هذه الفاتورة؟')) return;
             const invoice = invoices.find(i => i.id === id);
             if (invoice) {
@@ -675,14 +778,11 @@
         }
 
         function editInvoice(id) {
-            if (currentRole === 'admin') {
-                doEditInvoice(id);
-            } else {
-                // طلب كلمة مرور
-                pendingAction = 'editInvoice';
-                pendingActionData = id;
-                openPasswordModal();
+            if (!currentUser.permissions.canEdit) {
+                alert('❌ ليس لديك صلاحية تعديل الفواتير.');
+                return;
             }
+            doEditInvoice(id);
         }
 
         function resetForm() {
@@ -695,7 +795,7 @@
         }
 
         // ============================================================
-        // 5. دوال العرض
+        // 6. دوال العرض
         // ============================================================
         function renderInvoices() {
             const tbody = document.getElementById('invoicesTableBody');
@@ -706,8 +806,7 @@
 
             tbody.innerHTML = invoices.map((inv, idx) => {
                 const diff = inv.in - inv.out;
-                let status = '⚖️ متوازن';
-                let color = '#ffd700';
+                let status = '⚖️ متوازن', color = '#ffd700';
                 if (diff > 0) { status = '✅ ربح'; color = '#22c55e'; }
                 else if (diff < 0) { status = '❌ خسارة'; color = '#ef4444'; }
 
@@ -721,8 +820,8 @@
                     <td style="color:${color};">${status}</td>
                     <td>
                         <div class="actions">
-                            <button class="btn btn-blue" onclick="editInvoice(${inv.id})">✏️</button>
-                            <button class="btn btn-red" onclick="deleteInvoice(${inv.id})">🗑️</button>
+                            ${currentUser.permissions.canEdit ? `<button class="btn btn-blue" onclick="editInvoice(${inv.id})">✏️</button>` : ''}
+                            ${currentUser.permissions.canDelete ? `<button class="btn btn-red" onclick="deleteInvoice(${inv.id})">🗑️</button>` : ''}
                         </div>
                     </td>
                 </tr>
@@ -731,15 +830,13 @@
         }
 
         function renderAccounting() {
-            // الجدول التفصيلي
             const tbody = document.getElementById('accountingTableBody');
             if (invoices.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8;">لا توجد فواتير.</td></tr>`;
             } else {
                 tbody.innerHTML = invoices.map((inv, idx) => {
                     const diff = inv.in - inv.out;
-                    let status = '⚖️ متوازن';
-                    let color = '#ffd700';
+                    let status = '⚖️ متوازن', color = '#ffd700';
                     if (diff > 0) { status = '✅ ربح'; color = '#22c55e'; }
                     else if (diff < 0) { status = '❌ خسارة'; color = '#ef4444'; }
 
@@ -756,7 +853,6 @@
                 }).join('');
             }
 
-            // الملخص
             const totalOut = invoices.reduce((sum, inv) => sum + inv.out, 0);
             const totalIn = invoices.reduce((sum, inv) => sum + inv.in, 0);
             const totalProfit = totalIn - totalOut;
@@ -766,7 +862,6 @@
             document.getElementById('totalProfit').textContent = totalProfit.toFixed(2);
             document.getElementById('invoiceCount').textContent = invoices.length;
 
-            // تلميح الحالة
             const hint = document.getElementById('profitHint');
             if (totalProfit > 0) {
                 hint.className = 'profit-hint positive';
@@ -786,7 +881,6 @@
                 container.innerHTML = `<p style="color:#94a3b8;">لا توجد حركات مسجلة بعد.</p>`;
                 return;
             }
-
             container.innerHTML = logs.slice().reverse().map(log => `
                 <div class="log-item">
                     <span class="time">${new Date(log.time).toLocaleString('ar-SY')}</span>
@@ -802,58 +896,45 @@
         }
 
         // ============================================================
-        // 6. دوال السجل (Logs)
+        // 7. دوال السجل
         // ============================================================
         function addLog(action) {
             logs.push({
                 time: new Date().toISOString(),
                 action: action,
-                role: currentRole
+                user: currentUser?.username || 'غير معروف'
             });
-            if (logs.length > 500) logs.shift(); // حد أقصى 500 سجل
+            if (logs.length > 500) logs.shift();
             saveData();
         }
 
         // ============================================================
-        // 7. دوال التليجرام (تم وضع التوكن والأيدي)
+        // 8. دوال التليجرام
         // ============================================================
         function sendToTelegram(message) {
-            // 🔑 تم وضع التوكن والأيدي الخاصين بك هنا
             const botToken = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
             const chatId = '8938601996';
 
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            const payload = {
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'Markdown'
-            };
-
-            fetch(url, {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
             }).catch(err => console.error('❌ فشل إرسال تليجرام:', err));
         }
 
         // ============================================================
-        // 8. دوال إضافية (تصدير، مسح الكل)
+        // 9. دوال إضافية (تصدير، مسح الكل) – محمية بالصلاحيات
         // ============================================================
         function exportData() {
-            if (currentRole === 'admin') {
-                doExportData();
-            } else {
-                pendingAction = 'export';
-                openPasswordModal();
+            if (!currentUser.permissions.canExport) {
+                alert('❌ ليس لديك صلاحية تصدير البيانات.');
+                return;
             }
-        }
-
-        function doExportData() {
-            const data = {
-                invoices: invoices,
-                logs: logs,
-                exportedAt: new Date().toISOString()
-            };
+            const data = { invoices, logs, exportedAt: new Date().toISOString() };
             const json = JSON.stringify(data, null, 2);
             const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -868,15 +949,10 @@
         }
 
         function clearAllData() {
-            if (currentRole === 'admin') {
-                doClearAllData();
-            } else {
-                pendingAction = 'clearAll';
-                openPasswordModal();
+            if (!currentUser.permissions.canClear) {
+                alert('❌ ليس لديك صلاحية مسح جميع البيانات.');
+                return;
             }
-        }
-
-        function doClearAllData() {
             if (!confirm('⚠️ هل أنت متأكد من مسح جميع الفواتير والسجلات؟ هذا الإجراء لا يمكن التراجع عنه.')) return;
             invoices = [];
             logs = [];
@@ -887,7 +963,7 @@
         }
 
         // ============================================================
-        // 9. التبويبات (Tabs)
+        // 10. التبويبات
         // ============================================================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -899,28 +975,21 @@
         });
 
         // ============================================================
-        // 10. تهيئة الصفحة
+        // 11. تهيئة الصفحة
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            renderAll();
-
-            // نموذج الفاتورة
             document.getElementById('invoiceForm').addEventListener('submit', saveInvoiceFromForm);
-
-            // إغلاق النافذة عند الضغط خارجها
-            document.getElementById('passwordModal').addEventListener('click', function(e) {
-                if (e.target === this) closePasswordModal();
-            });
         });
 
         // ============================================================
-        // 11. دوال عمومية للوصول من HTML
+        // 12. دوال عمومية
         // ============================================================
-        window.toggleRole = toggleRole;
-        window.openPasswordModal = openPasswordModal;
-        window.closePasswordModal = closePasswordModal;
-        window.verifyPassword = verifyPassword;
+        window.login = login;
+        window.logout = logout;
+        window.addUser = addUser;
+        window.deleteUser = deleteUser;
+        window.renderUsers = renderUsers;
+        window.clearUserFields = clearUserFields;
         window.resetForm = resetForm;
         window.editInvoice = editInvoice;
         window.deleteInvoice = deleteInvoice;
