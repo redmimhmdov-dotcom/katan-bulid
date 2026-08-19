@@ -475,6 +475,7 @@
         const ADMIN_PASSWORD = '1992';
         let currentRole = 'user'; // 'user' أو 'admin'
         let pendingAction = null; // لتخزين الإجراء الذي يحتاج كلمة مرور
+        let pendingActionData = null;
 
         // ============================================================
         // 2. تحميل البيانات من localStorage
@@ -550,7 +551,6 @@
                     renderAll();
                     alert('✅ تم التبديل إلى وضع المدير (صلاحيات كاملة).');
                 } else if (pendingAction === 'deleteInvoice') {
-                    // تم التحقق، ننفذ الحذف
                     const id = parseInt(pendingActionData);
                     doDeleteInvoice(id);
                 } else if (pendingAction === 'editInvoice') {
@@ -815,17 +815,12 @@
         }
 
         // ============================================================
-        // 7. دوال التليجرام (استبدل التوكن والآيدي)
+        // 7. دوال التليجرام (تم وضع التوكن والأيدي)
         // ============================================================
         function sendToTelegram(message) {
-            // 🔑 ضع توكن البوت الخاص بك هنا
-            const botToken = 'YOUR_BOT_TOKEN'; // استبدل هذا
-            const chatId = 'YOUR_CHAT_ID'; // استبدل هذا
-
-            if (botToken === 'YOUR_BOT_TOKEN' || chatId === 'YOUR_CHAT_ID') {
-                console.log('⚠️ تليجرام غير مفعل - يرجى وضع التوكن والآيدي الصحيحين.');
-                return;
-            }
+            // 🔑 تم وضع التوكن والأيدي الخاصين بك هنا
+            const botToken = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
+            const chatId = '8938601996';
 
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
