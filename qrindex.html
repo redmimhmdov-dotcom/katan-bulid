@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - Katanbuild الرئيسي</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #030712;
+            color: #f1f5f9;
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .qr-container {
+            text-align: center;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+        .qr-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.05), transparent, rgba(56, 189, 248, 0.05), transparent);
+            animation: rotateBg 10s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .qr-content {
+            position: relative;
+            z-index: 1;
+        }
+        .qr-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        .qr-container p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        .qr-container a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .qr-container a:hover { text-decoration: underline; }
+        #qrcode {
+            display: inline-block;
+            background: #fff;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        #qrcode:hover {
+            transform: scale(1.05) perspective(500px) rotateX(3deg);
+        }
+        .qr-footer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid rgba(255,215,0,0.1);
+            padding-top: 15px;
+        }
+        .qr-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 480px) {
+            .qr-container { padding: 25px; }
+            .qr-container h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <div class="qr-content">
+            <div class="qr-badge">🏠 الصفحة الرئيسية</div>
+            <h1>🔗 KATANBUILD</h1>
+            <p>مسح الباركود للوصول إلى الموقع الرسمي<br />
+            <a href="https://katan-bulid.vercel.app/" target="_blank">/</a></p>
+            <div id="qrcode"></div>
+            <div class="qr-footer">
+                © 2026 Katanbuild · مواد بناء فاخرة
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const targetUrl = "https://katan-bulid.vercel.app/";
+        new QRCode(document.getElementById("qrcode"), {
+            text: targetUrl,
+            width: 280,
+            height: 280,
+            colorDark: "#0b132b",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        document.getElementById("qrcode").addEventListener("click", function() {
+            window.open(targetUrl, "_blank");
+        });
+    </script>
+</body>
+</html>
