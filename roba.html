@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏗️ منصة الابتكار المتقدمة - نظام إدارة المواد</title>
+    <title>🧪 منصة الابتكار المتقدمة - نظام التلميحات الذكي</title>
 
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -238,6 +238,68 @@
             border-radius: 8px;
             display: inline-block;
             margin-top: 4px;
+        }
+
+        .chem-info .chem-components {
+            color: #f5a623;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* ===== التلميحات الذكية ===== */
+        .hint-box {
+            background: rgba(245, 166, 35, 0.1);
+            border: 1px solid rgba(245, 166, 35, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .hint-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .hint-box .hint-icon {
+            font-size: 1.2rem;
+        }
+
+        .hint-box .hint-title {
+            color: #f5a623;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .hint-box .hint-content {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+
+        .hint-box .hint-diff {
+            display: flex;
+            gap: 15px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .hint-box .hint-diff .diff-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .hint-box .hint-diff .diff-item .up {
+            color: #00c896;
+        }
+        .hint-box .hint-diff .diff-item .down {
+            color: #e94560;
+        }
+        .hint-box .hint-diff .diff-item .same {
+            color: #888;
         }
 
         /* ===== إدارة المواد ===== */
@@ -939,11 +1001,11 @@
         <div class="logo">
             🧪 CONCRET<span>CHEM</span>
             <span style="font-size:0.9rem; font-weight:400; color:#888; margin-right:15px;">
-                نظام إدارة المواد · تحليل صور · ابتكار
+                التلميحات الذكية · تحليل صور · ابتكار
             </span>
         </div>
         <div class="badge-innov">
-            ⚡ v7.0 · مدير المواد الذكي
+            ⚡ v8.0 · نظام التلميحات الذكي
         </div>
     </header>
 
@@ -982,11 +1044,24 @@
                 </div>
             </div>
 
-            <!-- المعلومات الكيميائية -->
+            <!-- ===== المعلومات الكيميائية المفصلة ===== -->
             <div class="chem-info" id="chemInfo">
                 <div class="chem-title" id="chemTitle">🧪 التركيب الكيميائي</div>
-                <div class="chem-detail" id="chemDetail">اضغط على أي مادة لمعرفة تركيبها الكيميائي</div>
+                <div class="chem-detail" id="chemDetail">اضغط على أي مادة لمعرفة تركيبها الكيميائي المفصل</div>
                 <div class="chem-formula" id="chemFormula"></div>
+                <div class="chem-components" id="chemComponents"></div>
+            </div>
+
+            <!-- ===== التلميحات الذكية ===== -->
+            <div class="hint-box" id="hintBox">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="hint-icon">💡</span>
+                    <span class="hint-title">تلميح ذكي: الفرق بين الأصل والمُعدَّل</span>
+                </div>
+                <div class="hint-content" id="hintContent">
+                    أضف مواد لتعديل الخلطة ومشاهدة الفرق هنا.
+                </div>
+                <div class="hint-diff" id="hintDiff"></div>
             </div>
 
             <button class="btn-innov green" id="loadFromImageBtn">📥 تحميل الخلطة للتعديل</button>
@@ -1118,20 +1193,18 @@
         <span>📖</span> <span class="btn-text">إظهار التعليمات</span>
     </button>
 
-    <!-- ===== نافذة التعليمات (مختصرة) ===== -->
+    <!-- ===== نافذة التعليمات ===== -->
     <div class="help-overlay" id="helpOverlay">
         <div class="help-modal">
             <button class="close-btn" id="helpCloseBtn">✕</button>
-            <h1>📖 دليل المنصة <small>· نظام إدارة المواد</small></h1>
-            <h2>📦 إدارة المواد</h2>
-            <p>يمكنك إضافة مواد جديدة، تعديلها، أو حذفها. كل مادة لها صيغة كيميائية وتأثير على الخرسانة.</p>
-            <h2>🔍 البحث عن المواد</h2>
-            <p>استخدم شريط البحث للعثور على أي مادة بسرعة.</p>
+            <h1>📖 دليل المنصة <small>· نظام التلميحات الذكي</small></h1>
+            <h2>💡 التلميحات الذكية</h2>
+            <p>عند اختيار مواد للتعديل، يظهر تلميح يوضح الفرق بين المادة الأساسية والمعدلة في المقاومة والهبوط والكثافة.</p>
+            <h2>🧪 المعلومات الكيميائية</h2>
+            <p>كل مادة تعرض تركيبها الكيميائي المفصل والمكونات الرئيسية.</p>
             <h2>📸 تحليل الصورة</h2>
             <p>ارفع صورة لعينة خرسانية للتعرف على المواد المكونة لها.</p>
-            <h2>⚖️ المقارنة</h2>
-            <p>قارن بين الخلطة الأصلية والمعدلة مع جميع الخصائص.</p>
-            <div class="footer-note">🧪 ابتكر بلا حدود · أضف موادك الخاصة</div>
+            <div class="footer-note">🧪 ابتكر بلا حدود · مع تلميحات ذكية</div>
         </div>
     </div>
 
@@ -1140,22 +1213,24 @@
         (function() {
             'use strict';
 
-            // === قاعدة البيانات الكيميائية للمواد (قابلة للتوسيع) ===
+            // === قاعدة البيانات الكيميائية المفصلة ===
             const defaultMaterials = {
                 cement: {
                     id: 'cement',
                     name: 'أسمنت بورتلاندي',
                     emoji: '🧱',
-                    formula: 'C₃S + C₂S + C₃A + C₄AF',
-                    detail: 'سيليكات ثلاثي الكالسيوم (C₃S): تمنح القوة المبكرة. سيليكات ثنائي الكالسيوم (C₂S): تمنح القوة على المدى الطويل. ألومينات ثلاثي الكالسيوم (C₃A): تتفاعل بسرعة وتتحكم بزمن الشك.',
+                    formula: 'سيليكات وألومينات الكالسيوم',
+                    detail: 'التركيب الكيميائي الأساسي: سيليكات وألومينات الكالسيوم. المكونات الرئيسية: سيليكات ثلاثي الكالسيوم (C₃S): تمنح الخرسانة القوة المبكرة. سيليكات ثنائي الكالسيوم (C₂S): تمنح القوة على المدى الطويل. ألومينات ثلاثي الكالسيوم (C₃A): تتفاعل بسرعة وتتحكم بزمن الشك. ألُمينوفيريت رباعي الكالسيوم (C₄AF): مركب مساعد في التفاعل.',
+                    components: 'المكونات: C₃S (قوة مبكرة) · C₂S (قوة طويلة) · C₃A (زمن الشك) · C₄AF (مساعد)',
                     effect: { strengthMul: 1.1, slumpAdd: -5, densityAdd: 30, colorShift: [5, 5, 5], consAdd: -0.02 }
                 },
                 sand: {
                     id: 'sand',
                     name: 'رمل (ركام ناعم)',
                     emoji: '🏖️',
-                    formula: 'SiO₂ (كوارتز)',
-                    detail: 'يتكون غالباً من معدن الكوارتز النقي أو المخلوط، يعمل كمالئ فراغات وهيكل صلب داخل الخرسانة.',
+                    formula: 'SiO₂ (ثنائي أكسيد السيليكون)',
+                    detail: 'التركيب الكيميائي الأساسي: ثنائي أكسيد السيليكون (SiO₂). يتكون غالباً من معدن الكوارتز النقي أو المخلوط، ويعمل كمالئ فراغات وهيكل صلب داخل الخرسانة.',
+                    components: 'المكونات: SiO₂ (كوارتز) · يعمل كمالئ فراغات',
                     effect: { strengthMul: 1.0, slumpAdd: 0, densityAdd: 10, colorShift: [0, 0, 0], consAdd: 0 }
                 },
                 silica: {
@@ -1163,15 +1238,17 @@
                     name: 'سيليكا (غبار السيليكا)',
                     emoji: '🔬',
                     formula: 'SiO₂ (غير متبلور) 85-90%',
-                    detail: 'دقائق صغيراً جداً (نانوية) تسد المسام الدقيقة وتتفاعل مع هيدروكسيد الكالسيوم لزيادة مقاومة الضغط ومنع نفاذية الماء.',
+                    detail: 'التركيب الكيميائي الأساسي: ثنائي أكسيد السيليكون النقي غير المتبلور (SiO₂ بنسبة تتجاوز 85-90%). دقائق صغيراً جداً (نانوية) تسد المسام الدقيقة وتتفاعل مع هيدروكسيد الكالسيوم لزيادة مقاومة الضغط ومنع نفاذية الماء.',
+                    components: 'المكونات: SiO₂ (غير متبلور) · دقائق نانوية · تتفاعل مع Ca(OH)₂',
                     effect: { strengthMul: 1.45, slumpAdd: -15, densityAdd: 15, colorShift: [-5, -5, 0], consAdd: -0.03 }
                 },
                 plasticizer: {
                     id: 'plasticizer',
                     name: 'ملدن فائق',
                     emoji: '💧',
-                    formula: 'PCE · SMF · SNF',
-                    detail: 'مركبات عضوية بوليمرية معقدة. إثريات بوليكاربوكسيلات (PCE) أو ملامين سلفوناتي الفورمالديهايد (SMF) أو نفثالين سلفوناتي الفورمالديهايد (SNF). تقلل نسبة الماء وتزيد السيولة.',
+                    formula: 'PCE · SMF · SNF (بوليمرات عضوية)',
+                    detail: 'التركيب الكيميائي الأساسي: مركبات عضوية بوليمرية معقدة. الأنواع الكيميائية الشائعة: إثريات بوليكاربوكسيلات (PCE)، ملامين سلفوناتي الفورمالديهايد (SMF)، نفثالين سلفوناتي الفورمالديهايد (SNF). تقلل نسبة الماء المطلوبة وتزيد من سيولة الخرسانة دون إضعافها.',
+                    components: 'الأنواع: PCE · SMF · SNF · تقلل الماء · تزيد السيولة',
                     effect: { strengthMul: 1.0, slumpAdd: 150, densityAdd: 0, colorShift: [5, 5, 10], consAdd: 0.25 }
                 },
                 fibers: {
@@ -1179,7 +1256,8 @@
                     name: 'ألياف (فيبر)',
                     emoji: '🧵',
                     formula: '(C₃H₆)ₙ / Fe / SiO₂',
-                    detail: 'ألياف البولي بروبيلين: بوليمر هيدروكربوني. ألياف الفولاذ: حديد نقي مخلوط بنسب قليلة من الكربون. ألياف الزجاج: سيليكا مع أكسيد الألومنيوم والكالسيوم.',
+                    detail: 'التركيب الكيميائي حسب النوع: ألياف البولي بروبيلين (Polypropylene): بوليمر هيدروكربوني (C₃H₆)ₙ. ألياف الفولاذ (Steel Fibers): حديد نقي مخلوط بنسب قليلة من الكربون (Fe). ألياف الزجاج (Glass Fibers): سيليكا مع أكسيد الألومنيوم والكالسيوم.',
+                    components: 'الأنواع: بولي بروبيلين (C₃H₆)ₙ · فولاذ (Fe) · زجاج (SiO₂ + Al₂O₃ + CaO)',
                     effect: { strengthMul: 1.35, slumpAdd: -5, densityAdd: 20, colorShift: [10, -5, -10],
                     consAdd: -0.05 }
                 },
@@ -1189,6 +1267,7 @@
                     emoji: '🌋',
                     formula: 'SiO₂ + Al₂O₃ + Fe₂O₃',
                     detail: 'مواد طبيعية أو صناعية تحتوي على سيليكا وألومينا تتفاعل مع هيدروكسيد الكالسيوم لتكوين مركبات رابطة إضافية، تزيد المتانة وتقلل النفاذية.',
+                    components: 'المكونات: SiO₂ · Al₂O₃ · Fe₂O₃ · تتفاعل مع Ca(OH)₂',
                     effect: { strengthMul: 1.25, slumpAdd: -10, densityAdd: 10, colorShift: [-15, -10, -5],
                         consAdd: -0.02 }
                 },
@@ -1196,8 +1275,9 @@
                     id: 'graphene',
                     name: 'جرافين محسّن',
                     emoji: '⚛️',
-                    formula: 'C (sp²)',
+                    formula: 'C (sp²) طبقة أحادية',
                     detail: 'طبقة أحادية من الكربون بترتيب سداسي. يضيف قوة خارقة للخرسانة مع خفة وزن استثنائية. يحسن التوصيل الحراري والكهربائي.',
+                    components: 'المكونات: كربون نقي (C) · ترتيب سداسي · طبقة أحادية',
                     effect: { strengthMul: 1.6, slumpAdd: -10, densityAdd: -50, colorShift: [-10, -10, -5],
                         consAdd: -0.02 }
                 },
@@ -1205,21 +1285,23 @@
                     id: 'color',
                     name: 'صبغة ملونة',
                     emoji: '🎨',
-                    formula: 'Fe₂O₃ · TiO₂ · Cr₂O₃',
+                    formula: 'Fe₂O₃ · TiO₂ · Cr₂O₃ (أكاسيد معدنية)',
                     detail: 'أكاسيد معدنية طبيعية أو صناعية تعطي الخرسانة ألواناً متنوعة للاستخدامات الجمالية والمعمارية.',
+                    components: 'المكونات: Fe₂O₃ (أحمر) · TiO₂ (أبيض) · Cr₂O₃ (أخضر)',
                     effect: { strengthMul: 1.0, slumpAdd: 0, densityAdd: 0, colorShift: [30, 20, -20], consAdd: 0 }
                 },
                 aggregate: {
                     id: 'aggregate',
-                    name: 'ركام خشن',
+                    name: 'ركام خشن (سن)',
                     emoji: '🪨',
                     formula: 'مواد طبيعية',
                     detail: 'حبيبات صخرية كبيرة (سن) تشكل الهيكل الرئيسي للخرسانة وتقلل من الانكماش.',
+                    components: 'المكونات: حبيبات صخرية · سن · هيكل رئيسي',
                     effect: { strengthMul: 1.0, slumpAdd: 0, densityAdd: 20, colorShift: [0, 0, 0], consAdd: 0 }
                 }
             };
 
-            // === تحميل المواد من LocalStorage أو استخدام الافتراضية ===
+            // === تحميل المواد ===
             let materials = {};
 
             function loadMaterials() {
@@ -1227,7 +1309,6 @@
                 if (saved) {
                     try {
                         materials = JSON.parse(saved);
-                        // دمج مع الافتراضية في حالة وجود مواد جديدة
                         let merged = { ...defaultMaterials };
                         Object.keys(materials).forEach(key => {
                             merged[key] = materials[key];
@@ -1261,6 +1342,10 @@
             const chemTitle = document.getElementById('chemTitle');
             const chemDetail = document.getElementById('chemDetail');
             const chemFormula = document.getElementById('chemFormula');
+            const chemComponents = document.getElementById('chemComponents');
+            const hintBox = document.getElementById('hintBox');
+            const hintContent = document.getElementById('hintContent');
+            const hintDiff = document.getElementById('hintDiff');
             const loadFromImageBtn = document.getElementById('loadFromImageBtn');
             const applyModBtn = document.getElementById('applyModBtn');
             const resetModBtn = document.getElementById('resetModBtn');
@@ -1352,6 +1437,8 @@
                 imageMixType: 'standard',
                 imageMaterials: [],
                 selectedMaterialIds: [],
+                origValues: { strength: 30, slump: 80, density: 2400, consistency: 0.5 },
+                modValues: { strength: 30, slump: 80, density: 2400, consistency: 0.5 },
             };
 
             // === عرض المعلومات الكيميائية ===
@@ -1363,6 +1450,73 @@
                 chemTitle.textContent = `${data.emoji || '🧪'} ${data.name}`;
                 chemDetail.textContent = data.detail || 'لا يوجد وصف';
                 chemFormula.textContent = `الصيغة الكيميائية: ${data.formula || 'غير معروفة'}`;
+                chemComponents.textContent = data.components || '';
+            }
+
+            // === تحديث التلميحات ===
+            function updateHints() {
+                const origS = state.origValues.strength || 30;
+                const origSl = state.origValues.slump || 80;
+                const origD = state.origValues.density || 2400;
+                const origC = state.origValues.consistency || 0.5;
+
+                const modS = state.modValues.strength || 30;
+                const modSl = state.modValues.slump || 80;
+                const modD = state.modValues.density || 2400;
+                const modC = state.modValues.consistency || 0.5;
+
+                const hasChanges = state.additives.length > 0;
+
+                if (!hasChanges) {
+                    hintBox.classList.remove('show');
+                    return;
+                }
+
+                hintBox.classList.add('show');
+
+                // وصف التعديلات
+                const names = state.additives.map(id => materials[id]?.name || id);
+                hintContent.textContent = `تم تعديل الخلطة بإضافة: ${names.join(' + ')}`;
+
+                // الفروقات
+                let diffHtml = '';
+
+                const sDiff = modS - origS;
+                const slDiff = modSl - origSl;
+                const dDiff = modD - origD;
+
+                const consLabels = ['جاف جداً', 'جاف', 'متوسط', 'لدن', 'سائل جداً'];
+                const origCLabel = consLabels[Math.min(4, Math.floor(Math.min(1, Math.max(0.1, origC)) * 5))] || 'متوسط';
+                const modCLabel = consLabels[Math.min(4, Math.floor(Math.min(1, Math.max(0.1, modC)) * 5))] || 'متوسط';
+
+                diffHtml += `
+                    <div class="diff-item">
+                        💪 مقاومة: 
+                        <span class="${sDiff > 0 ? 'up' : sDiff < 0 ? 'down' : 'same'}">
+                            ${origS} → ${modS} ${sDiff > 0 ? '⬆+' : sDiff < 0 ? '⬇' : ''}${Math.abs(sDiff).toFixed(1)} MPa
+                        </span>
+                    </div>
+                    <div class="diff-item">
+                        📏 هبوط: 
+                        <span class="${slDiff > 0 ? 'up' : slDiff < 0 ? 'down' : 'same'}">
+                            ${origSl} → ${modSl} ${slDiff > 0 ? '⬆+' : slDiff < 0 ? '⬇' : ''}${Math.abs(slDiff).toFixed(0)} mm
+                        </span>
+                    </div>
+                    <div class="diff-item">
+                        ⚖️ كثافة: 
+                        <span class="${dDiff > 0 ? 'up' : dDiff < 0 ? 'down' : 'same'}">
+                            ${origD} → ${modD} ${dDiff > 0 ? '⬆+' : dDiff < 0 ? '⬇' : ''}${Math.abs(dDiff).toFixed(0)} kg/m³
+                        </span>
+                    </div>
+                    <div class="diff-item">
+                        🧪 قوام: 
+                        <span class="${modC > origC ? 'up' : modC < origC ? 'down' : 'same'}">
+                            ${origCLabel} → ${modCLabel}
+                        </span>
+                    </div>
+                `;
+
+                hintDiff.innerHTML = diffHtml;
             }
 
             // === عرض قائمة المواد ===
@@ -1400,7 +1554,6 @@
                 materialList.innerHTML = html;
                 updateSelectedMaterialsDisplay();
 
-                // === ربط أحداث القائمة ===
                 document.querySelectorAll('.mat-toggle').forEach(btn => {
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
@@ -1413,9 +1566,7 @@
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
                         const id = this.dataset.id;
-                        if (id === 'cement' || id === 'sand' || id === 'silica' ||
-                            id === 'plasticizer' || id === 'fibers' || id === 'pozzolan' ||
-                            id === 'graphene' || id === 'color' || id === 'aggregate') {
+                        if (Object.keys(defaultMaterials).includes(id)) {
                             alert('⚠️ لا يمكن حذف المواد الأساسية!');
                             return;
                         }
@@ -1434,14 +1585,10 @@
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
                         const id = this.dataset.id;
-                        const mat = materials[id];
-                        if (!mat) return;
-                        // فتح نافذة التعديل مع البيانات
                         openAddMaterial(id);
                     });
                 });
 
-                // النقر على العنصر لتحديده
                 document.querySelectorAll('.material-item').forEach(item => {
                     item.addEventListener('click', function(e) {
                         if (e.target.closest('.mat-actions')) return;
@@ -1460,18 +1607,55 @@
                 } else {
                     state.selectedMaterialIds.push(id);
                 }
-                // تحديث المواد المضافة للتعديل
-                state.additives = state.selectedMaterialIds.filter(id => id !== 'cement' && id !== 'sand' && id !==
-                'aggregate');
+                state.additives = state.selectedMaterialIds.filter(id =>
+                    id !== 'cement' && id !== 'sand' && id !== 'aggregate'
+                );
                 renderMaterialList(materialSearch.value);
                 updateSelectedMaterialsDisplay();
+                calculateModifiedValues();
                 updateComparison();
+                updateHints();
+            }
+
+            // === حساب القيم المعدلة ===
+            function calculateModifiedValues() {
+                const base = mixData[state.modifiedMix] || mixData.standard;
+                let modS = base.strength;
+                let modSl = base.slump;
+                let modD = base.density;
+                let modC = base.consistency || 0.5;
+
+                state.additives.forEach(matId => {
+                    const mat = materials[matId];
+                    if (mat && mat.effect) {
+                        modS *= (mat.effect.strengthMul || 1);
+                        modSl += (mat.effect.slumpAdd || 0);
+                        modD += (mat.effect.densityAdd || 0);
+                        modC += (mat.effect.consAdd || 0);
+                    }
+                });
+
+                const origBase = mixData[state.originalMix] || mixData.standard;
+                state.origValues = {
+                    strength: origBase.strength,
+                    slump: origBase.slump,
+                    density: origBase.density,
+                    consistency: origBase.consistency || 0.5
+                };
+
+                state.modValues = {
+                    strength: modS,
+                    slump: modSl,
+                    density: modD,
+                    consistency: Math.min(1, Math.max(0.1, modC))
+                };
             }
 
             // === تحديث عرض المواد المختارة ===
             function updateSelectedMaterialsDisplay() {
                 if (state.selectedMaterialIds.length === 0) {
-                    selectedMaterialsDiv.innerHTML = `<span style="color:#888; font-size:0.8rem;">لا توجد مواد مختارة</span>`;
+                    selectedMaterialsDiv.innerHTML =
+                    `<span style="color:#888; font-size:0.8rem;">لا توجد مواد مختارة</span>`;
                     return;
                 }
                 let html = '';
@@ -1496,7 +1680,7 @@
                 document.getElementById('materialCountLabel').textContent = `${count} مواد`;
             }
 
-            // === فتح نافذة إضافة/تعديل مادة ===
+            // === فتح نافذة إضافة مادة ===
             function openAddMaterial(editId = null) {
                 addMaterialOverlay.classList.add('active');
 
@@ -1507,7 +1691,8 @@
                     newMatDesc.value = mat.detail || '';
                     if (mat.effect) {
                         newMatColor.value = (mat.effect.colorShift || [0, 0, 0]).join(',');
-                        newMatEffect.value = `${mat.effect.strengthMul || 1},${mat.effect.slumpAdd || 0},${mat.effect.densityAdd || 0}`;
+                        newMatEffect.value =
+                            `${mat.effect.strengthMul || 1},${mat.effect.slumpAdd || 0},${mat.effect.densityAdd || 0}`;
                     }
                     saveMaterialBtn.dataset.editId = editId;
                 } else {
@@ -1535,14 +1720,12 @@
 
                 const id = name.replace(/\s+/g, '_').toLowerCase();
 
-                // معالجة اللون
                 let colorShift = [0, 0, 0];
                 if (colorStr) {
                     const parts = colorStr.split(',').map(Number);
                     if (parts.length === 3) colorShift = parts;
                 }
 
-                // معالجة التأثير
                 let strengthMul = 1.0,
                     slumpAdd = 0,
                     densityAdd = 0,
@@ -1561,6 +1744,7 @@
                     emoji: '🧪',
                     formula: formula || 'غير معروف',
                     detail: detail || 'لا يوجد وصف',
+                    components: 'مادة مضافة',
                     effect: {
                         strengthMul: strengthMul,
                         slumpAdd: slumpAdd,
@@ -1570,7 +1754,6 @@
                     }
                 };
 
-                // حفظ
                 materials[id] = newMat;
                 saveMaterials();
                 renderMaterialList(materialSearch.value);
@@ -1582,14 +1765,16 @@
 
                 addMaterialOverlay.classList.remove('active');
 
-                // إضافة المادة تلقائياً للتحديد
                 if (!state.selectedMaterialIds.includes(id)) {
                     state.selectedMaterialIds.push(id);
-                    state.additives = state.selectedMaterialIds.filter(id => id !== 'cement' && id !== 'sand' && id !==
-                        'aggregate');
+                    state.additives = state.selectedMaterialIds.filter(id =>
+                        id !== 'cement' && id !== 'sand' && id !== 'aggregate'
+                    );
                     renderMaterialList(materialSearch.value);
                     updateSelectedMaterialsDisplay();
+                    calculateModifiedValues();
                     updateComparison();
+                    updateHints();
                 }
             }
 
@@ -1763,6 +1948,11 @@
 
                 document.getElementById('diffText').textContent = diff.length > 0 ? diff.join(' · ') :
                     'لا توجد فروقات ملحوظة';
+
+                // تحديث القيم للتلميحات
+                state.origValues = { strength: origS, slump: origSl, density: origD, consistency: origC };
+                state.modValues = { strength: modS, slump: modSl, density: modD, consistency: modC };
+                updateHints();
             }
 
             // === تحليل الصورة ===
@@ -1833,22 +2023,27 @@
                 state.selectedMaterialIds = [];
                 renderMaterialList(materialSearch.value);
                 updateSelectedMaterialsDisplay();
+                calculateModifiedValues();
                 updateComparison();
+                updateHints();
                 const time = new Date().toLocaleTimeString();
                 modLog.innerHTML += `<br><span class="time">[${time}]</span> 📥 تم تحميل الخلطة للتعديل`;
             }
 
             // === تطبيق التعديلات ===
             function applyModifications() {
-                state.additives = state.selectedMaterialIds.filter(id => id !== 'cement' && id !== 'sand' && id !==
-                    'aggregate');
+                state.additives = state.selectedMaterialIds.filter(id =>
+                    id !== 'cement' && id !== 'sand' && id !== 'aggregate'
+                );
 
                 const time = new Date().toLocaleTimeString();
                 const names = state.additives.map(id => materials[id]?.name || id);
                 modLog.innerHTML +=
                     `<br><span class="time">[${time}]</span> 🔧 تم التعديل بـ: ${names.join('+') || 'لا شيء'}`;
 
+                calculateModifiedValues();
                 updateComparison();
+                updateHints();
             }
 
             // === إعادة تعيين ===
@@ -1857,7 +2052,9 @@
                 state.selectedMaterialIds = [];
                 renderMaterialList(materialSearch.value);
                 updateSelectedMaterialsDisplay();
+                calculateModifiedValues();
                 updateComparison();
+                updateHints();
                 const time = new Date().toLocaleTimeString();
                 modLog.innerHTML += `<br><span class="time">[${time}]</span> 🔄 تم إعادة التعيين`;
             }
@@ -1895,19 +2092,16 @@
             });
             saveMaterialBtn.addEventListener('click', saveMaterial);
 
-            // إغلاق نافذة الإضافة بالضغط على الخلفية
             addMaterialOverlay.addEventListener('click', function(e) {
                 if (e.target === this) {
                     this.classList.remove('active');
                 }
             });
 
-            // البحث
             materialSearch.addEventListener('input', function() {
                 renderMaterialList(this.value);
             });
 
-            // أزرار
             loadFromImageBtn.addEventListener('click', loadFromImage);
             applyModBtn.addEventListener('click', applyModifications);
             resetModBtn.addEventListener('click', resetModifications);
@@ -1943,7 +2137,7 @@
                 }
             });
 
-            // === جعل toggleMaterial عالمياً للاستخدام في HTML ===
+            // === جعل toggleMaterial عالمياً ===
             window.toggleMaterial = toggleMaterial;
 
             // === التهيئة ===
@@ -1954,8 +2148,9 @@
                     initComparison();
                     state.originalMix = 'standard';
                     state.modifiedMix = 'standard';
+                    calculateModifiedValues();
                     updateComparison();
-                    // عرض الكيمياء للمادة الأولى
+                    updateHints();
                     setTimeout(() => showChemInfo('cement'), 500);
                 }, 300);
             });
