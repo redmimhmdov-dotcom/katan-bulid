@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <style>
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -225,37 +226,53 @@
         }
 
         /* ===== مواد الابتكار ===== */
-        .innovation-materials {
-            display: flex;
-            flex-wrap: wrap;
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 6px;
             margin-top: 6px;
         }
 
         .innov-mat {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
             border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            transition: 0.3s;
         }
 
         .innov-mat:hover {
-            background: rgba(233, 69, 96, 0.2);
+            background: rgba(233, 69, 96, 0.1);
+            transform: translateY(-1px);
         }
 
         .innov-mat.active {
             border-color: #e94560;
-            background: rgba(233, 69, 96, 0.25);
+            background: rgba(233, 69, 96, 0.2);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.1);
         }
 
-        .innov-mat .emoji {
-            font-size: 1.1rem;
+        .innov-mat .mat-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .innov-mat .mat-header .emoji {
+            font-size: 1.2rem;
+        }
+
+        .innov-mat .mat-header .name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .innov-mat .mat-effect {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 2px;
+            padding-right: 28px;
         }
 
         /* ===== أزرار ===== */
@@ -308,24 +325,28 @@
             margin-top: 12px;
         }
 
+        .mb-2 {
+            margin-bottom: 12px;
+        }
+
         /* ===== معلومات المقارنة ===== */
         .compare-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-top: 8px;
         }
 
         .compare-info .item {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            padding: 8px 12px;
+            border-radius: 8px;
+            padding: 6px 10px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .compare-info .item .num {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #e94560;
         }
@@ -336,8 +357,54 @@
 
         .compare-info .item .lbl {
             color: #888;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
+        }
+
+        /* ===== الفروقات ===== */
+        .diff-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+            border-right: 3px solid #f5a623;
+        }
+
+        .diff-box .diff-text {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .diff-box .diff-text strong {
+            color: #eee;
+        }
+
+        /* ===== سجل التعديلات ===== */
+        .mod-log {
+            margin-top: 12px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 10px;
+            max-height: 80px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .mod-log::-webkit-scrollbar {
+            width: 3px;
+        }
+        .mod-log::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 10px;
+        }
+
+        .mod-log .time {
+            color: #e94560;
+        }
+
+        .mod-log .time.green {
+            color: #00c896;
         }
 
         /* ===== زر التعليمات ===== */
@@ -494,10 +561,46 @@
             font-size: 0.9rem;
         }
 
+        .help-modal .help-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .help-modal .help-table thead {
+            background: rgba(233, 69, 96, 0.15);
+        }
+
+        .help-modal .help-table th {
+            color: #e94560;
+            padding: 8px 12px;
+            text-align: right;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(233, 69, 96, 0.2);
+        }
+
+        .help-modal .help-table td {
+            color: #bbb;
+            padding: 6px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .help-modal .help-table .emoji-cell {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
         /* ===== استجابة ===== */
         @media (max-width: 700px) {
             .comparison-container {
                 grid-template-columns: 1fr;
+            }
+            .innovation-grid {
+                grid-template-columns: 1fr 1fr;
             }
             .help-modal {
                 padding: 20px;
@@ -513,6 +616,25 @@
             }
             .company-header .logo {
                 font-size: 1.2rem;
+            }
+            .company-header .badge-innov {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+            .main-grid {
+                gap: 15px;
+            }
+            .panel {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .innovation-grid {
+                grid-template-columns: 1fr;
+            }
+            .three-mini {
+                height: 150px;
             }
         }
     </style>
@@ -535,9 +657,9 @@
     <!-- ===== المحتوى الرئيسي ===== -->
     <div class="main-grid">
 
-        <!-- ===== اللوحة اليسرى: رفع الصورة + تحليل ===== -->
+        <!-- ===== اللوحة اليسرى: رفع الصورة + تحليل + مواد ===== -->
         <div class="panel">
-            <h2>📸 تحليل الصورة الذكي</h2>
+            <h2>📸 تحليل الصورة والمواد</h2>
 
             <!-- منطقة رفع الصورة -->
             <div class="upload-area" id="uploadArea">
@@ -570,34 +692,82 @@
 
             <button class="btn-innov green" id="loadFromImageBtn">📥 تحميل الخلطة للتعديل</button>
 
-            <!-- ===== مواد الابتكار للتعديل ===== -->
+            <!-- ===== مواد الابتكار (القائمة الكاملة) ===== -->
             <div class="mt-2">
-                <h3 style="color:#ccc; font-size:1rem; margin-bottom:8px;">✨ أضف مواد ابتكارية للتعديل</h3>
-                <div class="innovation-materials" id="innovMaterials">
-                    <span class="innov-mat" data-mat="fibers">
-                        <span class="emoji">🧵</span> ألياف زجاجية
-                    </span>
-                    <span class="innov-mat" data-mat="pozzolan">
-                        <span class="emoji">🌋</span> بوزولانا
-                    </span>
-                    <span class="innov-mat" data-mat="nano">
-                        <span class="emoji">🔬</span> سيليكا نانوية
-                    </span>
-                    <span class="innov-mat" data-mat="rubber">
-                        <span class="emoji">🔄</span> مطاط معاد تدويره
-                    </span>
-                    <span class="innov-mat" data-mat="graphene">
-                        <span class="emoji">⚛️</span> جرافين محسّن
-                    </span>
-                    <span class="innov-mat" data-mat="color">
-                        <span class="emoji">🎨</span> صبغة ملونة
-                    </span>
-                    <span class="innov-mat" data-mat="superplasticizer">
-                        <span class="emoji">💧</span> ملدن فائق
-                    </span>
-                    <span class="innov-mat" data-mat="air">
-                        <span class="emoji">🫧</span> عامل إدخال هواء
-                    </span>
+                <h3 style="color:#ccc; font-size:1rem; margin-bottom:8px;">
+                    🧪 اختر مواد للإضافة (اختر ما تريد)
+                </h3>
+
+                <div class="innovation-grid" id="innovMaterials">
+
+                    <div class="innov-mat" data-mat="fibers">
+                        <div class="mat-header">
+                            <span class="emoji">🧵</span>
+                            <span class="name">ألياف زجاجية</span>
+                        </div>
+                        <div class="mat-effect">⬆ مقاومة تشقق +35%</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="pozzolan">
+                        <div class="mat-header">
+                            <span class="emoji">🌋</span>
+                            <span class="name">بوزولانا</span>
+                        </div>
+                        <div class="mat-effect">⬆ متانة +25%</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="nano">
+                        <div class="mat-header">
+                            <span class="emoji">🔬</span>
+                            <span class="name">سيليكا نانوية</span>
+                        </div>
+                        <div class="mat-effect">⬆ مقاومة ضغط +45%</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="rubber">
+                        <div class="mat-header">
+                            <span class="emoji">🔄</span>
+                            <span class="name">مطاط معاد تدويره</span>
+                        </div>
+                        <div class="mat-effect">⬆ مرونة + عزل صوت</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="graphene">
+                        <div class="mat-header">
+                            <span class="emoji">⚛️</span>
+                            <span class="name">جرافين محسّن</span>
+                        </div>
+                        <div class="mat-effect">⬆ مقاومة +60% · خفة</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="color">
+                        <div class="mat-header">
+                            <span class="emoji">🎨</span>
+                            <span class="name">صبغة ملونة</span>
+                        </div>
+                        <div class="mat-effect">🎭 تشطيبات جمالية</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="superplasticizer">
+                        <div class="mat-header">
+                            <span class="emoji">💧</span>
+                            <span class="name">ملدن فائق</span>
+                        </div>
+                        <div class="mat-effect">⬆ سيولة +200%</div>
+                    </div>
+
+                    <div class="innov-mat" data-mat="air">
+                        <div class="mat-header">
+                            <span class="emoji">🫧</span>
+                            <span class="name">عامل إدخال هواء</span>
+                        </div>
+                        <div class="mat-effect">⬆ مقاومة للصقيع</div>
+                    </div>
+
+                </div>
+
+                <div style="font-size:0.75rem; color:#666; margin-top:6px; border-top:1px solid rgba(255,255,255,0.05); padding-top:6px;">
+                    💡 اضغط على أي مادة لاختيارها (تضيء باللون الأحمر) · اختر عدة مواد معاً
                 </div>
             </div>
 
@@ -647,16 +817,16 @@
             </div>
 
             <!-- الفروقات -->
-            <div style="background:rgba(0,0,0,0.2); border-radius:12px; padding:12px; margin-top:12px; border-right:3px solid #f5a623;">
-                <div style="font-size:0.8rem; color:#aaa;">
+            <div class="diff-box">
+                <div class="diff-text">
                     📊 <strong>الفروقات:</strong>
                     <span id="diffText">لا توجد تعديلات حتى الآن</span>
                 </div>
             </div>
 
             <!-- سجل التعديلات -->
-            <div style="margin-top:12px; background:rgba(0,0,0,0.15); border-radius:12px; padding:10px; max-height:80px; overflow-y:auto; font-size:0.8rem; color:#888;">
-                <div id="modLog"><span class="time" style="color:#e94560;">[البداية]</span> انتظر رفع صورة أو اختيار خلطة</div>
+            <div class="mod-log" id="modLog">
+                <span class="time">[البداية]</span> انتظر رفع صورة أو اختيار خلطة
             </div>
         </div>
     </div>
@@ -666,18 +836,55 @@
         <span>📖</span> <span class="btn-text">إظهار التعليمات</span>
     </button>
 
-    <!-- ===== نافذة التعليمات (مختصرة) ===== -->
+    <!-- ===== نافذة التعليمات ===== -->
     <div class="help-overlay" id="helpOverlay">
         <div class="help-modal">
             <button class="close-btn" id="helpCloseBtn">✕</button>
-            <h1>📖 دليل المنصة <small>· مقارنة + تحليل صور</small></h1>
-            <h2>🖼️ تحليل الصورة الذكي</h2>
-            <p>ارفع صورة لعينة خرسانية، وسيحلل النظام المكونات المقترحة تلقائياً.</p>
+            <h1>📖 دليل المنصة المتقدمة <small>· مقارنة + تحليل صور + ابتكار</small></h1>
+
+            <p style="color:#ccc; font-size:1.05rem;">
+                مرحباً بك في <span class="highlight">معمل الابتكار التفاعلي</span>.
+                هذه المنصة تمكنك من <span class="highlight-green">تحليل الصور، مقارنة الخلطات، وإضافة مواد مبتكرة</span>
+                دون أي خسارة في المواد أو الوقت.
+            </p>
+
+            <h2>📸 تحليل الصورة الذكي</h2>
+            <p>ارفع صورة لعينة خرسانية، ويقوم النظام تلقائياً بتحليل المكونات المقترحة ونوع الخلطة.</p>
+
             <h2>⚖️ المقارنة</h2>
-            <p>تعرض اللوحة اليمنى الخلطة الأصلية مقابل المُعدَّلة مع جميع الخصائص.</p>
-            <h2>✨ التعديل</h2>
-            <p>اختر مواد ابتكارية واضغط "طبّق التعديلات" لمشاهدة الفرق فوراً.</p>
-            <div class="footer-note">🧪 ابتكر بلا حدود · قارن بذكاء · وفر المواد</div>
+            <p>تعرض اللوحة اليمنى الخلطة الأصلية مقابل المُعدَّلة مع جميع الخصائص (مقاومة، هبوط، كثافة، قوام).</p>
+
+            <h2>✨ مواد الابتكار (8 مواد)</h2>
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>المادة</th>
+                        <th>التأثير</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>🧵 ألياف زجاجية</td><td>مقاومة تشقق +35%</td></tr>
+                    <tr><td>🌋 بوزولانا</td><td>متانة +25%</td></tr>
+                    <tr><td>🔬 سيليكا نانوية</td><td>مقاومة ضغط +45%</td></tr>
+                    <tr><td>🔄 مطاط معاد تدويره</td><td>مرونة + عزل صوت</td></tr>
+                    <tr><td>⚛️ جرافين محسّن</td><td>مقاومة +60% · خفة</td></tr>
+                    <tr><td>🎨 صبغة ملونة</td><td>تشطيبات جمالية</td></tr>
+                    <tr><td>💧 ملدن فائق</td><td>سيولة +200%</td></tr>
+                    <tr><td>🫧 عامل إدخال هواء</td><td>مقاومة للصقيع</td></tr>
+                </tbody>
+            </table>
+
+            <h2>💡 ابتكارات حصرية</h2>
+            <p>
+                <span class="highlight">خرسانة خارقة</span>: عالية المقاومة + جرافين + سيليكا نانوية → مقاومة 100+ MPa<br>
+                <span class="highlight-green">خرسانة مرنة</span>: قياسية + مطاط + ألياف → امتصاص صدمات عالي<br>
+                <span class="highlight">خرسانة ذاتية الترميم</span>: بوزولانا + سيليكا نانوية → إصلاح ذاتي للشقوق
+            </p>
+
+            <div class="footer-note">
+                🏗️ هذه المنصة هي <strong style="color:#e94560;">أداة التميّز</strong> التي تبحث عنها ·
+                صممت خصيصاً للمهندسين المعماريين المبتكرين
+            </div>
         </div>
     </div>
 
@@ -706,26 +913,69 @@
 
             // === بيانات الخلطات ===
             const mixData = {
-                standard: { name: 'قياسية', strength: 30, slump: 80, density: 2400, color: [180, 170, 155],
-                    consistency: 0.5, desc: 'خلطة قياسية متعددة الأغراض' },
-                high: { name: 'عالية المقاومة', strength: 55, slump: 60, density: 2500, color: [160, 155, 145],
-                    consistency: 0.4, desc: 'خلطة عالية المقاومة M40+' },
-                self: { name: 'ذاتية الدمك', strength: 40, slump: 220, density: 2350, color: [195, 185, 170],
-                    consistency: 0.85, desc: 'خلطة ذاتية الدمك SCC' },
-                light: { name: 'خفيفة الوزن', strength: 20, slump: 70, density: 1800, color: [210, 200, 185],
-                    consistency: 0.45, desc: 'خلطة خفيفة الوزن عازلة' },
-                fiber: { name: 'مسلحة بالألياف', strength: 45, slump: 65, density: 2450, color: [170, 160, 150],
-                    consistency: 0.35, desc: 'خلطة مسلحة بألياف' },
-                translucent: { name: 'شفافة', strength: 35, slump: 90, density: 2300, color: [220, 210, 190],
-                    consistency: 0.55, desc: 'خلطة شفافة LiTraCon' },
+                standard: {
+                    name: 'قياسية',
+                    strength: 30,
+                    slump: 80,
+                    density: 2400,
+                    color: [180, 170, 155],
+                    consistency: 0.5,
+                    desc: 'خلطة قياسية متعددة الأغراض'
+                },
+                high: {
+                    name: 'عالية المقاومة',
+                    strength: 55,
+                    slump: 60,
+                    density: 2500,
+                    color: [160, 155, 145],
+                    consistency: 0.4,
+                    desc: 'خلطة عالية المقاومة M40+'
+                },
+                self: {
+                    name: 'ذاتية الدمك',
+                    strength: 40,
+                    slump: 220,
+                    density: 2350,
+                    color: [195, 185, 170],
+                    consistency: 0.85,
+                    desc: 'خلطة ذاتية الدمك SCC'
+                },
+                light: {
+                    name: 'خفيفة الوزن',
+                    strength: 20,
+                    slump: 70,
+                    density: 1800,
+                    color: [210, 200, 185],
+                    consistency: 0.45,
+                    desc: 'خلطة خفيفة الوزن عازلة'
+                },
+                fiber: {
+                    name: 'مسلحة بالألياف',
+                    strength: 45,
+                    slump: 65,
+                    density: 2450,
+                    color: [170, 160, 150],
+                    consistency: 0.35,
+                    desc: 'خلطة مسلحة بألياف'
+                },
+                translucent: {
+                    name: 'شفافة',
+                    strength: 35,
+                    slump: 90,
+                    density: 2300,
+                    color: [220, 210, 190],
+                    consistency: 0.55,
+                    desc: 'خلطة شفافة LiTraCon'
+                },
             };
 
             // === تأثيرات المواد ===
             const matEffects = {
                 fibers: { label: 'ألياف', strengthMul: 1.35, slumpAdd: -5, densityAdd: 20, colorShift: [10, -5, -10],
                     consAdd: -0.05 },
-                pozzolan: { label: 'بوزولانا', strengthMul: 1.25, slumpAdd: -10, densityAdd: 10, colorShift: [-15, -10, -5],
-                    consAdd: -0.02 },
+                pozzolan: { label: 'بوزولانا', strengthMul: 1.25, slumpAdd: -10, densityAdd: 10, colorShift: [-15, -10,
+                        -5
+                    ], consAdd: -0.02 },
                 nano: { label: 'سيليكا نانوية', strengthMul: 1.45, slumpAdd: -15, densityAdd: 15, colorShift: [-5, -5, 0],
                     consAdd: -0.03 },
                 rubber: { label: 'مطاط معاد تدويره', strengthMul: 0.85, slumpAdd: 10, densityAdd: -200,
@@ -791,6 +1041,20 @@
                     fill.position.set(-3, 2, 4);
                     scene.add(fill);
 
+                    // أرضية
+                    const floorGeo = new THREE.PlaneGeometry(4, 4);
+                    const floorMat = new THREE.MeshStandardMaterial({
+                        color: 0x1a1a2e,
+                        roughness: 0.9,
+                        metalness: 0.1,
+                        transparent: true,
+                        opacity: 0.3,
+                    });
+                    const floor = new THREE.Mesh(floorGeo, floorMat);
+                    floor.rotation.x = -Math.PI / 2;
+                    floor.position.y = -0.6;
+                    scene.add(floor);
+
                     scenes[id] = { scene, camera, renderer, controls, container };
                     animateComparison(id);
                 });
@@ -833,7 +1097,7 @@
                 b = Math.min(255, Math.max(100, b));
 
                 const color = new THREE.Color(`rgb(${r}, ${g}, ${b})`);
-                const geometry = new THREE.SphereGeometry(1, 48, 48);
+                const geometry = new THREE.SphereGeometry(0.9, 48, 48);
 
                 const material = new THREE.MeshStandardMaterial({
                     color: color,
@@ -901,11 +1165,15 @@
 
                 // الفروقات
                 const diff = [];
-                if (Math.abs(modS - origS) > 1) diff.push(`مقاومة ${modS > origS ? '⬆+' : '⬇'}${Math.abs(Math.round(modS - origS))}MPa`);
-                if (Math.abs(modSl - origSl) > 5) diff.push(`هبوط ${modSl > origSl ? '⬆+' : '⬇'}${Math.abs(Math.round(modSl - origSl))}mm`);
-                if (Math.abs(modD - origD) > 10) diff.push(`كثافة ${modD > origD ? '⬆+' : '⬇'}${Math.abs(Math.round(modD - origD))}kg/m³`);
+                if (Math.abs(modS - origS) > 1) diff.push(
+                    `مقاومة ${modS > origS ? '⬆+' : '⬇'}${Math.abs(Math.round(modS - origS))}MPa`);
+                if (Math.abs(modSl - origSl) > 5) diff.push(
+                    `هبوط ${modSl > origSl ? '⬆+' : '⬇'}${Math.abs(Math.round(modSl - origSl))}mm`);
+                if (Math.abs(modD - origD) > 10) diff.push(
+                    `كثافة ${modD > origD ? '⬆+' : '⬇'}${Math.abs(Math.round(modD - origD))}kg/m³`);
 
-                document.getElementById('diffText').textContent = diff.length > 0 ? diff.join(' · ') : 'لا توجد فروقات ملحوظة';
+                document.getElementById('diffText').textContent = diff.length > 0 ? diff.join(' · ') :
+                'لا توجد فروقات ملحوظة';
             }
 
             // === تحليل الصورة (محاكاة ذكية) ===
@@ -915,23 +1183,26 @@
                     uploadedImage.src = e.target.result;
                     imagePreview.classList.add('show');
 
-                    // محاكاة التحليل بناءً على اسم الملف (لتجربة تفاعلية)
+                    // محاكاة التحليل بناءً على اسم الملف
                     const fileName = file.name.toLowerCase();
                     let detected = 'standard';
                     let materials = ['🧱 أسمنت بورتلاندي', '🪨 ركام خشن', '🏖️ رمل'];
 
-                    if (fileName.includes('high') || fileName.includes('قوية')) {
+                    if (fileName.includes('high') || fileName.includes('قوية') || fileName.includes('عالية')) {
                         detected = 'high';
                         materials = ['🧱 أسمنت بورتلاندي عالي', '🪨 ركام ناعم', '🔬 سيليكا'];
-                    } else if (fileName.includes('light') || fileName.includes('خفيف')) {
+                    } else if (fileName.includes('light') || fileName.includes('خفيف') || fileName.includes('عازل')) {
                         detected = 'light';
                         materials = ['🧱 أسمنت خفيف', '🪨 ركام خفيف', '🏖️ رمل ناعم'];
-                    } else if (fileName.includes('self') || fileName.includes('ذاتي')) {
+                    } else if (fileName.includes('self') || fileName.includes('ذاتي') || fileName.includes('scc')) {
                         detected = 'self';
                         materials = ['🧱 أسمنت', '🪨 ركام ناعم جداً', '💧 ملدن فائق'];
-                    } else if (fileName.includes('fiber') || fileName.includes('الياف')) {
+                    } else if (fileName.includes('fiber') || fileName.includes('الياف') || fileName.includes('ألياف')) {
                         detected = 'fiber';
                         materials = ['🧱 أسمنت', '🪨 ركام خشن', '🧵 ألياف زجاجية'];
+                    } else if (fileName.includes('trans') || fileName.includes('شفاف')) {
+                        detected = 'translucent';
+                        materials = ['🧱 أسمنت شفاف', '🪨 ركام ناعم', '💡 ألياف بصرية'];
                     }
 
                     state.imageMixType = detected;
@@ -944,7 +1215,7 @@
 
                     const time = new Date().toLocaleTimeString();
                     modLog.innerHTML =
-                        `<span class="time" style="color:#00c896;">[${time}]</span> 📸 تم تحليل الصورة: ${mixData[detected]?.name || 'قياسية'}` +
+                        `<span class="time green">[${time}]</span> 📸 تم تحليل الصورة: ${mixData[detected]?.name || 'قياسية'}` +
                         `<br><span style="color:#666; font-size:0.75rem;">${materials.join(' · ')}</span>`;
                 };
                 reader.readAsDataURL(file);
@@ -962,7 +1233,7 @@
                 document.querySelectorAll('.innov-mat').forEach(el => el.classList.remove('active'));
                 updateComparison();
                 const time = new Date().toLocaleTimeString();
-                modLog.innerHTML += `<br><span class="time" style="color:#e94560;">[${time}]</span> 📥 تم تحميل الخلطة للتعديل`;
+                modLog.innerHTML += `<br><span class="time">[${time}]</span> 📥 تم تحميل الخلطة للتعديل`;
             }
 
             // === تطبيق التعديلات ===
@@ -973,7 +1244,7 @@
                 const time = new Date().toLocaleTimeString();
                 const names = state.additives.map(m => matEffects[m]?.label || m);
                 modLog.innerHTML +=
-                    `<br><span class="time" style="color:#e94560;">[${time}]</span> 🔧 تم التعديل بـ: ${names.join('+') || 'لا شيء'}`;
+                    `<br><span class="time">[${time}]</span> 🔧 تم التعديل بـ: ${names.join('+') || 'لا شيء'}`;
 
                 updateComparison();
             }
@@ -984,15 +1255,19 @@
                 document.querySelectorAll('.innov-mat').forEach(el => el.classList.remove('active'));
                 updateComparison();
                 const time = new Date().toLocaleTimeString();
-                modLog.innerHTML += `<br><span class="time" style="color:#888;">[${time}]</span> 🔄 تم إعادة التعيين`;
+                modLog.innerHTML += `<br><span class="time">[${time}]</span> 🔄 تم إعادة التعيين`;
             }
 
             // === ربط الأحداث ===
             // رفع الصورة
             uploadArea.addEventListener('click', () => imageInput.click());
-            uploadArea.addEventListener('dragover', (e) => { e.preventDefault();
-                uploadArea.style.borderColor = '#e94560'; });
-            uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = 'rgba(233,69,96,0.3)'; });
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#e94560';
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = 'rgba(233,69,96,0.3)';
+            });
             uploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 uploadArea.style.borderColor = 'rgba(233,69,96,0.3)';
@@ -1034,7 +1309,13 @@
                 document.body.style.overflow = '';
             });
             helpOverlay.addEventListener('click', (e) => {
-                if (e.target === this) {
+                if (e.target === helpOverlay) {
+                    helpOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && helpOverlay.classList.contains('active')) {
                     helpOverlay.classList.remove('active');
                     document.body.style.overflow = '';
                 }
@@ -1044,7 +1325,6 @@
             window.addEventListener('load', function() {
                 setTimeout(() => {
                     initComparison();
-                    // تعيين خلطة أولية
                     state.originalMix = 'standard';
                     state.modifiedMix = 'standard';
                     updateComparison();
