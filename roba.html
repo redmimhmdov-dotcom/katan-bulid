@@ -1,23 +1,1265 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      سيموتك / سيلوتك — تحسين المونة الجافة ومحاكاة التآزر
-    </title>
-    <meta property="og:image" content="https://bolt.new/static/og_default.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
-    <script type="module" crossorigin="" src="/assets/index-BdOkmPy5.js">
-    </script>
-    <link rel="stylesheet" crossorigin="" href="/assets/index-CTEFrWmp.css" />
-    <script async="" src="https://bolt.new/badge.js?s=eb0eac70-e16c-45dc-a429-e325ff389288">
-    </script>
-  </head>
-  <body>
-    <div id="root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 مدقق الخلطات الواقعي - معمل CEMOTECH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0a0a1a;
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d0d2b, #1a1a3e);
+            padding: 20px 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 200, 150, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #00c896;
+        }
+
+        .header .logo span {
+            color: #888;
+            font-weight: 300;
+            font-size: 0.9rem;
+        }
+
+        .header .badge {
+            background: rgba(0, 200, 150, 0.1);
+            color: #00c896;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 200, 150, 0.2);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 1000px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .panel h2 {
+            font-size: 1.3rem;
+            color: #00c896;
+            margin-bottom: 18px;
+            border-bottom: 2px solid rgba(0, 200, 150, 0.1);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel h2 .badge-count {
+            font-size: 0.7rem;
+            background: rgba(0, 200, 150, 0.15);
+            padding: 2px 14px;
+            border-radius: 30px;
+            color: #888;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-group label .unit {
+            color: #666;
+            font-weight: 400;
+            font-size: 0.7rem;
+        }
+
+        .form-group label .required {
+            color: #e94560;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.3);
+            color: #eee;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #00c896;
+        }
+
+        .form-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .form-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== قائمة المواد ===== */
+        .material-list {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 6px;
+        }
+
+        .material-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .material-list::-webkit-scrollbar-thumb {
+            background: #00c896;
+            border-radius: 10px;
+        }
+
+        .material-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 4px;
+            border-right: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .material-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .material-item .mat-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .material-item .mat-info .mat-name {
+            font-size: 0.85rem;
+            color: #ccc;
+            font-weight: 500;
+        }
+
+        .material-item .mat-info .mat-role {
+            font-size: 0.65rem;
+            color: #666;
+        }
+
+        .material-item .mat-info .mat-range {
+            font-size: 0.6rem;
+            color: #555;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0 8px;
+            border-radius: 10px;
+        }
+
+        .material-item .mat-input {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .material-item .mat-input input {
+            width: 70px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.3);
+            color: #eee;
+            font-size: 0.85rem;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .material-item .mat-input input:focus {
+            border-color: #00c896;
+        }
+
+        .material-item .mat-input .mat-unit {
+            font-size: 0.7rem;
+            color: #666;
+            min-width: 20px;
+        }
+
+        .material-item .mat-status {
+            font-size: 0.7rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .material-item .mat-status .ok {
+            color: #00c896;
+        }
+        .material-item .mat-status .warn {
+            color: #f5a623;
+        }
+        .material-item .mat-status .err {
+            color: #e94560;
+        }
+
+        .material-item.active {
+            border-right-color: #00c896;
+            background: rgba(0, 200, 150, 0.05);
+        }
+
+        .material-item .mat-select {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #888;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            outline: none;
+        }
+
+        .material-item .mat-select:focus {
+            border-color: #00c896;
+        }
+
+        /* ===== الأزرار ===== */
+        .btn {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: #00c896;
+            color: #0a0a1a;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 200, 150, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #00c896;
+            color: #00c896;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 200, 150, 0.1);
+        }
+
+        .btn-danger {
+            background: #e94560;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mt-2 {
+            margin-top: 14px;
+        }
+
+        /* ===== نتيجة التدقيق ===== */
+        .validation-result {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 16px;
+            border-right: 4px solid #888;
+            display: none;
+        }
+
+        .validation-result.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .validation-result .result-status {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .validation-result .result-status .pass {
+            color: #00c896;
+        }
+        .validation-result .result-status .fail {
+            color: #e94560;
+        }
+        .validation-result .result-status .warn {
+            color: #f5a623;
+        }
+
+        .validation-result .result-details {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.8;
+        }
+
+        .validation-result .result-details .suggestion {
+            color: #f5a623;
+            font-weight: 600;
+        }
+
+        .validation-result .result-details .good {
+            color: #00c896;
+        }
+
+        .validation-result .result-details .bad {
+            color: #e94560;
+        }
+
+        .validation-result .result-summary {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .validation-result .result-summary .summary-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 8px;
+        }
+
+        .validation-result .result-summary .summary-item .num {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00c896;
+        }
+
+        .validation-result .result-summary .summary-item .lbl {
+            font-size: 0.65rem;
+            color: #888;
+        }
+
+        .validation-result .result-summary .summary-item .num.err {
+            color: #e94560;
+        }
+
+        /* ===== التقرير النهائي ===== */
+        .final-report {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .final-report.show {
+            display: block;
+        }
+
+        .final-report .report-title {
+            color: #00c896;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .final-report .report-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .final-report .report-item .r-name {
+            color: #888;
+        }
+        .final-report .report-item .r-value {
+            color: #eee;
+        }
+
+        .final-report .report-total {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px solid rgba(0, 200, 150, 0.1);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .final-report .report-total .total-val {
+            color: #00c896;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .header .logo {
+                font-size: 1.2rem;
+            }
+            .panel {
+                padding: 16px;
+            }
+            .material-item {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .material-item .mat-input input {
+                width: 55px;
+            }
+            .validation-result .result-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .panel {
+                background: #fff !important;
+                color: #000 !important;
+            }
+            .panel h2 {
+                color: #000 !important;
+            }
+            .material-item .mat-info .mat-name {
+                color: #000 !important;
+            }
+            .validation-result .result-status .pass {
+                color: #00c896 !important;
+            }
+            .validation-result .result-status .fail {
+                color: #e94560 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="logo">
+            🧪 CEMOTECH <span>| مدقق الخلطات الواقعي</span>
+        </div>
+        <div class="badge">✅ نظام تدقيق الخلطات · v2.0</div>
+    </header>
+
+    <!-- ===== MAIN GRID ===== -->
+    <div class="main-grid">
+
+        <!-- ===== PANEL LEFT: INPUT ===== -->
+        <div class="panel">
+            <h2>
+                📋 إدخال نسب المواد
+                <span class="badge-count">أدخل النسب الفعلية</span>
+            </h2>
+
+            <div class="form-group">
+                <label>📦 الكمية الأساسية (كجم) <span class="required">*</span></label>
+                <input type="number" id="baseQuantity" value="100" min="1" step="1">
+                <div style="font-size:0.7rem; color:#666; margin-top:2px;">أدخل كمية الأسمنت الأبيض الأساسية</div>
+            </div>
+
+            <div class="form-group">
+                <label>🏖️ نسبة الرمل/الركام <span class="unit">(% من الأسمنت)</span></label>
+                <input type="number" id="sandRatio" value="55" min="0" max="100" step="1">
+                <div style="font-size:0.7rem; color:#666; margin-top:2px;">النسبة المئوية للرمل مقارنة بالأسمنت</div>
+            </div>
+
+            <div class="form-group">
+                <label>💧 نسبة الماء <span class="unit">(% من الأسمنت)</span></label>
+                <input type="number" id="waterRatio" value="22" min="15" max="35" step="0.5">
+                <div style="font-size:0.7rem; color:#666; margin-top:2px;">نسبة الماء إلى الأسمنت (w/c) - يفضل 20-25%</div>
+            </div>
+
+            <div class="form-group">
+                <label>🎨 أكسيد الصبغة <span class="unit">(اختياري)</span></label>
+                <select id="oxideColor">
+                    <option value="none">بدون صبغة</option>
+                    <option value="red">أحمر (Fe₂O₃)</option>
+                    <option value="yellow">أصفر (Fe₂O₃·H₂O)</option>
+                    <option value="green">أخضر (Cr₂O₃)</option>
+                    <option value="blue">أزرق (ألترامارين)</option>
+                    <option value="brown">بني (أكسيد مختلط)</option>
+                    <option value="white">أبيض (TiO₂)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>🎨 نسبة الصبغة <span class="unit">(% من الأسمنت)</span></label>
+                <input type="number" id="colorRatio" value="3" min="0" max="10" step="0.5">
+                <div style="font-size:0.7rem; color:#666; margin-top:2px;">نسبة الأكسيد الملون (يفضل 2-5%)</div>
+            </div>
+
+            <div style="margin-top:18px; border-top:1px solid rgba(255,255,255,0.05); padding-top:14px;">
+                <h3 style="color:#ccc; font-size:1rem; margin-bottom:10px;">🧪 الإضافات الكيميائية</h3>
+                <div style="font-size:0.7rem; color:#666; margin-bottom:10px;">أدخل النسبة المئوية لكل مادة (نسبة من الأسمنت)</div>
+
+                <div class="material-list" id="materialsList">
+                    <!-- يتم تعبئتها بواسطة JavaScript -->
+                </div>
+            </div>
+
+            <div class="flex-row mt-2">
+                <button class="btn btn-primary" id="validateBtn">🔍 تدقيق الخلطة</button>
+                <button class="btn btn-secondary" id="resetBtn" style="flex:0.5;">🔄</button>
+            </div>
+        </div>
+
+        <!-- ===== PANEL RIGHT: RESULTS ===== -->
+        <div class="panel">
+            <h2>
+                📊 نتيجة التدقيق
+                <span class="badge-count">واقعي 100%</span>
+            </h2>
+
+            <!-- نتيجة التحقق -->
+            <div class="validation-result" id="validationResult">
+                <div class="result-status" id="resultStatus">
+                    <span>🔍 جاري التحقق...</span>
+                </div>
+                <div class="result-details" id="resultDetails">
+                    <span style="color:#666;">سيتم عرض تفاصيل التدقيق هنا</span>
+                </div>
+                <div class="result-summary" id="resultSummary">
+                    <div class="summary-item">
+                        <div class="num" id="sumMaterials">0</div>
+                        <div class="lbl">المواد المدخلة</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="num" id="sumValid">0</div>
+                        <div class="lbl">صحيحة</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="num" id="sumIssues">0</div>
+                        <div class="lbl">مشاكل</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التقرير النهائي -->
+            <div class="final-report" id="finalReport">
+                <div class="report-title">📋 التقرير النهائي للخلطة</div>
+                <div id="reportContent"></div>
+                <div class="report-total">
+                    <span>📦 الوزن الإجمالي:</span>
+                    <span class="total-val" id="totalWeight">0 كجم</span>
+                </div>
+            </div>
+
+            <!-- أزرار -->
+            <div class="flex-row mt-2 no-print">
+                <button class="btn btn-secondary" id="downloadReportBtn" style="flex:1;">📥 تحميل التقرير</button>
+                <button class="btn btn-secondary" id="printReportBtn" style="flex:1;">🖨️ طباعة</button>
+            </div>
+
+            <!-- تعليمات -->
+            <div style="margin-top:16px; background:rgba(0,0,0,0.15); border-radius:12px; padding:14px; border-right:3px solid #f5a623;">
+                <div style="font-size:0.8rem; color:#888; font-weight:600;">💡 كيفية الاستخدام:</div>
+                <div style="font-size:0.75rem; color:#666; line-height:1.8; margin-top:4px;">
+                    1. أدخل كمية الأسمنت الأساسية (كجم)<br>
+                    2. أدخل نسب الرمل، الماء، الصبغة (إن وجدت)<br>
+                    3. حدد نسب الإضافات الكيميائية (كل مادة لها نطاق آمن)<br>
+                    4. اضغط "تدقيق الخلطة" لمعرفة مدى صحة التركيبة<br>
+                    5. ستحصل على تقرير مفصل بالصحة والأخطاء والاقتراحات
+                </div>
+            </div>
+        </div>
     </div>
-  </body>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ========================================
+            // 1. DATA - المواد والنطاقات الآمنة
+            // ========================================
+
+            const materialsData = [{
+                id: 'vinabond',
+                name: 'Vinabond RDP',
+                options: ['511', '514', '515', '516', '517'],
+                min: 0.5,
+                max: 5.0,
+                default: 1.5,
+                unit: '%',
+                role: 'بوليمر رابط',
+                description: 'يستخدم كرابط لتحسين الالتصاق والمرونة'
+            }, {
+                id: 'celoprome',
+                name: 'Celoprome 70M',
+                min: 0.05,
+                max: 0.6,
+                default: 0.3,
+                unit: '%',
+                role: 'مثخن (HPMC)',
+                description: 'يحسن قابلية التشغيل والتماسك'
+            }, {
+                id: 'foamsolver',
+                name: 'Foamsolver DF03',
+                min: 0.10,
+                max: 0.20,
+                default: 0.15,
+                unit: '%',
+                role: 'مزيل رغوة',
+                description: 'يزيل الفقاعات الهوائية لمنع الثقوب'
+            }, {
+                id: 'celofiber',
+                name: 'CELOFIBER CF 200W',
+                min: 0.20,
+                max: 0.60,
+                default: 0.40,
+                unit: '%',
+                role: 'ألياف سليلوزية',
+                description: 'تعزز المتانة ومقاومة التشقق'
+            }, {
+                id: 'prestarr',
+                name: 'PRESTARR 1027',
+                min: 0.01,
+                max: 0.10,
+                default: 0.05,
+                unit: '%',
+                role: 'إيثر نشا',
+                description: 'يحسن الالتصاق وقابلية التشغيل'
+            }, {
+                id: 'stargel',
+                name: 'STARGEL ST600',
+                min: 0.01,
+                max: 0.10,
+                default: 0.04,
+                unit: '%',
+                role: 'إيثر نشا (معلق)',
+                description: 'يمنع ترسب المواد الثقيلة'
+            }, {
+                id: 'aquago',
+                name: 'AQUAGO WP 200',
+                min: 0.20,
+                max: 0.50,
+                default: 0.30,
+                unit: '%',
+                role: 'عازل مائي',
+                description: 'يمنع نفاذية الماء ويزيد العمر الافتراضي'
+            }, {
+                id: 'gypstar',
+                name: 'GYPSTAR G300',
+                min: 0.05,
+                max: 0.25,
+                default: 0.15,
+                unit: '%',
+                role: 'مثبط جبس',
+                description: 'يبطئ زمن الشك للجبس'
+            }];
+
+            // ========================================
+            // 2. STATE
+            // ========================================
+
+            let state = {
+                baseQuantity: 100,
+                sandRatio: 55,
+                waterRatio: 22,
+                oxideColor: 'none',
+                colorRatio: 3,
+                additives: {},
+                validationResult: null
+            };
+
+            // ========================================
+            // 3. DOM REFS
+            // ========================================
+
+            const baseQuantity = document.getElementById('baseQuantity');
+            const sandRatio = document.getElementById('sandRatio');
+            const waterRatio = document.getElementById('waterRatio');
+            const oxideColor = document.getElementById('oxideColor');
+            const colorRatio = document.getElementById('colorRatio');
+            const materialsList = document.getElementById('materialsList');
+            const validateBtn = document.getElementById('validateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            const validationResult = document.getElementById('validationResult');
+            const resultStatus = document.getElementById('resultStatus');
+            const resultDetails = document.getElementById('resultDetails');
+            const sumMaterials = document.getElementById('sumMaterials');
+            const sumValid = document.getElementById('sumValid');
+            const sumIssues = document.getElementById('sumIssues');
+
+            const finalReport = document.getElementById('finalReport');
+            const reportContent = document.getElementById('reportContent');
+            const totalWeight = document.getElementById('totalWeight');
+
+            // ========================================
+            // 4. RENDER MATERIALS LIST
+            // ========================================
+
+            function renderMaterials() {
+                let html = '';
+
+                materialsData.forEach(mat => {
+                    const val = state.additives[mat.id]?.value ?? mat.default;
+                    const option = state.additives[mat.id]?.option ?? mat.options?.[0] || '';
+
+                    html += `
+                        <div class="material-item" data-id="${mat.id}">
+                            <div class="mat-info">
+                                <span class="mat-name">${mat.name}</span>
+                                <span class="mat-role">· ${mat.role}</span>
+                                <span class="mat-range">${mat.min}% - ${mat.max}%</span>
+                            </div>
+                            <div class="mat-input">
+                                ${mat.options ? `
+                                    <select class="mat-select" data-id="${mat.id}">
+                                        ${mat.options.map(opt => `<option value="${opt}" ${opt === option ? 'selected' : ''}>${opt}</option>`).join('')}
+                                    </select>
+                                ` : ''}
+                                <input type="number" class="mat-percent" data-id="${mat.id}" value="${val}" min="${mat.min}" max="${mat.max}" step="${mat.step || 0.01}">
+                                <span class="mat-unit">%</span>
+                                <span class="mat-status" id="status_${mat.id}">⏳</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                materialsList.innerHTML = html;
+
+                // Events
+                materialsList.querySelectorAll('.mat-percent').forEach(input => {
+                    input.addEventListener('input', function() {
+                        const id = this.dataset.id;
+                        const val = parseFloat(this.value) || 0;
+                        if (!state.additives[id]) state.additives[id] = {};
+                        state.additives[id].value = val;
+                        updateMaterialStatus(id);
+                    });
+                });
+
+                materialsList.querySelectorAll('.mat-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        const id = this.dataset.id;
+                        const val = this.value;
+                        if (!state.additives[id]) state.additives[id] = {};
+                        state.additives[id].option = val;
+                    });
+                });
+
+                // Initialize status
+                materialsData.forEach(mat => {
+                    updateMaterialStatus(mat.id);
+                });
+            }
+
+            // ========================================
+            // 5. UPDATE MATERIAL STATUS
+            // ========================================
+
+            function updateMaterialStatus(id) {
+                const mat = materialsData.find(m => m.id === id);
+                if (!mat) return;
+
+                const val = state.additives[id]?.value ?? mat.default;
+                const statusEl = document.getElementById(`status_${id}`);
+                if (!statusEl) return;
+
+                const min = mat.min;
+                const max = mat.max;
+
+                if (val < min) {
+                    statusEl.innerHTML = `<span class="err">⬇ منخفض</span>`;
+                } else if (val > max) {
+                    statusEl.innerHTML = `<span class="err">⬆ مرتفع</span>`;
+                } else {
+                    statusEl.innerHTML = `<span class="ok">✅ صحيح</span>`;
+                }
+
+                // Highlight active
+                const parent = statusEl.closest('.material-item');
+                if (parent) {
+                    parent.classList.toggle('active', val > 0);
+                }
+            }
+
+            // ========================================
+            // 6. VALIDATION ENGINE - CORE
+            // ========================================
+
+            function validateMix() {
+                // قراءة المدخلات
+                const base = parseFloat(baseQuantity.value) || 100;
+                const sand = parseFloat(sandRatio.value) || 0;
+                const water = parseFloat(waterRatio.value) || 0;
+                const color = oxideColor.value;
+                const colorPct = parseFloat(colorRatio.value) || 0;
+
+                // قراءة الإضافات
+                const additives = {};
+                materialsData.forEach(mat => {
+                    const val = state.additives[mat.id]?.value ?? mat.default;
+                    const option = state.additives[mat.id]?.option ?? mat.options?.[0] || '';
+                    additives[mat.id] = { value: val, option: option };
+                });
+
+                // ===== التحقق =====
+                let issues = [];
+                let warnings = [];
+                let suggestions = [];
+                let isValid = true;
+
+                // 1. التحقق من الرمل
+                if (sand < 30) {
+                    issues.push('نسبة الرمل منخفضة جداً (أقل من 30%) → يفضل 40-60%');
+                    isValid = false;
+                } else if (sand > 70) {
+                    issues.push('نسبة الرمل مرتفعة جداً (أكثر من 70%) → يفضل 40-60%');
+                    isValid = false;
+                } else if (sand < 40) {
+                    warnings.push('نسبة الرمل منخفضة (أقل من 40%) → قد تؤثر على الهيكل');
+                    suggestions.push('زيادة الرمل إلى 45-55% لتحسين التماسك');
+                } else if (sand > 60) {
+                    warnings.push('نسبة الرمل مرتفعة (أكثر من 60%) → قد تقلل من القوة');
+                    suggestions.push('تقليل الرمل إلى 45-55% لتحسين القوة');
+                }
+
+                // 2. التحقق من الماء
+                if (water < 18) {
+                    issues.push('نسبة الماء منخفضة جداً (أقل من 18%) → صعوبة في التشغيل');
+                    isValid = false;
+                } else if (water > 30) {
+                    issues.push('نسبة الماء مرتفعة جداً (أكثر من 30%) → تقلل القوة وتزيد الانكماش');
+                    isValid = false;
+                } else if (water < 20) {
+                    warnings.push('نسبة الماء منخفضة (أقل من 20%) → قد تكون الخلطة جافة');
+                    suggestions.push('زيادة الماء إلى 22-25% لتحسين القابلية');
+                } else if (water > 25) {
+                    warnings.push('نسبة الماء مرتفعة (أكثر من 25%) → قد تقلل القوة النهائية');
+                    suggestions.push('تقليل الماء إلى 22-25% لتحسين القوة');
+                }
+
+                // 3. التحقق من الصبغة
+                if (color !== 'none') {
+                    if (colorPct < 1) {
+                        warnings.push('نسبة الصبغة منخفضة جداً (أقل من 1%) → قد لا يظهر اللون بوضوح');
+                        suggestions.push('زيادة الصبغة إلى 2-5% للحصول على لون واضح');
+                    } else if (colorPct > 8) {
+                        warnings.push('نسبة الصبغة مرتفعة (أكثر من 8%) → قد تؤثر على القوة');
+                        suggestions.push('تقليل الصبغة إلى 2-5% للحفاظ على القوة');
+                    } else if (colorPct < 2) {
+                        warnings.push('نسبة الصبغة منخفضة (أقل من 2%) → اللون قد يكون باهتاً');
+                    } else if (colorPct > 5) {
+                        warnings.push('نسبة الصبغة مرتفعة (أكثر من 5%) → قد تزيد التكلفة دون فائدة');
+                        suggestions.push('استخدام 3-4% للحصول على أفضل توازن');
+                    }
+                }
+
+                // 4. التحقق من الإضافات
+                materialsData.forEach(mat => {
+                    const val = additives[mat.id]?.value ?? mat.default;
+                    const min = mat.min;
+                    const max = mat.max;
+
+                    if (val < min) {
+                        issues.push(`${mat.name}: النسبة منخفضة (${val}% < ${min}%) → قد لا يعمل بشكل فعال`);
+                        isValid = false;
+                        suggestions.push(`زيادة ${mat.name} إلى ${(min + max)/2}% للحصول على أداء مثالي`);
+                    } else if (val > max) {
+                        issues.push(`${mat.name}: النسبة مرتفعة (${val}% > ${max}%) → قد تسبب مشاكل في الخلطة`);
+                        isValid = false;
+                        suggestions.push(`تقليل ${mat.name} إلى ${(min + max)/2}% لتجنب المشاكل`);
+                    } else if (val > (min + max) * 0.75) {
+                        warnings.push(`${mat.name}: النسبة عالية (${val}%) → قد تزيد التكلفة`);
+                        suggestions.push(`تقليل ${mat.name} إلى ${(min + max) * 0.5}% لتقليل التكلفة`);
+                    } else if (val < (min + max) * 0.25) {
+                        warnings.push(`${mat.name}: النسبة منخفضة (${val}%) → التأثير قد يكون محدوداً`);
+                        suggestions.push(`زيادة ${mat.name} إلى ${(min + max) * 0.5}% لتحسين الأداء`);
+                    }
+                });
+
+                // 5. تفاعلات خاصة
+                // إذا كان Vinabond نشط > 3% و Stargel نشط > 0.05%
+                const vinabondVal = additives.vinabond?.value || 0;
+                const stargelVal = additives.stargel?.value || 0;
+
+                if (vinabondVal > 3 && stargelVal > 0.05) {
+                    warnings.push('Vinabond عالي مع Stargel → قد تتفاعل وتؤثر على زمن الشك');
+                    suggestions.push('تقليل Stargel إلى أقل من 0.05% أو تقليل Vinabond');
+                }
+
+                // إذا كان Celofiber > 0.5% و Prestarr > 0.08%
+                const celofiberVal = additives.celofiber?.value || 0;
+                const prestarrVal = additives.prestarr?.value || 0;
+
+                if (celofiberVal > 0.5 && prestarrVal > 0.08) {
+                    warnings.push('Celofiber عالي مع Prestarr → قد تزيد اللزوجة بشكل كبير');
+                    suggestions.push('تقليل Celofiber إلى 0.3-0.4% أو تقليل Prestarr');
+                }
+
+                // 6. تقييم عام
+                const totalIssues = issues.length;
+                const totalWarnings = warnings.length;
+
+                let status = 'pass';
+                let statusText = '✅ الخلطة صالحة!';
+                let statusColor = 'pass';
+
+                if (totalIssues > 0) {
+                    status = 'fail';
+                    statusText = '❌ الخلطة غير صالحة!';
+                    statusColor = 'fail';
+                } else if (totalWarnings > 2) {
+                    status = 'warn';
+                    statusText = '⚠️ الخلطة بحاجة إلى تحسينات';
+                    statusColor = 'warn';
+                } else if (totalWarnings > 0) {
+                    status = 'warn';
+                    statusText = '⚠️ يوجد بعض الملاحظات البسيطة';
+                    statusColor = 'warn';
+                }
+
+                // ===== عرض النتيجة =====
+                showResult(status, statusText, statusColor, issues, warnings, suggestions, base, sand, water, color,
+                    colorPct, additives);
+
+                // ===== التقرير النهائي =====
+                generateFinalReport(base, sand, water, color, colorPct, additives);
+
+                // تحديث الإحصائيات
+                sumMaterials.textContent = materialsData.length + 3;
+                sumValid.textContent = isValid ? materialsData.length : materialsData.length - issues.length;
+                sumIssues.textContent = issues.length;
+            }
+
+            // ========================================
+            // 7. SHOW RESULT
+            // ========================================
+
+            function showResult(status, statusText, statusColor, issues, warnings, suggestions, base, sand, water, color,
+                colorPct, additives) {
+                validationResult.classList.add('show');
+
+                // Status
+                resultStatus.innerHTML = `<span class="${statusColor}">${statusText}</span>`;
+
+                // Details
+                let detailsHtml = '';
+
+                if (issues.length > 0) {
+                    detailsHtml += `<div style="color:#e94560; font-weight:700;">❌ المشاكل (يجب حلها):</div>`;
+                    issues.forEach(issue => {
+                        detailsHtml += `<div style="padding-right:16px; color:#e94560;">• ${issue}</div>`;
+                    });
+                }
+
+                if (warnings.length > 0) {
+                    detailsHtml +=
+                        `<div style="color:#f5a623; font-weight:700; margin-top:8px;">⚠️ الملاحظات (يُنصح بمراجعتها):</div>`;
+                    warnings.forEach(warn => {
+                        detailsHtml += `<div style="padding-right:16px; color:#f5a623;">• ${warn}</div>`;
+                    });
+                }
+
+                if (suggestions.length > 0) {
+                    detailsHtml +=
+                        `<div style="color:#00c896; font-weight:700; margin-top:8px;">💡 الاقتراحات لتحسين الخلطة:</div>`;
+                    suggestions.forEach(sug => {
+                        detailsHtml += `<div style="padding-right:16px; color:#00c896;">• ${sug}</div>`;
+                    });
+                }
+
+                if (issues.length === 0 && warnings.length === 0) {
+                    detailsHtml =
+                        `<div style="color:#00c896;">🎉 جميع النسب ضمن النطاقات المثالية. الخلطة متوازنة ومناسبة للإنتاج.</div>`;
+                }
+
+                resultDetails.innerHTML = detailsHtml;
+            }
+
+            // ========================================
+            // 8. GENERATE FINAL REPORT
+            // ========================================
+
+            function generateFinalReport(base, sand, water, color, colorPct, additives) {
+                finalReport.classList.add('show');
+
+                const colorName = {
+                    'none': 'بدون صبغة',
+                    'red': 'أحمر (Fe₂O₃)',
+                    'yellow': 'أصفر (Fe₂O₃·H₂O)',
+                    'green': 'أخضر (Cr₂O₃)',
+                    'blue': 'أزرق (ألترامارين)',
+                    'brown': 'بني (أكسيد مختلط)',
+                    'white': 'أبيض (TiO₂)'
+                } [color] || 'بدون';
+
+                const sandWeight = (sand / 100) * base;
+                const waterWeight = (water / 100) * base;
+                const colorWeight = (colorPct / 100) * base;
+
+                let html = `
+                    <div class="report-item"><span class="r-name">⚪ الأسمنت الأبيض</span><span class="r-value">${base.toFixed(1)} كجم</span></div>
+                    <div class="report-item"><span class="r-name">🏖️ الرمل (${sand}%)</span><span class="r-value">${sandWeight.toFixed(1)} كجم</span></div>
+                    <div class="report-item"><span class="r-name">💧 الماء (${water}%)</span><span class="r-value">${waterWeight.toFixed(1)} كجم</span></div>
+                    <div class="report-item"><span class="r-name">🎨 الصبغة (${colorName})</span><span class="r-value">${colorWeight.toFixed(1)} كجم</span></div>
+                    <div style="border-top:1px solid rgba(255,255,255,0.05); margin:4px 0;"></div>
+                `;
+
+                let totalAddWeight = 0;
+
+                materialsData.forEach(mat => {
+                    const val = additives[mat.id]?.value ?? mat.default;
+                    const weight = (val / 100) * base;
+                    totalAddWeight += weight;
+                    const option = additives[mat.id]?.option || '';
+                    if (weight > 0.01) {
+                        html += `
+                            <div class="report-item">
+                                <span class="r-name">🧪 ${mat.name}${option ? ' ('+option+')' : ''} (${val}%)</span>
+                                <span class="r-value">${weight.toFixed(2)} كجم</span>
+                            </div>
+                        `;
+                    }
+                });
+
+                const total = base + sandWeight + waterWeight + colorWeight + totalAddWeight;
+
+                reportContent.innerHTML = html;
+                totalWeight.textContent = `${total.toFixed(2)} كجم`;
+            }
+
+            // ========================================
+            // 9. DOWNLOAD REPORT
+            // ========================================
+
+            function generateTextReport() {
+                const base = parseFloat(baseQuantity.value) || 100;
+                const sand = parseFloat(sandRatio.value) || 0;
+                const water = parseFloat(waterRatio.value) || 0;
+                const color = oxideColor.value;
+                const colorPct = parseFloat(colorRatio.value) || 0;
+
+                const colorName = {
+                    'none': 'بدون صبغة',
+                    'red': 'أحمر (Fe₂O₃)',
+                    'yellow': 'أصفر (Fe₂O₃·H₂O)',
+                    'green': 'أخضر (Cr₂O₃)',
+                    'blue': 'أزرق (ألترامارين)',
+                    'brown': 'بني (أكسيد مختلط)',
+                    'white': 'أبيض (TiO₂)'
+                } [color] || 'بدون';
+
+                const sandWeight = (sand / 100) * base;
+                const waterWeight = (water / 100) * base;
+                const colorWeight = (colorPct / 100) * base;
+
+                let report = '========================================\n';
+                report += '🧪 تقرير خلطة CEMOTECH / CELOTECH\n';
+                report += '========================================\n\n';
+                report += `📅 التاريخ: ${new Date().toLocaleDateString('ar-EG')}\n`;
+                report += `⏰ الوقت: ${new Date().toLocaleTimeString('ar-EG')}\n\n`;
+
+                report += '📦 المكونات الأساسية:\n';
+                report += `  ⚪ الأسمنت الأبيض: ${base.toFixed(1)} كجم\n`;
+                report += `  🏖️ الرمل (${sand}%): ${sandWeight.toFixed(1)} كجم\n`;
+                report += `  💧 الماء (${water}%): ${waterWeight.toFixed(1)} كجم\n`;
+                report += `  🎨 الصبغة (${colorName}): ${colorWeight.toFixed(1)} كجم\n\n`;
+
+                report += '🧪 الإضافات الكيميائية:\n';
+                let totalAdd = 0;
+                materialsData.forEach(mat => {
+                    const val = state.additives[mat.id]?.value ?? mat.default;
+                    const weight = (val / 100) * base;
+                    totalAdd += weight;
+                    const option = state.additives[mat.id]?.option || '';
+                    if (weight > 0.01) {
+                        report += `  ${mat.name}${option ? ' ('+option+')' : ''}: ${val}% → ${weight.toFixed(2)} كجم\n`;
+                    }
+                });
+
+                const total = base + sandWeight + waterWeight + colorWeight + totalAdd;
+                report += `\n📦 الوزن الإجمالي: ${total.toFixed(2)} كجم\n\n`;
+
+                // إضافة نتيجة التحقق
+                const statusEl = resultStatus.querySelector('span');
+                const statusText = statusEl ? statusEl.textContent : 'لم يتم التدقيق';
+                report += `📊 نتيجة التدقيق: ${statusText}\n\n`;
+
+                report += '========================================\n';
+                report += '🧪 CEMOTECH / CELOTECH - Drymix Lab\n';
+                report += '========================================\n';
+
+                return report;
+            }
+
+            function downloadReport() {
+                const report = generateTextReport();
+                const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `CEMOTECH_Report_${new Date().toISOString().slice(0,10)}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            function printReport() {
+                window.print();
+            }
+
+            // ========================================
+            // 10. RESET
+            // ========================================
+
+            function resetAll() {
+                baseQuantity.value = '100';
+                sandRatio.value = '55';
+                waterRatio.value = '22';
+                oxideColor.value = 'none';
+                colorRatio.value = '3';
+
+                materialsData.forEach(mat => {
+                    state.additives[mat.id] = {
+                        value: mat.default,
+                        option: mat.options?.[0] || ''
+                    };
+                });
+
+                renderMaterials();
+                validationResult.classList.remove('show');
+                finalReport.classList.remove('show');
+
+                // Update status
+                materialsData.forEach(mat => {
+                    updateMaterialStatus(mat.id);
+                });
+            }
+
+            // ========================================
+            // 11. EVENT BINDING
+            // ========================================
+
+            validateBtn.addEventListener('click', validateMix);
+            resetBtn.addEventListener('click', resetAll);
+
+            document.getElementById('downloadReportBtn').addEventListener('click', downloadReport);
+            document.getElementById('printReportBtn').addEventListener('click', printReport);
+
+            // Auto-validate on input change (debounced)
+            let timeoutId;
+
+            function autoValidate() {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(validateMix, 500);
+            }
+
+            baseQuantity.addEventListener('input', autoValidate);
+            sandRatio.addEventListener('input', autoValidate);
+            waterRatio.addEventListener('input', autoValidate);
+            oxideColor.addEventListener('change', autoValidate);
+            colorRatio.addEventListener('input', autoValidate);
+
+            // ========================================
+            // 12. INIT
+            // ========================================
+
+            function init() {
+                // Initialize additives state
+                materialsData.forEach(mat => {
+                    state.additives[mat.id] = {
+                        value: mat.default,
+                        option: mat.options?.[0] || ''
+                    };
+                });
+
+                renderMaterials();
+
+                // Auto-validate after render
+                setTimeout(validateMix, 300);
+            }
+
+            init();
+
+        })();
+    </script>
+
+</body>
 </html>
