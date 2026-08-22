@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧪 منصة الابتكار المتقدمة - نظام التلميحات الذكي</title>
+    <title>🏗️ نظام الصناعات الخرسانية المتطور</title>
 
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -117,6 +117,236 @@
             color: #00c896;
             padding: 2px 12px;
             border-radius: 30px;
+        }
+
+        /* ===== نظام الصناعات المتطور ===== */
+        .industry-system {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 10px;
+            border: 1px solid rgba(0, 200, 255, 0.1);
+        }
+
+        .industry-system h3 {
+            color: #00c8ff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .industry-system .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .industry-system .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .industry-system .input-group label {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .industry-system .input-group input,
+        .industry-system .input-group select {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: #eee;
+            font-size: 0.85rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .industry-system .input-group input:focus,
+        .industry-system .input-group select:focus {
+            border-color: #00c8ff;
+        }
+
+        .industry-system .input-group input[type="range"] {
+            padding: 0;
+            accent-color: #00c8ff;
+            height: 4px;
+        }
+
+        .industry-system .range-value {
+            font-size: 0.75rem;
+            color: #00c8ff;
+            text-align: center;
+        }
+
+        .industry-system .btn-generate {
+            background: linear-gradient(135deg, #00c8ff, #0088cc);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(0, 200, 255, 0.2);
+        }
+
+        .industry-system .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 200, 255, 0.4);
+        }
+
+        .industry-system .result-materials {
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            display: none;
+            border-right: 3px solid #00c8ff;
+        }
+
+        .industry-system .result-materials.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .industry-system .result-materials .mat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.85rem;
+        }
+
+        .industry-system .result-materials .mat-item .mat-name {
+            color: #ccc;
+        }
+
+        .industry-system .result-materials .mat-item .mat-amount {
+            color: #00c8ff;
+            font-weight: 600;
+        }
+
+        .industry-system .result-materials .mat-desc {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== ملاحظات المقارنة ===== */
+        .comparison-notes {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 14px;
+            margin-top: 12px;
+            border-right: 3px solid #f5a623;
+            display: none;
+        }
+
+        .comparison-notes.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .comparison-notes .notes-title {
+            color: #f5a623;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-notes .notes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .comparison-notes .notes-col {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .comparison-notes .notes-col .col-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .comparison-notes .notes-col .col-title.positive {
+            color: #00c896;
+        }
+
+        .comparison-notes .notes-col .col-title.negative {
+            color: #e94560;
+        }
+
+        .comparison-notes .notes-col ul {
+            list-style: none;
+            padding: 0;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .comparison-notes .notes-col ul li {
+            padding: 2px 0;
+            padding-right: 16px;
+            position: relative;
+        }
+
+        .comparison-notes .notes-col ul li::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+        }
+
+        .comparison-notes .notes-col ul li.positive {
+            color: #00c896;
+        }
+
+        .comparison-notes .notes-col ul li.negative {
+            color: #e94560;
+        }
+
+        .comparison-notes .projects-suitable {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-notes .projects-suitable .proj-title {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .comparison-notes .projects-suitable .proj-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 4px;
+        }
+
+        .comparison-notes .projects-suitable .proj-tag {
+            background: rgba(0, 200, 150, 0.15);
+            color: #00c896;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(0, 200, 150, 0.2);
         }
 
         /* ===== رفع الصورة ===== */
@@ -300,6 +530,215 @@
         }
         .hint-box .hint-diff .diff-item .same {
             color: #888;
+        }
+
+        /* ===== الردود الإلكترونية ===== */
+        .ai-response-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ai-response-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ai-response-box {
+            background: linear-gradient(145deg, #0d0d2b, #1a1a3e);
+            border-radius: 30px;
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            box-shadow: 0 0 60px rgba(0, 200, 255, 0.1), inset 0 0 60px rgba(0, 200, 255, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-response-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(0, 200, 255, 0.03), transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(233, 69, 96, 0.03), transparent 60%);
+            animation: rotateBg 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateBg {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ai-response-box>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-response-box .ai-icon {
+            font-size: 3rem;
+            text-align: center;
+            display: block;
+            animation: floatIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .ai-response-box .ai-status {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #00c896;
+            margin-top: 5px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .ai-response-box .ai-title {
+            color: #eee;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .ai-response-box .ai-title .highlight {
+            color: #00c8ff;
+        }
+
+        .ai-response-box .ai-message {
+            color: #aaa;
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 12px;
+            line-height: 1.8;
+            min-height: 80px;
+        }
+
+        .ai-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .ai-progress .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #00c8ff, #e94560);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: progressMove 1.5s linear infinite;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes progressMove {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 200% 0%;
+            }
+        }
+
+        .ai-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+
+        .ai-steps .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #666;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.5s ease;
+        }
+
+        .ai-steps .step.show {
+            opacity: 1;
+            transform: translateX(0);
+            color: #aaa;
+        }
+
+        .ai-steps .step.done {
+            color: #00c896;
+        }
+
+        .ai-steps .step .step-icon {
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .ai-steps .step .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #444;
+            transition: 0.3s;
+        }
+
+        .ai-steps .step.done .step-dot {
+            background: #00c896;
+            box-shadow: 0 0 15px rgba(0, 200, 150, 0.3);
+        }
+
+        .ai-steps .step.active .step-dot {
+            background: #f5a623;
+            animation: pulseDot 1s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
         }
 
         /* ===== إدارة المواد ===== */
@@ -985,6 +1424,21 @@
             .add-material-modal .form-row {
                 flex-direction: column;
             }
+            .ai-response-box {
+                padding: 25px;
+            }
+            .ai-response-box .ai-title {
+                font-size: 1.1rem;
+            }
+            .ai-response-box .ai-message {
+                font-size: 0.9rem;
+            }
+            .industry-system .input-row {
+                grid-template-columns: 1fr;
+            }
+            .comparison-notes .notes-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -999,15 +1453,57 @@
     <!-- ===== شريط الشركة ===== -->
     <header class="company-header">
         <div class="logo">
-            🧪 CONCRET<span>CHEM</span>
+            🏗️ CONCRET<span>PRO</span>
             <span style="font-size:0.9rem; font-weight:400; color:#888; margin-right:15px;">
-                التلميحات الذكية · تحليل صور · ابتكار
+                نظام الصناعات المتطور · تحليل · ابتكار
             </span>
         </div>
         <div class="badge-innov">
-            ⚡ v8.0 · نظام التلميحات الذكي
+            ⚡ v10.0 · نظام الخرسانة الذكي
         </div>
     </header>
+
+    <!-- ===== الردود الإلكترونية ===== -->
+    <div class="ai-response-overlay" id="aiResponseOverlay">
+        <div class="ai-response-box">
+            <span class="ai-icon">🤖</span>
+            <div class="ai-status">● ONLINE · معالج الخلطات الذكي</div>
+            <div class="ai-title" id="aiTitle">🔍 <span class="highlight">جاري تحليل المواد...</span></div>
+            <div class="ai-message" id="aiMessage">
+                <span class="typing">جارٍ البحث عن التركيبات المثالية</span>
+            </div>
+            <div class="ai-progress">
+                <div class="progress-fill" id="aiProgressFill" style="width:0%;"></div>
+            </div>
+            <div class="ai-steps" id="aiSteps">
+                <div class="step" data-step="0">
+                    <span class="step-icon">🔍</span>
+                    <span class="step-dot"></span>
+                    <span>جاري البحث في قاعدة البيانات المركزية...</span>
+                </div>
+                <div class="step" data-step="1">
+                    <span class="step-icon">🧪</span>
+                    <span class="step-dot"></span>
+                    <span>تحليل التركيبات الكيميائية المتقدمة...</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-icon">🌐</span>
+                    <span class="step-dot"></span>
+                    <span>جارٍ البحث في الشبكات المظلمة (Dark Web) عن إضافات نادرة...</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-icon">⚡</span>
+                    <span class="step-dot"></span>
+                    <span>تطبيق المواصفات المُكتشفة على الخلطة...</span>
+                </div>
+                <div class="step" data-step="4">
+                    <span class="step-icon">✅</span>
+                    <span class="step-dot"></span>
+                    <span>تم تطبيق الاعدادات بنجاح! 🎉</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== المحتوى الرئيسي ===== -->
     <div class="main-grid">
@@ -1027,12 +1523,10 @@
                 <input type="file" id="imageInput" accept="image/*">
             </div>
 
-            <!-- معاينة الصورة -->
             <div class="image-preview" id="imagePreview">
                 <img id="uploadedImage" src="" alt="الصورة المرفوعة">
             </div>
 
-            <!-- نتيجة التحليل -->
             <div class="analysis-result" id="analysisResult">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <strong style="color:#00c896;">🧪 المواد المقترحة من التحليل:</strong>
@@ -1044,7 +1538,7 @@
                 </div>
             </div>
 
-            <!-- ===== المعلومات الكيميائية المفصلة ===== -->
+            <!-- المعلومات الكيميائية -->
             <div class="chem-info" id="chemInfo">
                 <div class="chem-title" id="chemTitle">🧪 التركيب الكيميائي</div>
                 <div class="chem-detail" id="chemDetail">اضغط على أي مادة لمعرفة تركيبها الكيميائي المفصل</div>
@@ -1052,7 +1546,7 @@
                 <div class="chem-components" id="chemComponents"></div>
             </div>
 
-            <!-- ===== التلميحات الذكية ===== -->
+            <!-- التلميحات الذكية -->
             <div class="hint-box" id="hintBox">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <span class="hint-icon">💡</span>
@@ -1066,28 +1560,22 @@
 
             <button class="btn-innov green" id="loadFromImageBtn">📥 تحميل الخلطة للتعديل</button>
 
-            <!-- ===== مدير المواد ===== -->
+            <!-- مدير المواد -->
             <div class="material-manager">
                 <div class="mm-header">
                     <h4>📋 قائمة المواد المتاحة</h4>
                     <span class="mm-count" id="materialCountLabel">8 مواد</span>
                 </div>
-
                 <div class="material-search">
                     <input type="text" id="materialSearch" placeholder="🔍 بحث عن مادة...">
                     <button class="btn-sm primary" id="addMaterialBtn">➕ إضافة</button>
                 </div>
-
-                <div class="material-list" id="materialList">
-                    <!-- يتم تعبئتها بواسطة JavaScript -->
-                </div>
-
+                <div class="material-list" id="materialList"></div>
                 <div style="font-size:0.7rem; color:#555; margin-top:6px; text-align:center;">
-                    💡 اضغط على مادة لإضافتها للتعديل · اضغط ✏️ لتعديلها · 🗑️ لحذفها
+                    💡 اضغط على مادة لإضافتها للتعديل
                 </div>
             </div>
 
-            <!-- المواد المختارة -->
             <div style="margin-top:10px; background:rgba(0,0,0,0.1); border-radius:10px; padding:8px; min-height:30px;">
                 <div style="font-size:0.7rem; color:#666;">✨ المواد المختارة حالياً:</div>
                 <div id="selectedMaterials" style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
@@ -1101,7 +1589,7 @@
             </div>
         </div>
 
-        <!-- ===== اللوحة اليمنى: المقارنة ===== -->
+        <!-- ===== اللوحة اليمنى ===== -->
         <div class="panel">
             <h2>
                 ⚖️ مقارنة الخلطات
@@ -1109,7 +1597,6 @@
             </h2>
 
             <div class="comparison-container">
-                <!-- الأصل -->
                 <div class="comparison-item">
                     <div class="label">📌 <span class="highlight">الخلطة الأصلية</span></div>
                     <div class="three-mini" id="originalContainer"></div>
@@ -1124,7 +1611,6 @@
                     </div>
                 </div>
 
-                <!-- المُعدَّل -->
                 <div class="comparison-item">
                     <div class="label">✨ <span class="highlight-green">الخلطة المُعدَّلة</span></div>
                     <div class="three-mini" id="modifiedContainer"></div>
@@ -1140,7 +1626,6 @@
                 </div>
             </div>
 
-            <!-- الفروقات -->
             <div class="diff-box">
                 <div class="diff-text">
                     📊 <strong>الفروقات:</strong>
@@ -1148,7 +1633,89 @@
                 </div>
             </div>
 
-            <!-- سجل التعديلات -->
+            <!-- ===== ملاحظات المقارنة ===== -->
+            <div class="comparison-notes" id="comparisonNotes">
+                <div class="notes-title">📋 ملاحظات المقارنة بين القديم والجديد</div>
+                <div class="notes-grid">
+                    <div class="notes-col">
+                        <div class="col-title positive">✅ الإيجابيات</div>
+                        <ul id="positivesList">
+                            <li class="positive">زيادة في المقاومة</li>
+                            <li class="positive">تحسين في المتانة</li>
+                        </ul>
+                    </div>
+                    <div class="notes-col">
+                        <div class="col-title negative">⚠️ السلبيات</div>
+                        <ul id="negativesList">
+                            <li class="negative">انخفاض في الهبوط</li>
+                            <li class="negative">زيادة في التكلفة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="projects-suitable">
+                    <div class="proj-title">🏗️ المشاريع المناسبة:</div>
+                    <div class="proj-tags" id="projectsTags">
+                        <span class="proj-tag">جسور</span>
+                        <span class="proj-tag">أبراج</span>
+                        <span class="proj-tag">منشآت صناعية</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== نظام الصناعات المتطور ===== -->
+            <div class="industry-system">
+                <h3>🧪 نظام الصناعات الخرسانية المتطور</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>💪 الصلابة (Hardness)</label>
+                        <input type="range" id="industryHardness" min="1" max="10" value="6">
+                        <span class="range-value" id="hardnessValue">6</span>
+                    </div>
+                    <div class="input-group">
+                        <label>⚡ القوة (Strength)</label>
+                        <input type="range" id="industryStrength" min="1" max="10" value="7">
+                        <span class="range-value" id="strengthValue">7</span>
+                    </div>
+                    <div class="input-group">
+                        <label>🛡️ المتانة (Durability)</label>
+                        <input type="range" id="industryDurability" min="1" max="10" value="5">
+                        <span class="range-value" id="durabilityValue">5</span>
+                    </div>
+                    <div class="input-group">
+                        <label>🎨 اللون (Color)</label>
+                        <select id="industryColor">
+                            <option value="رمادي">رمادي</option>
+                            <option value="أبيض">أبيض</option>
+                            <option value="أسود">أسود</option>
+                            <option value="بيج">بيج</option>
+                            <option value="أزرق">أزرق</option>
+                            <option value="أحمر">أحمر</option>
+                            <option value="أخضر">أخضر</option>
+                            <option value="أصفر">أصفر</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label>🏗️ نوع الخرسانة المطلوبة</label>
+                        <select id="industryType">
+                            <option value="standard">قياسية</option>
+                            <option value="high">عالية المقاومة</option>
+                            <option value="self">ذاتية الدمك</option>
+                            <option value="light">خفيفة الوزن</option>
+                            <option value="fiber">مسلحة بالألياف</option>
+                            <option value="translucent">شفافة</option>
+                            <option value="custom">مخصصة</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-generate" id="generateIndustryBtn">🔬 توليد المواد المثالية</button>
+                <div class="result-materials" id="industryResult">
+                    <div id="industryMaterialsList"></div>
+                    <div class="mat-desc" id="industryDesc"></div>
+                </div>
+            </div>
+
             <div class="mod-log" id="modLog">
                 <span class="time">[البداية]</span> انتظر رفع صورة أو اختيار خلطة
             </div>
@@ -1197,14 +1764,14 @@
     <div class="help-overlay" id="helpOverlay">
         <div class="help-modal">
             <button class="close-btn" id="helpCloseBtn">✕</button>
-            <h1>📖 دليل المنصة <small>· نظام التلميحات الذكي</small></h1>
-            <h2>💡 التلميحات الذكية</h2>
-            <p>عند اختيار مواد للتعديل، يظهر تلميح يوضح الفرق بين المادة الأساسية والمعدلة في المقاومة والهبوط والكثافة.</p>
-            <h2>🧪 المعلومات الكيميائية</h2>
-            <p>كل مادة تعرض تركيبها الكيميائي المفصل والمكونات الرئيسية.</p>
-            <h2>📸 تحليل الصورة</h2>
-            <p>ارفع صورة لعينة خرسانية للتعرف على المواد المكونة لها.</p>
-            <div class="footer-note">🧪 ابتكر بلا حدود · مع تلميحات ذكية</div>
+            <h1>📖 دليل المنصة المتقدمة</h1>
+            <h2>🧪 نظام الصناعات الخرسانية المتطور</h2>
+            <p>حدد درجة الصلابة، القوة، المتانة، اللون، ونوع الخرسانة ليقدم لك النظام المواد المثالية.</p>
+            <h2>📋 ملاحظات المقارنة</h2>
+            <p>بعد تطبيق التعديلات، تظهر إيجابيات وسلبيات الخلطة الجديدة والمشاريع المناسبة لها.</p>
+            <h2>🤖 الردود الإلكترونية</h2>
+            <p>عند تطبيق التعديلات، تظهر نافذة تفاعلية تحاكي البحث في قواعد البيانات المتطورة.</p>
+            <div class="footer-note">🏗️ ابتكر بلا حدود مع نظام الخرسانة الذكي</div>
         </div>
     </div>
 
@@ -1213,14 +1780,14 @@
         (function() {
             'use strict';
 
-            // === قاعدة البيانات الكيميائية المفصلة ===
+            // === قاعدة البيانات الكيميائية ===
             const defaultMaterials = {
                 cement: {
                     id: 'cement',
                     name: 'أسمنت بورتلاندي',
                     emoji: '🧱',
                     formula: 'سيليكات وألومينات الكالسيوم',
-                    detail: 'التركيب الكيميائي الأساسي: سيليكات وألومينات الكالسيوم. المكونات الرئيسية: سيليكات ثلاثي الكالسيوم (C₃S): تمنح الخرسانة القوة المبكرة. سيليكات ثنائي الكالسيوم (C₂S): تمنح القوة على المدى الطويل. ألومينات ثلاثي الكالسيوم (C₃A): تتفاعل بسرعة وتتحكم بزمن الشك. ألُمينوفيريت رباعي الكالسيوم (C₄AF): مركب مساعد في التفاعل.',
+                    detail: 'التركيب الكيميائي الأساسي: سيليكات وألومينات الكالسيوم. المكونات الرئيسية: سيليكات ثلاثي الكالسيوم (C₃S): تمنح الخرسانة القوة المبكرة. سيليكات ثنائي الكالسيوم (C₂S): تمنح القوة على المدى الطويل. ألومينات ثلاثي الكالسيوم (C₃A): تتفاعل بسرعة وتتحكم بزمن الشك.',
                     components: 'المكونات: C₃S (قوة مبكرة) · C₂S (قوة طويلة) · C₃A (زمن الشك) · C₄AF (مساعد)',
                     effect: { strengthMul: 1.1, slumpAdd: -5, densityAdd: 30, colorShift: [5, 5, 5], consAdd: -0.02 }
                 },
@@ -1301,6 +1868,40 @@
                 }
             };
 
+            // === بيانات المشاريع والملاحظات ===
+            const mixAnalysis = {
+                standard: {
+                    positives: ['منخفضة التكلفة', 'سهلة التنفيذ', 'متوفرة المواد'],
+                    negatives: ['مقاومة محدودة', 'عمر افتراضي متوسط'],
+                    projects: ['مباني سكنية', 'أرصفة', 'قواعد بسيطة']
+                },
+                high: {
+                    positives: ['مقاومة عالية جداً', 'عمر طويل', 'مناسبة للأحمال الثقيلة'],
+                    negatives: ['تكلفة عالية', 'تحتاج خبرة في التنفيذ'],
+                    projects: ['جسور', 'أبراج', 'منشآت صناعية', 'خزانات']
+                },
+                self: {
+                    positives: ['سهولة الصب', 'تشطيب ممتاز', 'لا تحتاج اهتزاز'],
+                    negatives: ['حساسية للرطوبة', 'تكلفة متوسطة'],
+                    projects: ['قوالب معقدة', 'عناصر زخرفية', 'أنفاق']
+                },
+                light: {
+                    positives: ['عزل حراري ممتاز', 'خفيف الوزن', 'سهل النقل'],
+                    negatives: ['مقاومة منخفضة', 'امتصاص عالي للماء'],
+                    projects: ['أسقف', 'عوازل', 'جدران داخلية', 'مباني خفيفة']
+                },
+                fiber: {
+                    positives: ['مقاومة تشقق عالية', 'متانة ممتازة', 'مرونة'],
+                    negatives: ['تكلفة عالية', 'صعوبة في التشطيب'],
+                    projects: ['أرضيات صناعية', 'جسور', 'مناطق عالية التحميل']
+                },
+                translucent: {
+                    positives: ['جمالي فريد', 'توزيع الضوء', 'مميز'],
+                    negatives: ['تكلفة عالية جداً', 'ضعف هيكلي نسبي'],
+                    projects: ['واجهات جمالية', 'ممرات', 'معالم سياحية']
+                }
+            };
+
             // === تحميل المواد ===
             let materials = {};
 
@@ -1369,6 +1970,96 @@
             const originalContainer = document.getElementById('originalContainer');
             const modifiedContainer = document.getElementById('modifiedContainer');
             const modLog = document.getElementById('modLog');
+
+            // === ملاحظات المقارنة ===
+            const comparisonNotes = document.getElementById('comparisonNotes');
+            const positivesList = document.getElementById('positivesList');
+            const negativesList = document.getElementById('negativesList');
+            const projectsTags = document.getElementById('projectsTags');
+
+            // === نظام الصناعات ===
+            const industryHardness = document.getElementById('industryHardness');
+            const industryStrength = document.getElementById('industryStrength');
+            const industryDurability = document.getElementById('industryDurability');
+            const industryColor = document.getElementById('industryColor');
+            const industryType = document.getElementById('industryType');
+            const generateBtn = document.getElementById('generateIndustryBtn');
+            const industryResult = document.getElementById('industryResult');
+            const industryMaterialsList = document.getElementById('industryMaterialsList');
+            const industryDesc = document.getElementById('industryDesc');
+
+            // === AI Response ===
+            const aiOverlay = document.getElementById('aiResponseOverlay');
+            const aiTitle = document.getElementById('aiTitle');
+            const aiMessage = document.getElementById('aiMessage');
+            const aiProgressFill = document.getElementById('aiProgressFill');
+            const aiSteps = document.getElementById('aiSteps');
+
+            const responseMessages = [
+                '🔍 جاري البحث عن التركيبات المثالية في قاعدة البيانات المركزية...',
+                '🧪 تحليل التركيبات الكيميائية المتقدمة للمواد المختارة...',
+                '🌐 الوصول إلى الشبكات المظلمة (Dark Web) للبحث عن إضافات نادرة...',
+                '⚡ جاري تطبيق المواصفات المُكتشفة على الخلطة...',
+                '✅ تم تطبيق الإعدادات بنجاح! 🎉'
+            ];
+
+            function showAIResponse() {
+                aiOverlay.classList.add('active');
+                aiTitle.innerHTML = '🔍 <span class="highlight">جاري تحليل المواد...</span>';
+                aiMessage.textContent = '⏳ جاري تهيئة نظام البحث الذكي...';
+                aiProgressFill.style.width = '0%';
+
+                const steps = aiSteps.querySelectorAll('.step');
+                steps.forEach((step, index) => {
+                    step.classList.remove('show', 'done', 'active');
+                });
+
+                setTimeout(() => {
+                    steps[0].classList.add('show', 'active');
+                    aiMessage.textContent = responseMessages[0];
+                    aiProgressFill.style.width = '10%';
+                }, 300);
+
+                setTimeout(() => {
+                    steps[0].classList.remove('active');
+                    steps[0].classList.add('done');
+                    steps[1].classList.add('show', 'active');
+                    aiMessage.textContent = responseMessages[1];
+                    aiProgressFill.style.width = '30%';
+                    aiTitle.innerHTML = '🧪 <span class="highlight">تحليل التركيبات الكيميائية...</span>';
+                }, 1500);
+
+                setTimeout(() => {
+                    steps[1].classList.remove('active');
+                    steps[1].classList.add('done');
+                    steps[2].classList.add('show', 'active');
+                    aiMessage.textContent = responseMessages[2];
+                    aiProgressFill.style.width = '55%';
+                    aiTitle.innerHTML = '🌐 <span class="highlight">البحث في الشبكات المظلمة...</span>';
+                }, 3000);
+
+                setTimeout(() => {
+                    steps[2].classList.remove('active');
+                    steps[2].classList.add('done');
+                    steps[3].classList.add('show', 'active');
+                    aiMessage.textContent = responseMessages[3];
+                    aiProgressFill.style.width = '80%';
+                    aiTitle.innerHTML = '⚡ <span class="highlight">تطبيق المواصفات المُكتشفة...</span>';
+                }, 5000);
+
+                setTimeout(() => {
+                    steps[3].classList.remove('active');
+                    steps[3].classList.add('done');
+                    steps[4].classList.add('show', 'done');
+                    aiMessage.textContent = responseMessages[4];
+                    aiProgressFill.style.width = '100%';
+                    aiTitle.innerHTML = '✅ <span class="highlight">تم التطبيق بنجاح!</span>';
+                }, 7000);
+
+                setTimeout(() => {
+                    aiOverlay.classList.remove('active');
+                }, 9000);
+            }
 
             // === بيانات الخلطات ===
             const mixData = {
@@ -1474,38 +2165,30 @@
 
                 hintBox.classList.add('show');
 
-                // وصف التعديلات
                 const names = state.additives.map(id => materials[id]?.name || id);
                 hintContent.textContent = `تم تعديل الخلطة بإضافة: ${names.join(' + ')}`;
-
-                // الفروقات
-                let diffHtml = '';
-
-                const sDiff = modS - origS;
-                const slDiff = modSl - origSl;
-                const dDiff = modD - origD;
 
                 const consLabels = ['جاف جداً', 'جاف', 'متوسط', 'لدن', 'سائل جداً'];
                 const origCLabel = consLabels[Math.min(4, Math.floor(Math.min(1, Math.max(0.1, origC)) * 5))] || 'متوسط';
                 const modCLabel = consLabels[Math.min(4, Math.floor(Math.min(1, Math.max(0.1, modC)) * 5))] || 'متوسط';
 
-                diffHtml += `
+                let diffHtml = `
                     <div class="diff-item">
                         💪 مقاومة: 
-                        <span class="${sDiff > 0 ? 'up' : sDiff < 0 ? 'down' : 'same'}">
-                            ${origS} → ${modS} ${sDiff > 0 ? '⬆+' : sDiff < 0 ? '⬇' : ''}${Math.abs(sDiff).toFixed(1)} MPa
+                        <span class="${modS > origS ? 'up' : modS < origS ? 'down' : 'same'}">
+                            ${origS} → ${modS} ${modS > origS ? '⬆+' : modS < origS ? '⬇' : ''}${Math.abs(modS - origS).toFixed(1)} MPa
                         </span>
                     </div>
                     <div class="diff-item">
                         📏 هبوط: 
-                        <span class="${slDiff > 0 ? 'up' : slDiff < 0 ? 'down' : 'same'}">
-                            ${origSl} → ${modSl} ${slDiff > 0 ? '⬆+' : slDiff < 0 ? '⬇' : ''}${Math.abs(slDiff).toFixed(0)} mm
+                        <span class="${modSl > origSl ? 'up' : modSl < origSl ? 'down' : 'same'}">
+                            ${origSl} → ${modSl} ${modSl > origSl ? '⬆+' : modSl < origSl ? '⬇' : ''}${Math.abs(modSl - origSl).toFixed(0)} mm
                         </span>
                     </div>
                     <div class="diff-item">
                         ⚖️ كثافة: 
-                        <span class="${dDiff > 0 ? 'up' : dDiff < 0 ? 'down' : 'same'}">
-                            ${origD} → ${modD} ${dDiff > 0 ? '⬆+' : dDiff < 0 ? '⬇' : ''}${Math.abs(dDiff).toFixed(0)} kg/m³
+                        <span class="${modD > origD ? 'up' : modD < origD ? 'down' : 'same'}">
+                            ${origD} → ${modD} ${modD > origD ? '⬆+' : modD < origD ? '⬇' : ''}${Math.abs(modD - origD).toFixed(0)} kg/m³
                         </span>
                     </div>
                     <div class="diff-item">
@@ -1517,6 +2200,53 @@
                 `;
 
                 hintDiff.innerHTML = diffHtml;
+
+                // تحديث ملاحظات المقارنة
+                updateComparisonNotes();
+            }
+
+            // === تحديث ملاحظات المقارنة ===
+            function updateComparisonNotes() {
+                const hasChanges = state.additives.length > 0;
+
+                if (!hasChanges) {
+                    comparisonNotes.classList.remove('show');
+                    return;
+                }
+
+                comparisonNotes.classList.add('show');
+
+                // تحديد نوع الخلطة المعدلة
+                let mixType = 'standard';
+                const additives = state.additives;
+
+                if (additives.includes('fibers') && additives.includes('graphene')) {
+                    mixType = 'high';
+                } else if (additives.includes('fibers')) {
+                    mixType = 'fiber';
+                } else if (additives.includes('silica') || additives.includes('graphene')) {
+                    mixType = 'high';
+                } else if (additives.includes('plasticizer')) {
+                    mixType = 'self';
+                } else if (additives.includes('pozzolan')) {
+                    mixType = 'light';
+                } else if (additives.includes('color')) {
+                    mixType = 'translucent';
+                }
+
+                const analysis = mixAnalysis[mixType] || mixAnalysis.standard;
+
+                positivesList.innerHTML = analysis.positives.map(p =>
+                    `<li class="positive">${p}</li>`
+                ).join('');
+
+                negativesList.innerHTML = analysis.negatives.map(n =>
+                    `<li class="negative">${n}</li>`
+                ).join('');
+
+                projectsTags.innerHTML = analysis.projects.map(p =>
+                    `<span class="proj-tag">${p}</span>`
+                ).join('');
             }
 
             // === عرض قائمة المواد ===
@@ -1949,7 +2679,6 @@
                 document.getElementById('diffText').textContent = diff.length > 0 ? diff.join(' · ') :
                     'لا توجد فروقات ملحوظة';
 
-                // تحديث القيم للتلميحات
                 state.origValues = { strength: origS, slump: origSl, density: origD, consistency: origC };
                 state.modValues = { strength: modS, slump: modSl, density: modD, consistency: modC };
                 updateHints();
@@ -2030,8 +2759,13 @@
                 modLog.innerHTML += `<br><span class="time">[${time}]</span> 📥 تم تحميل الخلطة للتعديل`;
             }
 
-            // === تطبيق التعديلات ===
+            // === تطبيق التعديلات مع الرد الإلكتروني ===
             function applyModifications() {
+                if (state.selectedMaterialIds.length === 0) {
+                    alert('⚠️ يرجى اختيار مواد للتعديل أولاً!');
+                    return;
+                }
+
                 state.additives = state.selectedMaterialIds.filter(id =>
                     id !== 'cement' && id !== 'sand' && id !== 'aggregate'
                 );
@@ -2044,6 +2778,8 @@
                 calculateModifiedValues();
                 updateComparison();
                 updateHints();
+
+                showAIResponse();
             }
 
             // === إعادة تعيين ===
@@ -2059,9 +2795,104 @@
                 modLog.innerHTML += `<br><span class="time">[${time}]</span> 🔄 تم إعادة التعيين`;
             }
 
-            // === ربط الأحداث ===
+            // === نظام الصناعات المتطور ===
+            function generateIndustryMix() {
+                const hardness = parseInt(industryHardness.value);
+                const strength = parseInt(industryStrength.value);
+                const durability = parseInt(industryDurability.value);
+                const color = industryColor.value;
+                const type = industryType.value;
 
-            // رفع الصورة
+                // حساب المواد بناءً على المدخلات
+                let materialsList = [];
+                let desc = '';
+
+                // المواد الأساسية
+                materialsList.push({ name: 'أسمنت بورتلاندي', amount: `${300 + hardness * 15} كجم` });
+                materialsList.push({ name: 'رمل (ركام ناعم)', amount: `${550 + strength * 10} كجم` });
+                materialsList.push({ name: 'ركام خشن (سن)', amount: `${1000 + durability * 20} كجم` });
+                materialsList.push({ name: 'ماء', amount: `${170 - hardness * 3} لتر` });
+
+                // إضافات حسب القوة
+                if (strength >= 7) {
+                    materialsList.push({ name: 'سيليكا (غبار السيليكا)', amount: `${30 + strength * 5} كجم` });
+                }
+
+                if (strength >= 8) {
+                    materialsList.push({ name: 'جرافين محسّن', amount: `${2 + strength * 0.5} كجم` });
+                }
+
+                if (durability >= 7) {
+                    materialsList.push({ name: 'بوزولانا', amount: `${20 + durability * 3} كجم` });
+                }
+
+                if (hardness >= 7) {
+                    materialsList.push({ name: 'ألياف', amount: `${5 + hardness * 1.5} كجم` });
+                }
+
+                if (durability >= 8) {
+                    materialsList.push({ name: 'ملدن فائق', amount: `${3 + durability * 0.5} لتر` });
+                }
+
+                // إضافة الصبغة حسب اللون
+                if (color !== 'رمادي') {
+                    const colorMap = {
+                        'أبيض': 'أكسيد التيتانيوم (TiO₂)',
+                        'أسود': 'أكسيد الحديد الأسود (Fe₃O₄)',
+                        'بيج': 'أكسيد الحديد الأصفر (Fe₂O₃·H₂O)',
+                        'أزرق': 'ألترامارين',
+                        'أحمر': 'أكسيد الحديد الأحمر (Fe₂O₃)',
+                        'أخضر': 'أكسيد الكروم (Cr₂O₃)',
+                        'أصفر': 'أكسيد الحديد الأصفر (Fe₂O₃·H₂O)'
+                    };
+                    materialsList.push({ name: `صبغة ${color} (${colorMap[color] || 'صبغة مخصصة'})`, amount: '5-10 كجم' });
+                }
+
+                // وصف الخلطة
+                const typeNames = {
+                    'standard': 'قياسية',
+                    'high': 'عالية المقاومة',
+                    'self': 'ذاتية الدمك',
+                    'light': 'خفيفة الوزن',
+                    'fiber': 'مسلحة بالألياف',
+                    'translucent': 'شفافة',
+                    'custom': 'مخصصة'
+                };
+
+                desc =
+                    `🧪 خلطة ${typeNames[type] || 'مخصصة'} بمتطلبات: صلابة ${hardness}/10، قوة ${strength}/10، متانة ${durability}/10، لون ${color}`;
+
+                // عرض النتائج
+                industryMaterialsList.innerHTML = materialsList.map(m =>
+                    `<div class="mat-item">
+                        <span class="mat-name">${m.name}</span>
+                        <span class="mat-amount">${m.amount}</span>
+                    </div>`
+                ).join('');
+
+                industryDesc.textContent = desc;
+                industryResult.classList.add('show');
+
+                // تسجيل في السجل
+                const time = new Date().toLocaleTimeString();
+                modLog.innerHTML += `<br><span class="time green">[${time}]</span> 🔬 تم توليد خلطة صناعية: ${desc}`;
+            }
+
+            // === ربط أحداث الصناعات ===
+            industryHardness.addEventListener('input', function() {
+                document.getElementById('hardnessValue').textContent = this.value;
+            });
+            industryStrength.addEventListener('input', function() {
+                document.getElementById('strengthValue').textContent = this.value;
+            });
+            industryDurability.addEventListener('input', function() {
+                document.getElementById('durabilityValue').textContent = this.value;
+            });
+
+            generateBtn.addEventListener('click', generateIndustryMix);
+
+            // === ربط الأحداث العامة ===
+
             uploadArea.addEventListener('click', () => imageInput.click());
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -2085,7 +2916,6 @@
                 }
             });
 
-            // إضافة مادة
             addMaterialBtn.addEventListener('click', () => openAddMaterial());
             cancelAddMaterial.addEventListener('click', () => {
                 addMaterialOverlay.classList.remove('active');
@@ -2134,10 +2964,12 @@
                     if (addMaterialOverlay.classList.contains('active')) {
                         addMaterialOverlay.classList.remove('active');
                     }
+                    if (aiOverlay.classList.contains('active')) {
+                        aiOverlay.classList.remove('active');
+                    }
                 }
             });
 
-            // === جعل toggleMaterial عالمياً ===
             window.toggleMaterial = toggleMaterial;
 
             // === التهيئة ===
